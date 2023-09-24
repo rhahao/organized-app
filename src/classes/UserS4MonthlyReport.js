@@ -50,7 +50,10 @@ UserS4MonthlyReportClass.prototype.get = async function (month) {
     return this;
   }
 
-  // initialize month
+  return S4Record;
+};
+
+UserS4MonthlyReportClass.prototype.initialize = async function (month) {
   const dailyRecord = new UserS4DailyReportClass();
   dailyRecord.month = month;
   dailyRecord.isS4 = true;
@@ -73,27 +76,41 @@ UserS4MonthlyReportClass.prototype.get = async function (month) {
   return this;
 };
 
-UserS4MonthlyReportClass.prototype.generate = async function () {
+UserS4MonthlyReportClass.prototype.calculatePlacements = async function () {
   this.placements = reportsFieldSum(this.reports, 'placements', 0) || '';
-  this.videos = reportsFieldSum(this.reports, 'videos', 0) || '';
-  this.returnVisits = reportsFieldSum(this.reports, 'returnVisits', 0) || '';
 
-  // calculate total duration
-  let seconds = 0;
+  // save
+  const dailyRecord = UserS4Records.getS4(this.month);
+  dailyRecord.placements = this.placements;
+  dailyRecord.changes = [{ date: new Date() }];
+
+  await dailyRecord.save();
+
+  return this;
+};
+
+UserS4MonthlyReportClass.prototype.calculateVideos = async function () {
+  this.videos = reportsFieldSum(this.reports, 'videos', 0) || '';
+
+  // save
+  const dailyRecord = UserS4Records.getS4(this.month);
+  dailyRecord.videos = this.videos;
+  dailyRecord.changes = [{ date: new Date() }];
+
+  await dailyRecord.save();
+
+  return this;
+};
+
+UserS4MonthlyReportClass.prototype.calculateHours = async function () {
   let minutes = 0;
   let hours = 0;
   for (const report of this.reports) {
     if (report.duration) {
-      seconds += +report.duration.split(':')[2];
       minutes += +report.duration.split(':')[1];
       hours += +report.duration.split(':')[0];
     }
   }
-
-  minutes += (seconds - (seconds % 60)) / 60;
-  seconds = seconds % 60;
-
-  if (seconds >= 30) minutes += 1;
 
   hours += (minutes - (minutes % 60)) / 60;
   minutes = minutes % 60;
@@ -113,9 +130,32 @@ UserS4MonthlyReportClass.prototype.generate = async function () {
     if (minutes >= 38) minutes = 45;
   }
 
-  this.hours = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  this.hours = `${hours}:${String(minutes).padStart(2, '0')}`;
 
-  // calculate total bible studies
+  // save
+  const dailyRecord = UserS4Records.getS4(this.month);
+  dailyRecord.duration = this.hours;
+  dailyRecord.changes = [{ date: new Date() }];
+
+  await dailyRecord.save();
+
+  return this;
+};
+
+UserS4MonthlyReportClass.prototype.calculateReturnVisits = async function () {
+  this.returnVisits = reportsFieldSum(this.reports, 'returnVisits', 0) || '';
+
+  // save
+  const dailyRecord = UserS4Records.getS4(this.month);
+  dailyRecord.returnVisits = this.returnVisits;
+  dailyRecord.changes = [{ date: new Date() }];
+
+  await dailyRecord.save();
+
+  return this;
+};
+
+UserS4MonthlyReportClass.prototype.calculateBiblesStudies = async function () {
   let bibleStudies = [];
   for (const report of this.reports) {
     if (report.bibleStudies) {
@@ -128,10 +168,6 @@ UserS4MonthlyReportClass.prototype.generate = async function () {
 
   // save
   const dailyRecord = UserS4Records.getS4(this.month);
-  dailyRecord.placements = this.placements;
-  dailyRecord.videos = this.videos;
-  dailyRecord.duration = this.hours;
-  dailyRecord.returnVisits = this.returnVisits;
   dailyRecord.bibleStudies = this.bibleStudies;
   dailyRecord.changes = [{ date: new Date() }];
 

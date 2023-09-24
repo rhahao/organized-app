@@ -1,5 +1,5 @@
+import { useEffect, useMemo, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Box from '@mui/material/Box';
@@ -8,48 +8,70 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { UserS4Records } from '../../classes/UserS4Records';
-import { refreshReportState } from '../../states/report';
+import { refreshScreenState } from '../../states/main';
 
-const S4GenericField = ({ fldType, month, currentDate, value = 0, setValue }) => {
+const getClassField = (fldType) => {
+  if (fldType === 'S4Placements') return 'placements';
+  if (fldType === 'S4Video') return 'videos';
+  if (fldType === 'S4ReturnVisits') return 'returnVisits';
+};
+
+const S4GenericField = ({ fldType, currentDate }) => {
   const { t } = useTranslation('ui');
 
-  const setRefreshScreen = useSetRecoilState(refreshReportState);
+  const setScreenRefresh = useSetRecoilState(refreshScreenState);
 
-  const fldName = t(fldType);
+  const [value, setValue] = useState('');
 
-  const getClassField = () => {
-    if (fldType === 'S4Placements') return 'placements';
-    if (fldType === 'S4Video') return 'videos';
-    if (fldType === 'S4ReturnVisits') return 'returnVisits';
-  };
-
-  const handleRecordUpdate = async (value) => {
-    const classField = getClassField();
-    const tmpDate = format(new Date(currentDate), 'yyyy/MM/dd');
-
-    const currentReport = await UserS4Records.get(tmpDate);
-    currentReport[classField] = value;
-    currentReport.changes = currentReport.changes.filter((record) => record.field !== classField);
-    currentReport.changes.push({ date: new Date(), field: classField, value });
-
-    await currentReport.save();
-
-    setValue(value);
-    setRefreshScreen((prev) => !prev);
-  };
+  const fldName = useMemo(() => t(fldType), [fldType, t]);
 
   const handleIncreaseCount = async () => {
-    const tmp = value + 1;
-    await handleRecordUpdate(tmp);
+    const tmp = +value + 1;
+    await handleUpdateRecord(tmp);
   };
 
   const handleDecreaseCount = async () => {
-    let tmp = 0;
-
-    if (value > 0) tmp = value - 1;
-
-    await handleRecordUpdate(tmp);
+    if (value !== '' || value > 0) {
+      let tmp = '';
+      if (value > 1) tmp = value - 1;
+      await handleUpdateRecord(tmp);
+    }
   };
+
+  const handleUpdateRecord = async (value) => {
+    if (value === 0) value = '';
+
+    setValue(value);
+
+    const field = getClassField(fldType);
+
+    let currentReport = await UserS4Records.get(currentDate);
+
+    if (!currentReport) {
+      currentReport = await UserS4Records.initialize(currentDate);
+    }
+
+    currentReport[field] = +value;
+    currentReport.changes = currentReport.changes.filter((record) => record.field !== field);
+    currentReport.changes.push({ date: new Date(), field, value });
+
+    await currentReport.save();
+    setScreenRefresh((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleGetReportValue = async () => {
+      const fldName = getClassField(fldType);
+
+      const data = await UserS4Records.get(currentDate);
+      if (data) {
+        setValue(data[fldName] || '');
+      }
+    };
+
+    setValue('');
+    handleGetReportValue();
+  }, [currentDate, fldType]);
 
   return (
     <Box sx={{ margin: '10px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '280px' }}>
@@ -69,6 +91,7 @@ const S4GenericField = ({ fldType, month, currentDate, value = 0, setValue }) =>
             sx={{ '.MuiOutlinedInput-input': { textAlign: 'center', fontSize: '18px' } }}
             type="number"
             value={value}
+            onChange={(e) => handleUpdateRecord(e.target.value)}
           />
         </Box>
         <IconButton aria-label="add" color="secondary" onClick={handleIncreaseCount}>

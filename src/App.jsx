@@ -14,13 +14,14 @@ import PrivateVipRoute from './components/PrivateVipRoute';
 import PrivatePublicTalkCoordinatorRoute from './components/PrivatePublicTalkCoordinatorRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import { apiHostState, isLightThemeState, isOnlineState, visitorIDState } from './states/main';
-import { congAccountConnectedState, congRoleState } from './states/congregation';
+import { congAccountConnectedState } from './states/congregation';
 import { appSnackOpenState } from './states/notification';
 import { InternetChecker } from './features/internetChecker';
 import NotificationWrapper from './features/notificationWrapper';
 import WaitingPage from './components/WaitingPage';
 import backupWorkerInstance from './workers/backupWorker';
 import PrivateMeetingEditorRoute from './components/PrivateMeetingEditorRoute';
+import useUserRole from './hooks/useUserRole';
 
 // lazy loading
 const Layout = lazy(() => import('./components/Layout'));
@@ -43,7 +44,6 @@ const MeetingAttendance = lazy(() => import('./pages/MeetingAttendance'));
 const FieldServiceReport = lazy(() => import('./pages/FieldServiceReport'));
 const BranchOfficeReports = lazy(() => import('./pages/BranchOfficeReports'));
 const UserFieldServiceReport = lazy(() => import('./pages/UserFieldServiceReport'));
-const UserBibleStudies = lazy(() => import('./pages/UserBibleStudies'));
 const PendingFieldServiceReports = lazy(() => import('./pages/PendingFieldServiceReports'));
 const PublicTalksList = lazy(() => import('./pages/PublicTalksList'));
 const WeekendMeetingSchedule = lazy(() => import('./pages/WeekendMeetingSchedule'));
@@ -65,6 +65,16 @@ const darkTheme = createTheme({
 });
 
 const App = ({ updatePwa }) => {
+  const {
+    adminRole,
+    lmmoRole,
+    secretaryRole,
+    coordinatorRole,
+    publicTalkCoordinatorRole,
+    publisherRole,
+    elderLocalRole,
+  } = useUserRole();
+
   const setVisitorID = useSetRecoilState(visitorIDState);
   const setApiHost = useSetRecoilState(apiHostState);
 
@@ -72,21 +82,10 @@ const App = ({ updatePwa }) => {
   const isLight = useRecoilValue(isLightThemeState);
   const appSnackOpen = useRecoilValue(appSnackOpenState);
   const isCongAccountConnected = useRecoilValue(congAccountConnectedState);
-  const congRole = useRecoilValue(congRoleState);
 
   const [activeTheme, setActiveTheme] = useState(darkTheme);
   const [isLoading, setIsLoading] = useState(true);
   const [isSupported, setIsSupported] = useState(true);
-
-  const secretaryRole = congRole.includes('secretary');
-  const lmmoRole = congRole.includes('lmmo') || congRole.includes('lmmo-backup');
-  const publicTalkCoordinatorRole = congRole.includes('public_talk_coordinator');
-  const coordinatorRole = congRole.includes('coordinator');
-  const adminRole = congRole.includes('admin');
-  const elderRole =
-    congRole.includes('elder') || secretaryRole || lmmoRole || coordinatorRole || publicTalkCoordinatorRole;
-  const msRole = congRole.includes('ms');
-  const publisherRole = congRole.includes('publisher') || msRole || elderRole;
 
   const router = createHashRouter([
     {
@@ -104,13 +103,10 @@ const App = ({ updatePwa }) => {
         },
         {
           element: <PrivatePublisherRoute isPublisher={publisherRole} />,
-          children: [
-            { path: '/user-field-service-reports', element: <UserFieldServiceReport /> },
-            { path: '/user-bible-studies', element: <UserBibleStudies /> },
-          ],
+          children: [{ path: '/user-field-service-reports', element: <UserFieldServiceReport /> }],
         },
         {
-          element: <PrivateElderRoute isElder={elderRole} />,
+          element: <PrivateElderRoute isElder={elderLocalRole} />,
           children: [
             {
               path: '/persons',

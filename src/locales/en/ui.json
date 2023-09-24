@@ -677,5 +677,14 @@
   "countriesFetchError": "Failed to fetch countries",
   "congregationsFetchError": "Failed to fetch congregations",
   "navMenuHelp": "Help",
-  "docsUrlCode": "docs"
+  "docsUrlCode": "docs",
+  "dateFormatFull": "{{ day }}, {{ month }} {{ date }}, {{ year }}",
+  "addNewBibleStudyLabel": "Add \"{{ name }}\"",
+  "bibleStudiesHeader": "Find or create Bible Student",
+  "S4PlacementsAlt": "PLC",
+  "S4VideoAlt": "VD",
+  "S4HoursAlt": "H",
+  "S4ReturnVisitsAlt": "RV",
+  "S4BibleStudiesAlt": "BS",
+  "S4SubmitTooltip": "Submit S-4 report"
 }

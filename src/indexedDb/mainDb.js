@@ -305,6 +305,9 @@ appDb.version(64).stores({
   visiting_speakers:
     '&cong_number, cong_id, cong_name, cong_speakers, is_local, request_status, notif_dismissed, changes',
 });
+appDb.version(65).stores({
+  user_bible_studies: '&uid, person_name, isDeleted',
+});
 
 appDb.on('populate', function () {
   appDb.app_settings.add({

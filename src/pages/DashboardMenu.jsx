@@ -7,7 +7,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -30,7 +29,8 @@ import SendIcon from '@mui/icons-material/Send';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import MenuCard from '../components/MenuCard';
-import { congAccountConnectedState, congRoleState } from '../states/congregation';
+import useUserRole from '../hooks/useUserRole';
+import { congAccountConnectedState } from '../states/congregation';
 import {
   accountTypeState,
   backupDbOpenState,
@@ -60,6 +60,16 @@ const DashboardMenu = () => {
   const { t } = useTranslation('ui');
   const navigate = useNavigate();
 
+  const {
+    adminRole,
+    lmmoRole,
+    secretaryRole,
+    coordinatorRole,
+    publicTalkCoordinatorRole,
+    publisherRole,
+    elderLocalRole,
+  } = useUserRole();
+
   const sourceLang = useRecoilValue(sourceLangState);
 
   const setAppSnackOpen = useSetRecoilState(appSnackOpenState);
@@ -82,23 +92,6 @@ const DashboardMenu = () => {
   const isCongAccountConnected = useRecoilValue(congAccountConnectedState);
   const isOnline = useRecoilValue(isOnlineState);
   const accountType = useRecoilValue(accountTypeState);
-  const congRole = useRecoilValue(congRoleState);
-
-  const lmmoRole = congRole.includes('lmmo') || congRole.includes('lmmo-backup');
-  const secretaryRole = congRole.includes('secretary');
-  const publicTalkCoordinatorRole = congRole.includes('public_talk_coordinator');
-  const coordinatorRole = congRole.includes('coordinator');
-  const adminRole = congRole.includes('admin');
-  const elderRole = congRole.includes('elder');
-  const msRole = congRole.includes('ms');
-  const publisherRole =
-    congRole.includes('publisher') ||
-    msRole ||
-    elderRole ||
-    lmmoRole ||
-    secretaryRole ||
-    coordinatorRole ||
-    publicTalkCoordinatorRole;
 
   const handleOpenMyAssignment = useCallback(() => {
     setWhatsNewOpen(false);
@@ -159,9 +152,7 @@ const DashboardMenu = () => {
     return [
       {
         title: t('persons'),
-        visible:
-          accountType === 'vip' &&
-          (lmmoRole || secretaryRole || elderRole || coordinatorRole || publicTalkCoordinatorRole),
+        visible: accountType === 'vip' && elderLocalRole,
         links: [
           {
             title: t('persons'),
@@ -285,12 +276,6 @@ const DashboardMenu = () => {
             navigateTo: '/user-field-service-reports',
           },
           {
-            title: t('myBibleStudies'),
-            icon: <AutoStoriesIcon />,
-            visible: publisherRole,
-            navigateTo: '/user-bible-studies',
-          },
-          {
             title: t('postFieldServiceReport'),
             icon: <NoteIcon />,
             visible: accountType === 'vip' && secretaryRole,
@@ -361,7 +346,6 @@ const DashboardMenu = () => {
     ];
   }, [
     accountType,
-    adminRole,
     handleCreateBackup,
     handleImportEPUB,
     handleImportJWOrg,
@@ -373,13 +357,14 @@ const DashboardMenu = () => {
     handleWeekAdd,
     isCongAccountConnected,
     isOnline,
-    lmmoRole,
-    secretaryRole,
     t,
-    publisherRole,
-    elderRole,
-    publicTalkCoordinatorRole,
+    adminRole,
     coordinatorRole,
+    lmmoRole,
+    elderLocalRole,
+    publicTalkCoordinatorRole,
+    secretaryRole,
+    publisherRole,
   ]);
 
   return (

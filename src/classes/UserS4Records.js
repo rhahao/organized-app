@@ -1,6 +1,11 @@
 import { format } from 'date-fns';
+import { promiseGetRecoil } from 'recoil-outside';
 import appDb from '../indexedDb/mainDb';
 import { UserS4DailyReportClass } from './UserS4DailyReport';
+import { secretaryRoleState } from '../states/congregation';
+import { ServiceYear } from './ServiceYear';
+import { Setting } from './Setting';
+import { S21s } from './S21s';
 
 class UserS4RecordsClass {
   constructor() {
@@ -41,23 +46,37 @@ UserS4RecordsClass.prototype.getByUid = function (report_uid) {
 };
 
 UserS4RecordsClass.prototype.get = async function (month_date) {
-  const tmpMonthValue = new Date(month_date);
   const record = this.list.find((record) => record.month_date === month_date);
+  return record;
+};
 
-  if (record) return record;
+UserS4RecordsClass.prototype.initialize = async function (month_date) {
+  const tmpMonthValue = new Date(month_date);
+  const monthStart = new Date(tmpMonthValue.getFullYear(), tmpMonthValue.getMonth(), 1);
 
-  if (!record) {
-    const monthStart = new Date(tmpMonthValue.getFullYear(), tmpMonthValue.getMonth(), 1);
+  const dailyRecord = new UserS4DailyReportClass();
+  dailyRecord.month = format(monthStart, 'yyyy/MM/dd');
+  dailyRecord.month_date = month_date;
+  await dailyRecord.save();
 
-    const dailyRecord = new UserS4DailyReportClass();
-    dailyRecord.month = format(monthStart, 'yyyy/MM/dd');
-    dailyRecord.month_date = month_date;
-    await dailyRecord.save();
+  this.list.push(dailyRecord);
 
-    this.list.push(dailyRecord);
+  // if secretary, initialize S-21 record
+  const secretaryRole = await promiseGetRecoil(secretaryRoleState);
+  console.log(secretaryRole);
+  if (secretaryRole) {
+    const currentServiceYear = ServiceYear.getByMonth(month_date).uid;
+    const localUid = Setting.user_local_uid;
 
-    return dailyRecord;
+    let currentS21 = S21s.get(currentServiceYear, localUid);
+    if (!currentS21) {
+      currentS21 = await S21s.add(currentServiceYear, localUid);
+    }
+
+    await currentS21.initializeMonth(month_date);
   }
+
+  return dailyRecord;
 };
 
 UserS4RecordsClass.prototype.getS4 = function (month) {

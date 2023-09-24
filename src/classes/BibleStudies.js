@@ -23,10 +23,6 @@ BibleStudiesClass.prototype.loadAll = async function () {
     const BibleStudy = new BibleStudyClass();
     BibleStudy.uid = person.uid;
     BibleStudy.person_name = person.person_name;
-    BibleStudy.person_active = person.person_active;
-    BibleStudy.person_addresses = person.person_addresses;
-    BibleStudy.person_contact = person.person_contact;
-    BibleStudy.changes = person.changes;
     this.list.push(BibleStudy);
   }
 
@@ -37,21 +33,19 @@ BibleStudiesClass.prototype.get = function (uid) {
   return this.list.find((record) => record.uid === uid);
 };
 
-BibleStudiesClass.prototype.create = async function (data) {
-  const BibleStudy = new BibleStudyClass();
-  BibleStudy.person_name = data.person_name;
-  BibleStudy.person_addresses = data.person_addresses;
-  BibleStudy.person_contact = data.person_contact;
-  BibleStudy.changes = [
-    { date: new Date(), field: 'person_name', value: data.person_name },
-    { date: new Date(), field: 'person_addresses', value: data.person_addresses },
-    { date: new Date(), field: 'person_contact', value: data.person_contact },
-  ];
+BibleStudiesClass.prototype.getByName = function (person_name) {
+  return this.list.find((record) => record.person_name === person_name);
+};
 
+BibleStudiesClass.prototype.create = async function (person_name) {
+  const BibleStudy = new BibleStudyClass();
+  BibleStudy.person_name = person_name;
   await appDb.user_bible_studies.put({ ...BibleStudy }, BibleStudy.uid);
 
   this.list.push(BibleStudy);
   this.sort();
+
+  return this.list;
 };
 
 BibleStudiesClass.prototype.delete = async function (uid) {
@@ -59,6 +53,8 @@ BibleStudiesClass.prototype.delete = async function (uid) {
   await currentBS.delete();
 
   this.list = this.list.filter((record) => record.uid !== uid);
+
+  return this.list;
 };
 
 BibleStudiesClass.prototype.cleanDeleted = async function () {

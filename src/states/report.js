@@ -22,3 +22,8 @@ export const pendingFieldServiceReportsCountState = selector({
     return pendingReports.length;
   },
 });
+
+export const isBibleStudyEditorOpenState = atom({
+  key: 'isBibleStudyEditorOpen',
+  default: false,
+});

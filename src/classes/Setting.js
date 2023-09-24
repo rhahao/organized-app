@@ -84,22 +84,57 @@ SettingClass.prototype.shortDateFormat = function () {
 
 SettingClass.prototype.monthNames = function () {
   const appLang = this.appLang();
+  const { getDataByLanguage } = getI18n();
 
   let months = [];
-  months.push(getI18n().getDataByLanguage(appLang).ui['january']);
-  months.push(getI18n().getDataByLanguage(appLang).ui['february']);
-  months.push(getI18n().getDataByLanguage(appLang).ui['march']);
-  months.push(getI18n().getDataByLanguage(appLang).ui['april']);
-  months.push(getI18n().getDataByLanguage(appLang).ui['may']);
-  months.push(getI18n().getDataByLanguage(appLang).ui['june']);
-  months.push(getI18n().getDataByLanguage(appLang).ui['july']);
-  months.push(getI18n().getDataByLanguage(appLang).ui['august']);
-  months.push(getI18n().getDataByLanguage(appLang).ui['september']);
-  months.push(getI18n().getDataByLanguage(appLang).ui['october']);
-  months.push(getI18n().getDataByLanguage(appLang).ui['november']);
-  months.push(getI18n().getDataByLanguage(appLang).ui['december']);
+  months.push(getDataByLanguage(appLang).ui['january']);
+  months.push(getDataByLanguage(appLang).ui['february']);
+  months.push(getDataByLanguage(appLang).ui['march']);
+  months.push(getDataByLanguage(appLang).ui['april']);
+  months.push(getDataByLanguage(appLang).ui['may']);
+  months.push(getDataByLanguage(appLang).ui['june']);
+  months.push(getDataByLanguage(appLang).ui['july']);
+  months.push(getDataByLanguage(appLang).ui['august']);
+  months.push(getDataByLanguage(appLang).ui['september']);
+  months.push(getDataByLanguage(appLang).ui['october']);
+  months.push(getDataByLanguage(appLang).ui['november']);
+  months.push(getDataByLanguage(appLang).ui['december']);
 
   return months;
+};
+
+SettingClass.prototype.dayNames = function () {
+  const appLang = this.appLang();
+  const { getDataByLanguage } = getI18n();
+
+  const days = [];
+  days.push(getDataByLanguage(appLang).ui['sunday']);
+  days.push(getDataByLanguage(appLang).ui['monday']);
+  days.push(getDataByLanguage(appLang).ui['tuesday']);
+  days.push(getDataByLanguage(appLang).ui['wednesday']);
+  days.push(getDataByLanguage(appLang).ui['thursday']);
+  days.push(getDataByLanguage(appLang).ui['friday']);
+  days.push(getDataByLanguage(appLang).ui['saturday']);
+
+  return days;
+};
+
+SettingClass.prototype.daysFirstLetter = function () {
+  const appLang = this.appLang();
+  const { getDataByLanguage } = getI18n();
+
+  const days = [];
+  days.push(getDataByLanguage(appLang).ui['monday']);
+  days.push(getDataByLanguage(appLang).ui['tuesday']);
+  days.push(getDataByLanguage(appLang).ui['wednesday']);
+  days.push(getDataByLanguage(appLang).ui['thursday']);
+  days.push(getDataByLanguage(appLang).ui['friday']);
+  days.push(getDataByLanguage(appLang).ui['saturday']);
+  days.push(getDataByLanguage(appLang).ui['sunday']);
+
+  return days.map((day) => {
+    return day.charAt(0).toUpperCase();
+  });
 };
 
 SettingClass.prototype.appLang = function () {
