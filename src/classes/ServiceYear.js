@@ -121,17 +121,25 @@ ServiceYearClass.prototype.getByMonth = function (month) {
 ServiceYearClass.prototype.getMonths = function (uid) {
   const SY = this.get(uid);
 
+  const currentSY = this.getCurrent();
+  const currentReportMonth = this.currentReportMonth();
+
   const options = [];
 
   let a = 8;
   for (let i = 0; i < 12; i++) {
     const year = a < 8 ? SY.value.split('-')[1] : SY.value.split('-')[0];
+    const value = `${year}/${String(a + 1).padStart(2, 0)}/01`;
 
     options.push({
       index: a,
-      value: `${year}/${String(a + 1).padStart(2, 0)}/01`,
+      value,
       label: `${Setting.monthNames()[a]} ${year}`,
     });
+
+    if (SY.value === currentSY.value) {
+      if (value === currentReportMonth) break;
+    }
 
     a++;
     if (a === 12) a = 0;

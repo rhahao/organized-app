@@ -64,7 +64,7 @@ UserS4RecordsClass.prototype.initialize = async function (month_date) {
   // if secretary, initialize S-21 record
   const secretaryRole = await promiseGetRecoil(secretaryRoleState);
   if (secretaryRole) {
-    const currentServiceYear = ServiceYear.getByMonth(month_date).uid;
+    const currentServiceYear = ServiceYear.getByMonth(dailyRecord.month).uid;
     const localUid = Setting.user_local_uid;
 
     let currentS21 = S21s.get(currentServiceYear, localUid);
@@ -72,7 +72,7 @@ UserS4RecordsClass.prototype.initialize = async function (month_date) {
       currentS21 = await S21s.add(currentServiceYear, localUid);
     }
 
-    await currentS21.initializeMonth(month_date);
+    await currentS21.initializeMonth(dailyRecord.month);
   }
 
   return dailyRecord;
