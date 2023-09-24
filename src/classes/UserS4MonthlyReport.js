@@ -1,9 +1,11 @@
+import { promiseGetRecoil } from 'recoil-outside';
 import {
   apiSendUserFieldServiceReports,
   apiUnpostUserFieldServiceReports,
   apiSendPocketFieldServiceReports,
   apiUnpostPocketFieldServiceReports,
 } from '../api';
+import { secretaryRoleState } from '../states/congregation';
 import { reportsFieldSum } from '../utils/app';
 import { S21s } from './S21s';
 import { ServiceYear } from './ServiceYear';
@@ -86,6 +88,16 @@ UserS4MonthlyReportClass.prototype.calculatePlacements = async function () {
 
   await dailyRecord.save();
 
+  // if secretary, save report to S-21 record
+  const secretaryRole = await promiseGetRecoil(secretaryRoleState);
+  if (secretaryRole) {
+    const currentServiceYear = ServiceYear.getByMonth(this.month).uid;
+    const localUid = Setting.user_local_uid;
+
+    const currentS21 = S21s.get(currentServiceYear, localUid);
+    await currentS21.saveMonthReport(this.month, { field: 'placements', value: this.placements });
+  }
+
   return this;
 };
 
@@ -98,6 +110,16 @@ UserS4MonthlyReportClass.prototype.calculateVideos = async function () {
   dailyRecord.changes = [{ date: new Date() }];
 
   await dailyRecord.save();
+
+  // if secretary, save report to S-21 record
+  const secretaryRole = await promiseGetRecoil(secretaryRoleState);
+  if (secretaryRole) {
+    const currentServiceYear = ServiceYear.getByMonth(this.month).uid;
+    const localUid = Setting.user_local_uid;
+
+    const currentS21 = S21s.get(currentServiceYear, localUid);
+    await currentS21.saveMonthReport(this.month, { field: 'videos', value: this.videos });
+  }
 
   return this;
 };
@@ -127,7 +149,8 @@ UserS4MonthlyReportClass.prototype.calculateHours = async function () {
   if (hours === 0) {
     if (minutes > 7 && minutes < 23) minutes = 15;
     if (minutes >= 23 && minutes < 38) minutes = 30;
-    if (minutes >= 38) minutes = 45;
+    if (minutes >= 38 && minutes <= 45) minutes = 45;
+    if (minutes > 45) hours = 1;
   }
 
   this.hours = `${hours}:${String(minutes).padStart(2, '0')}`;
@@ -138,6 +161,17 @@ UserS4MonthlyReportClass.prototype.calculateHours = async function () {
   dailyRecord.changes = [{ date: new Date() }];
 
   await dailyRecord.save();
+
+  // if secretary, save report to S-21 record
+  const secretaryRole = await promiseGetRecoil(secretaryRoleState);
+  if (secretaryRole) {
+    const currentServiceYear = ServiceYear.getByMonth(this.month).uid;
+    const localUid = Setting.user_local_uid;
+    const hours = this.hours.split(':')[0] === '0' ? '' : this.hours.split(':')[0];
+
+    const currentS21 = S21s.get(currentServiceYear, localUid);
+    await currentS21.saveMonthReport(this.month, { field: 'hours', value: hours });
+  }
 
   return this;
 };
@@ -151,6 +185,16 @@ UserS4MonthlyReportClass.prototype.calculateReturnVisits = async function () {
   dailyRecord.changes = [{ date: new Date() }];
 
   await dailyRecord.save();
+
+  // if secretary, save report to S-21 record
+  const secretaryRole = await promiseGetRecoil(secretaryRoleState);
+  if (secretaryRole) {
+    const currentServiceYear = ServiceYear.getByMonth(this.month).uid;
+    const localUid = Setting.user_local_uid;
+
+    const currentS21 = S21s.get(currentServiceYear, localUid);
+    await currentS21.saveMonthReport(this.month, { field: 'returnVisits', value: this.returnVisits });
+  }
 
   return this;
 };
@@ -172,6 +216,16 @@ UserS4MonthlyReportClass.prototype.calculateBiblesStudies = async function () {
   dailyRecord.changes = [{ date: new Date() }];
 
   await dailyRecord.save();
+
+  // if secretary, save report to S-21 record
+  const secretaryRole = await promiseGetRecoil(secretaryRoleState);
+  if (secretaryRole) {
+    const currentServiceYear = ServiceYear.getByMonth(this.month).uid;
+    const localUid = Setting.user_local_uid;
+
+    const currentS21 = S21s.get(currentServiceYear, localUid);
+    await currentS21.saveMonthReport(this.month, { field: 'bibleStudies', value: this.bibleStudies });
+  }
 
   return this;
 };

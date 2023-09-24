@@ -31,7 +31,8 @@ const UserS4Field = ({ fldType, fldName, month }) => {
 
         if (fldName === 'hours') {
           currentS4 = await currentS4.calculateHours();
-          const value = currentS4.hours.split(':')[0];
+          let value = currentS4.hours.split(':')[0];
+          if (value === '0') value = '';
           setValue(value);
         }
 

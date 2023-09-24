@@ -1,5 +1,6 @@
 import appDb from '../indexedDb/mainDb';
 import { BibleStudies } from './BibleStudies';
+import { UserS4Records } from './UserS4Records';
 
 export class BibleStudyClass {
   constructor() {
@@ -8,19 +9,6 @@ export class BibleStudyClass {
     this.isDeleted = false;
   }
 }
-
-BibleStudyClass.prototype.compare = function (data) {
-  const excludeFields = ['isDeleted', 'uid'];
-
-  for (const [key, value] of Object.entries(this)) {
-    if (excludeFields.indexOf(key) === -1) {
-      if (value !== data[key]) {
-        this.changes = this.changes.filter((record) => record.field !== key);
-        this.changes.push({ date: new Date(), field: key, value: data[key] });
-      }
-    }
-  }
-};
 
 BibleStudyClass.prototype.save = async function (data) {
   this.compare(data);
@@ -34,4 +22,20 @@ BibleStudyClass.prototype.save = async function (data) {
 BibleStudyClass.prototype.delete = async function () {
   this.isDeleted = true;
   await appDb.user_bible_studies.update(this.uid, { ...this });
+};
+
+BibleStudyClass.prototype.isActive = function () {
+  let isActive = false;
+
+  for (const report of UserS4Records.list) {
+    if (Array.isArray(report.bibleStudies)) {
+      const findRecord = report.bibleStudies.some((person) => person === this.uid);
+      if (findRecord) {
+        isActive = true;
+        break;
+      }
+    }
+  }
+
+  return isActive;
 };

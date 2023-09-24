@@ -198,6 +198,7 @@ const S4BibleStudiesField = ({ currentDate }) => {
             sx={{ '.MuiOutlinedInput-input': { textAlign: 'center', fontSize: '18px' } }}
             InputProps={{ readOnly: true }}
             type="number"
+            onClick={handleOpenEditor}
             value={bsCount}
           />
         </Box>
