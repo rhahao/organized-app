@@ -21,6 +21,7 @@ const useUserRole = () => {
   const elderLocalRole = useRecoilValue(elderLocalRoleState);
   const msRole = useRecoilValue(msRoleState);
   const publisherRole = useRecoilValue(publisherRoleState);
+  const fullMeetingEditor = lmmoRole && coordinatorRole && publicTalkCoordinatorRole;
 
   return {
     adminRole,
@@ -32,6 +33,7 @@ const useUserRole = () => {
     elderLocalRole,
     msRole,
     publisherRole,
+    fullMeetingEditor,
   };
 };
 

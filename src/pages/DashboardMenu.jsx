@@ -68,6 +68,7 @@ const DashboardMenu = () => {
     publicTalkCoordinatorRole,
     publisherRole,
     elderLocalRole,
+    fullMeetingEditor,
   } = useUserRole();
 
   const sourceLang = useRecoilValue(sourceLangState);
@@ -224,7 +225,7 @@ const DashboardMenu = () => {
           {
             title: t('refreshSchedule'),
             icon: <CloudSyncIcon />,
-            visible: isCongAccountConnected && !lmmoRole && !coordinatorRole && !publicTalkCoordinatorRole,
+            visible: isCongAccountConnected && !fullMeetingEditor,
             action: apiFetchSchedule,
           },
         ],
@@ -365,6 +366,7 @@ const DashboardMenu = () => {
     publicTalkCoordinatorRole,
     secretaryRole,
     publisherRole,
+    fullMeetingEditor,
   ]);
 
   return (
