@@ -7,14 +7,16 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { UserS4Records } from '../../classes/UserS4Records';
 import { refreshScreenState } from '../../states/main';
+import { UserS4MonthlyReport } from '../../classes/UserS4MonthlyReport';
 
-const S4HourField = ({ currentDate }) => {
+const S4HourField = ({ currentDate, month }) => {
   const { t } = useTranslation('ui');
 
   const setScreenRefresh = useSetRecoilState(refreshScreenState);
 
   const [hasError, setHasError] = useState(false);
   const [value, setValue] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChangeDuration = useCallback(
     async (value) => {
@@ -109,11 +111,14 @@ const S4HourField = ({ currentDate }) => {
 
         setValue(tmpValue);
       }
+
+      const currentS4 = await UserS4MonthlyReport.get(month);
+      setIsSubmitted(currentS4.isSubmitted);
     };
 
     setValue('');
     handleGetReportValue();
-  }, [currentDate]);
+  }, [currentDate, month]);
 
   return (
     <Box sx={{ margin: '10px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '280px' }}>
@@ -128,6 +133,7 @@ const S4HourField = ({ currentDate }) => {
           fullWidth={true}
           sx={{ '.MuiOutlinedInput-input': { textAlign: 'center', fontSize: '18px' } }}
           placeholder="H:MM"
+          InputProps={{ readOnly: isSubmitted }}
           value={value}
           onChange={onChange}
           error={hasError}

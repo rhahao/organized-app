@@ -14,10 +14,11 @@ import { BibleStudies } from '../../classes/BibleStudies';
 import { UserS4Records } from '../../classes/UserS4Records';
 import { refreshScreenState } from '../../states/main';
 import { isBibleStudyEditorOpenState } from '../../states/report';
+import { UserS4MonthlyReport } from '../../classes/UserS4MonthlyReport';
 
 const filter = createFilterOptions();
 
-const S4BibleStudiesField = ({ currentDate }) => {
+const S4BibleStudiesField = ({ currentDate, month }) => {
   const { t } = useTranslation('ui');
 
   const [openEditor, setOpenEditor] = useRecoilState(isBibleStudyEditorOpenState);
@@ -27,6 +28,7 @@ const S4BibleStudiesField = ({ currentDate }) => {
   const [bsCount, setBsCount] = useState('');
   const [selected, setSelected] = useState([]);
   const [options, setOptions] = useState([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleUpdateBibleStudies = async (newValue, details, reason) => {
     // add new bible study
@@ -121,11 +123,14 @@ const S4BibleStudiesField = ({ currentDate }) => {
 
         setSelected(tmpValue);
       }
+
+      const currentS4 = await UserS4MonthlyReport.get(month);
+      setIsSubmitted(currentS4.isSubmitted);
     };
 
     setSelected([]);
     handleGetReportValue();
-  }, [currentDate]);
+  }, [currentDate, month]);
 
   useEffect(() => {
     setBsCount(selected.length || '');
@@ -198,11 +203,11 @@ const S4BibleStudiesField = ({ currentDate }) => {
             sx={{ '.MuiOutlinedInput-input': { textAlign: 'center', fontSize: '18px' } }}
             InputProps={{ readOnly: true }}
             type="number"
-            onClick={handleOpenEditor}
+            onClick={isSubmitted ? null : handleOpenEditor}
             value={bsCount}
           />
         </Box>
-        <IconButton aria-label="add" color="secondary" onClick={handleOpenEditor}>
+        <IconButton aria-label="add" color="secondary" disabled={isSubmitted} onClick={handleOpenEditor}>
           <EditIcon sx={{ fontSize: '30px' }} />
         </IconButton>
       </Box>

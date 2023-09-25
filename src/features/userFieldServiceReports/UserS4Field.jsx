@@ -17,7 +17,7 @@ const UserS4Field = ({ fldType, fldName, month }) => {
 
   useEffect(() => {
     const loadS4 = async () => {
-      let currentS4 = await UserS4MonthlyReport.get(month);
+      let currentS4 = UserS4MonthlyReport.get(month);
       if (currentS4) {
         if (fldName === 'placements') {
           currentS4 = await currentS4.calculatePlacements();

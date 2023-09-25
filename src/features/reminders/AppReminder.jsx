@@ -51,7 +51,7 @@ const AppReminder = () => {
 
     if (publisherRole) {
       if (date >= 2 && date < 20) {
-        const currentS4 = await UserS4MonthlyReport.get(currentMonth);
+        const currentS4 = UserS4MonthlyReport.get(currentMonth);
         const isS1Submitted = currentS4.isSubmitted;
         if (!isS1Submitted) {
           setHasReminder(true);

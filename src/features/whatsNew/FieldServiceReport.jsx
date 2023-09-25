@@ -20,7 +20,7 @@ const FieldServiceReport = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', gap: '8px' }}>
+    <Box sx={{ display: 'flex', gap: '8px', borderBottom: '1px outset', paddingBottom: '15px' }}>
       <FactCheckIcon color="success" />
       <Box>
         <Typography>{t('pendingFieldServiceReportsNew')}</Typography>

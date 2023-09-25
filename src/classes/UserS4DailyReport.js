@@ -30,7 +30,8 @@ UserS4DailyReportClass.prototype.null = function () {
 
   if (this.placements > 0) result = false;
   if (this.videos > 0) result = false;
-  if (this.duration !== 0 && this.duration !== '00:00' && this.duration !== '') result = false;
+  if (this.duration !== 0 && this.duration !== '00:00' && this.duration !== '' && this.duration !== '0:00')
+    result = false;
   if (this.returnVisits > 0) result = false;
   if (this.bibleStudies.length > 0) result = false;
 

@@ -9,10 +9,10 @@ import { isLightThemeState } from '../states/main';
 import { getLastDate } from '../utils/date';
 import { Setting } from '../classes/Setting';
 
-const MonthCalendar = ({ month, marked = [], selectedDate }) => {
+const MonthCalendar = ({ month, marked = [], selectedDate, disableUnmarked = false, initialSelected = 1 }) => {
   const isLight = useRecoilValue(isLightThemeState);
 
-  const [selected, setSelected] = useState(1);
+  const [selected, setSelected] = useState(initialSelected);
 
   const minDate = new Date(month);
   const maxDate = getLastDate(month);
@@ -101,6 +101,7 @@ const MonthCalendar = ({ month, marked = [], selectedDate }) => {
               position: 'relative',
               marginBottom: '5px',
             }}
+            disabled={marked && disableUnmarked && !marked.includes(date)}
           >
             {date}
             {marked && marked.includes(date) && (

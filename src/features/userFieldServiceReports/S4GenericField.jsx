@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Box from '@mui/material/Box';
@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { UserS4Records } from '../../classes/UserS4Records';
 import { refreshScreenState } from '../../states/main';
+import { UserS4MonthlyReport } from '../../classes/UserS4MonthlyReport';
 
 const getClassField = (fldType) => {
   if (fldType === 'S4Placements') return 'placements';
@@ -16,12 +17,13 @@ const getClassField = (fldType) => {
   if (fldType === 'S4ReturnVisits') return 'returnVisits';
 };
 
-const S4GenericField = ({ fldType, currentDate }) => {
+const S4GenericField = ({ fldType, currentDate, month }) => {
   const { t } = useTranslation('ui');
 
-  const setScreenRefresh = useSetRecoilState(refreshScreenState);
+  const [screenRefresh, setScreenRefresh] = useRecoilState(refreshScreenState);
 
   const [value, setValue] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const fldName = useMemo(() => t(fldType), [fldType, t]);
 
@@ -67,11 +69,14 @@ const S4GenericField = ({ fldType, currentDate }) => {
       if (data) {
         setValue(data[fldName] || '');
       }
+
+      const currentS4 = await UserS4MonthlyReport.get(month);
+      setIsSubmitted(currentS4.isSubmitted);
     };
 
     setValue('');
     handleGetReportValue();
-  }, [currentDate, fldType]);
+  }, [currentDate, fldType, month, screenRefresh]);
 
   return (
     <Box sx={{ margin: '10px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '280px' }}>
@@ -80,7 +85,7 @@ const S4GenericField = ({ fldType, currentDate }) => {
       </Typography>
 
       <Box sx={{ display: 'flex', falignItems: 'center' }}>
-        <IconButton aria-label="remove" color="warning" onClick={handleDecreaseCount}>
+        <IconButton aria-label="remove" color="warning" disabled={isSubmitted} onClick={handleDecreaseCount}>
           <RemoveCircleIcon sx={{ fontSize: '30px' }} />
         </IconButton>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -89,12 +94,13 @@ const S4GenericField = ({ fldType, currentDate }) => {
             size="small"
             fullWidth={true}
             sx={{ '.MuiOutlinedInput-input': { textAlign: 'center', fontSize: '18px' } }}
+            InputProps={{ readOnly: isSubmitted }}
             type="number"
             value={value}
             onChange={(e) => handleUpdateRecord(e.target.value)}
           />
         </Box>
-        <IconButton aria-label="add" color="secondary" onClick={handleIncreaseCount}>
+        <IconButton aria-label="add" color="secondary" disabled={isSubmitted} onClick={handleIncreaseCount}>
           <AddCircleIcon sx={{ fontSize: '30px' }} />
         </IconButton>
       </Box>

@@ -29,7 +29,7 @@ class UserS4MonthlyReportClass {
   }
 }
 
-UserS4MonthlyReportClass.prototype.get = async function (month) {
+UserS4MonthlyReportClass.prototype.get = function (month) {
   const S4Record = UserS4Records.list.find((record) => record.month === month && record.isS4 === true);
 
   if (S4Record) {
@@ -260,27 +260,6 @@ UserS4MonthlyReportClass.prototype.submit = async function () {
     await apiSendPocketFieldServiceReports(S4);
   }
 
-  // local handling if secretary
-  if (secretaryRole) {
-    const currentServiceYear = ServiceYear.getByMonth(this.month).uid;
-    const localUid = Setting.user_local_uid;
-
-    let currentS21 = S21s.get(currentServiceYear, localUid);
-    if (!currentS21) {
-      currentS21 = await S21s.add(currentServiceYear, localUid);
-    }
-
-    const hours = S4.duration === '' ? '' : +S4.duration.split(':')[0];
-
-    await currentS21.initializeMonth(this.month);
-    await currentS21.saveMonthReport(this.month, { field: 'placements', value: this.placements });
-    await currentS21.saveMonthReport(this.month, { field: 'videos', value: this.videos });
-    await currentS21.saveMonthReport(this.month, { field: 'hours', value: hours });
-    await currentS21.saveMonthReport(this.month, { field: 'returnVisits', value: this.returnVisits });
-    await currentS21.saveMonthReport(this.month, { field: 'bibleStudies', value: this.bibleStudies });
-    await currentS21.saveMonthReport(this.month, { field: 'comments', value: this.comments });
-  }
-
   await S4.save();
 
   this.isSubmitted = true;
@@ -313,6 +292,18 @@ UserS4MonthlyReportClass.prototype.undoSubmit = async function () {
   this.isSubmitted = false;
 
   return this;
+};
+
+UserS4MonthlyReportClass.prototype.null = function () {
+  let result = true;
+
+  if (this.placements > 0) result = false;
+  if (this.videos > 0) result = false;
+  if (this.hours !== 0 && this.hours !== '00:00' && this.hours !== '' && this.hours !== '0:00') result = false;
+  if (this.returnVisits > 0) result = false;
+  if (this.bibleStudies > 0) result = false;
+
+  return result;
 };
 
 export const UserS4MonthlyReport = new UserS4MonthlyReportClass();

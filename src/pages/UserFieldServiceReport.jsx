@@ -23,11 +23,9 @@ const UserFieldServiceReport = () => {
   );
   const [currentMonth, setCurrentMonth] = useState('');
   const [allMonths, setAllMonths] = useState([]);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isPending, setIsPending] = useState(true);
-  const [isLocked, setIsLocked] = useState(false);
   const [datesMarked, setDatesMarked] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleServiceYearChange = (value) => {
     setCurrentServiceYear(value);
@@ -71,28 +69,23 @@ const UserFieldServiceReport = () => {
 
   useEffect(() => {
     const initializeMonth = async () => {
-      const currentS21 = UserS4Records.getS21(currentMonth);
-      if (currentS21) {
-        setIsLocked(true);
+      let currentS4 = UserS4MonthlyReport.get(currentMonth);
+
+      if (!currentS4) {
+        currentS4 = await UserS4MonthlyReport.initialize(currentMonth);
       }
 
-      if (!currentS21) {
-        let currentS4 = await UserS4MonthlyReport.get(currentMonth);
+      setIsSubmitted(currentS4.isSubmitted);
 
-        if (!currentS4) {
-          currentS4 = await UserS4MonthlyReport.initialize(currentMonth);
+      const tmpMarked = [];
+      for (const report of currentS4.reports) {
+        const isNull = report.null();
+        if (!isNull) {
+          tmpMarked.push(+report.month_date.split('/')[2]);
         }
-
-        const tmpMarked = [];
-        for (const report of currentS4.reports) {
-          const isNull = report.null();
-          if (!isNull) {
-            tmpMarked.push(+report.month_date.split('/')[2]);
-          }
-        }
-
-        setDatesMarked(tmpMarked);
       }
+
+      setDatesMarked(tmpMarked);
     };
 
     if (currentMonth !== '') {
@@ -142,11 +135,17 @@ const UserFieldServiceReport = () => {
       <UserS4 month={currentMonth} />
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'flex-start' }}>
-        <MonthCalendar month={currentMonth} marked={datesMarked} selectedDate={(value) => handleDateSelected(value)} />
+        <MonthCalendar
+          month={currentMonth}
+          marked={datesMarked}
+          disableUnmarked={isSubmitted}
+          selectedDate={(value) => handleDateSelected(value)}
+          initialSelected={isSubmitted ? +datesMarked[0] : undefined}
+        />
         {selectedDate !== null && (
           <Box>
             <Typography sx={{ fontWeight: 'bold' }}>{formatDateFull(selectedDate)}</Typography>
-            <S4DailyRecord date={selectedDate} />
+            <S4DailyRecord month={currentMonth} date={selectedDate} />
           </Box>
         )}
       </Box>
