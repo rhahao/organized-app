@@ -336,11 +336,10 @@ appDb
       await trans.sched.put(data, oldWeekOf);
     }
   });
-  
+
 appDb.version(68).stores({
   user_bible_studies: '&uid, person_name, isDeleted',
 });
-
 
 appDb.on('populate', function () {
   appDb.app_settings.add({

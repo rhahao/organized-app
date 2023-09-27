@@ -26,8 +26,6 @@ const WeekendAssignments = () => {
 
   const { opening_prayer_WM_autoAssign } = Setting;
 
-  const { opening_prayer_WM_autoAssign } = Setting;
-
   useEffect(() => {
     if (week !== '') {
       const lmmoRole = Setting.cong_role.includes('lmmo') || Setting.cong_role.includes('lmmo-backup');
