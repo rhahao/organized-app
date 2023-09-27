@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { Markup } from 'interweave';
 import { useTheme } from '@mui/material/styles';
@@ -18,12 +18,14 @@ import SendIcon from '@mui/icons-material/Send';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import WarningIcon from '@mui/icons-material/Warning';
 import UserS4Field from './UserS4Field';
 import useUserRole from '../../hooks/useUserRole';
 import { ServiceYear } from '../../classes/ServiceYear';
 import { refreshScreenState } from '../../states/main';
 import { UserS4MonthlyReport } from '../../classes/UserS4MonthlyReport';
 import { getMonthName } from '../../utils/app';
+import { congAccountConnectedState } from '../../states/congregation';
 
 const UserS4 = ({ month }) => {
   const { t } = useTranslation('ui');
@@ -36,6 +38,8 @@ const UserS4 = ({ month }) => {
 
   const [screenRefresh, setScreenRefresh] = useRecoilState(refreshScreenState);
 
+  const congAccountConnected = useRecoilValue(congAccountConnectedState);
+
   const [isCurrent, setIsCurrent] = useState(false);
   const [hasReport, setHasReport] = useState(false);
   const [submitOpen, setSubmitOpen] = useState(false);
@@ -43,6 +47,7 @@ const UserS4 = ({ month }) => {
   const [isPending, setIsPending] = useState(false);
   const [reportS4, setReportS4] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [hasIssue, setHasIssue] = useState(false);
 
   const handleOpenSubmit = () => setSubmitOpen(true);
   const handleCloseSubmit = () => setSubmitOpen(false);
@@ -78,10 +83,19 @@ const UserS4 = ({ month }) => {
 
     const currentS4 = UserS4MonthlyReport.get(month);
     if (currentS4) {
+      console.log(currentS4);
       const hasReport = !currentS4.null();
       setHasReport(hasReport);
       setIsSubmitted(currentS4.isSubmitted);
       setIsPending(currentS4.isPending);
+
+      const returnVisits = currentS4.returnVisits || 0;
+      const bibleStudies = currentS4.bibleStudies || 0;
+
+      setHasIssue(false);
+      if (returnVisits < bibleStudies) {
+        setHasIssue(true);
+      }
     }
   }, [month, screenRefresh]);
 
@@ -167,7 +181,8 @@ const UserS4 = ({ month }) => {
       <Paper elevation={1} sx={{ marginBottom: '20px', width: '305px', padding: '10px' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
           <Typography sx={{ fontWeight: 'bold' }}>Totals</Typography>
-          {!secretaryRole && isCurrent && hasReport && !isSubmitted && (
+
+          {congAccountConnected && !secretaryRole && isCurrent && hasReport && !isSubmitted && !hasIssue && (
             <Tooltip title={t('S4Submit')}>
               <IconButton color="success" onClick={handleOpenSubmit}>
                 <SendIcon />
@@ -175,7 +190,11 @@ const UserS4 = ({ month }) => {
             </Tooltip>
           )}
 
-          {!secretaryRole && isSubmitted && isPending && !isProcessing && (
+          {!secretaryRole && isCurrent && hasReport && !isSubmitted && hasIssue && (
+            <WarningIcon sx={{ color: '#DC7633', fontSize: '25px' }} />
+          )}
+
+          {congAccountConnected && !secretaryRole && isSubmitted && isPending && !isProcessing && (
             <Tooltip title={t('undoSubmit')}>
               <IconButton color="error" onClick={handleUndoSubmit}>
                 <CancelScheduleSendIcon />
@@ -194,10 +213,18 @@ const UserS4 = ({ month }) => {
           <UserS4Field fldType="S4BibleStudiesAlt" fldName="bibleStudies" month={month} />
         </Box>
 
-        {!secretaryRole && isSubmitted && isPending && !isProcessing && (
+        {congAccountConnected && !secretaryRole && isSubmitted && isPending && !isProcessing && (
           <Box sx={{ borderTop: '1px outset', marginTop: '15px', paddingTop: '10px' }}>
             <Typography color="#D35400" sx={{ fontSize: '14px', lineHeight: 1.2 }}>
               <Markup content={t('S4UndoSubmitDisclaimer')} />
+            </Typography>
+          </Box>
+        )}
+
+        {!isSubmitted && isPending && !isProcessing && hasIssue && (
+          <Box sx={{ borderTop: '1px outset', marginTop: '15px', paddingTop: '10px' }}>
+            <Typography color="#D35400" sx={{ fontSize: '14px', lineHeight: 1.2 }}>
+              <Markup content={t('publisherLessReturnVisitsWarning')} />
             </Typography>
           </Box>
         )}

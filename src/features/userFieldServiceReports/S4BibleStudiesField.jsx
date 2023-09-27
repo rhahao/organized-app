@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
@@ -23,7 +23,7 @@ const S4BibleStudiesField = ({ currentDate, month }) => {
 
   const [openEditor, setOpenEditor] = useRecoilState(isBibleStudyEditorOpenState);
 
-  const setScreenRefresh = useSetRecoilState(refreshScreenState);
+  const [screenRefresh, setScreenRefresh] = useRecoilState(refreshScreenState);
 
   const [bsCount, setBsCount] = useState('');
   const [selected, setSelected] = useState([]);
@@ -125,12 +125,12 @@ const S4BibleStudiesField = ({ currentDate, month }) => {
       }
 
       const currentS4 = await UserS4MonthlyReport.get(month);
-      setIsSubmitted(currentS4.isSubmitted);
+      if (currentS4) setIsSubmitted(currentS4.isSubmitted);
     };
 
     setSelected([]);
     handleGetReportValue();
-  }, [currentDate, month]);
+  }, [currentDate, month, screenRefresh]);
 
   useEffect(() => {
     setBsCount(selected.length || '');

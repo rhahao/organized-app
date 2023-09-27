@@ -689,5 +689,6 @@
   "S4Submit": "Submit S-4 report",
   "S4InfoHeader": "Here’s your field service report for <strong>{{ month }}:</strong>",
   "S4CommentsInfo": "Add comments, if necessary, and click <strong>SUBMIT</strong> to send it to the secretary.",
-  "S4UndoSubmitDisclaimer": "Your field service report was already submitted to the secretary. If you have to make a change, click the <em>Undo Submit</em> icon above."
+  "S4UndoSubmitDisclaimer": "Your field service report was already submitted to the secretary. If you have to make a change, click the <em>Undo Submit</em> icon above.",
+  "publisherLessReturnVisitsWarning": "Please check your report. Return visits should not be less than bible studies."
 }

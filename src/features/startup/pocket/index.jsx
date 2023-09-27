@@ -85,6 +85,7 @@ const PocketStartup = () => {
         await loadApp();
         await runUpdater();
         await updateUserSettings(data);
+        // await UserS4Records.updateFromSecretary(data.fieldServiceReports);
         await apiFetchSchedule();
         setTimeout(async () => {
           setCongAccountConnected(true);

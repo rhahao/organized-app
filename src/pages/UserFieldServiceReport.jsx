@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import { ServiceYear } from '../classes/ServiceYear';
 import { S4DailyRecord, UserS4 } from '../features/userFieldServiceReports';
 import { UserS4MonthlyReport } from '../classes/UserS4MonthlyReport';
-import { UserS4Records } from '../classes/UserS4Records';
 import { refreshScreenState } from '../states/main';
 import { formatDateFull } from '../utils/date';
 

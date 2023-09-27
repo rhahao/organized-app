@@ -268,28 +268,38 @@ UserS4MonthlyReportClass.prototype.submit = async function () {
 };
 
 UserS4MonthlyReportClass.prototype.undoSubmit = async function () {
-  const dailyRecord = UserS4Records.getS4(this.month);
-  dailyRecord.isSubmitted = false;
-  dailyRecord.isPending = true;
-  dailyRecord.changes = [{ date: new Date() }];
-
   const secretaryRole = Setting.cong_role.includes('secretary');
   const vipRole = !secretaryRole && Setting.account_type === 'vip';
   const pocketRole = !secretaryRole && Setting.account_type === 'pocket';
+  let status;
 
   // http request if vip
   if (vipRole) {
-    await apiUnpostUserFieldServiceReports(this.month);
+    const res = await apiUnpostUserFieldServiceReports(this.month);
+    status = res.status;
   }
 
   // http request if pocket
   if (pocketRole) {
-    await apiUnpostPocketFieldServiceReports(this.month);
+    const res = await apiUnpostPocketFieldServiceReports(this.month);
+    status = res.status;
   }
 
-  await dailyRecord.save();
+  if (status === 200) {
+    const dailyRecord = UserS4Records.getS4(this.month);
+    dailyRecord.isSubmitted = false;
+    dailyRecord.isPending = true;
+    dailyRecord.changes = [{ date: new Date() }];
+    await dailyRecord.save();
+    this.isSubmitted = false;
+  }
 
-  this.isSubmitted = false;
+  if (status === 404) {
+    const dailyRecord = UserS4Records.getS4(this.month);
+    dailyRecord.isPending = false;
+    await dailyRecord.save();
+    this.isPending = false;
+  }
 
   return this;
 };
@@ -305,5 +315,27 @@ UserS4MonthlyReportClass.prototype.null = function () {
 
   return result;
 };
+
+// UserS4MonthlyReportClass.prototype.saveFromSecretary = async function (data) {
+//   const dailyRecord = UserS4Records.getS4(this.month);
+//   dailyRecord.placements = data.placements;
+//   dailyRecord.videos = data.videos;
+//   dailyRecord.duration = data.hours;
+//   dailyRecord.returnVisits = data.returnVisits;
+//   dailyRecord.bibleStudies = data.bibleStudies;
+//   dailyRecord.comments = data.comments;
+//   dailyRecord.changes = data.changes;
+
+//   await dailyRecord.save();
+
+//   this.placements = data.placements;
+//   this.videos = data.videos;
+//   this.hours = data.hours;
+//   this.returnVisits = data.returnVisits;
+//   this.bibleStudies = data.bibleStudies;
+//   this.comments = data.comments;
+
+//   return this;
+// };
 
 export const UserS4MonthlyReport = new UserS4MonthlyReportClass();

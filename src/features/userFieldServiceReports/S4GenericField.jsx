@@ -71,7 +71,7 @@ const S4GenericField = ({ fldType, currentDate, month }) => {
       }
 
       const currentS4 = await UserS4MonthlyReport.get(month);
-      setIsSubmitted(currentS4.isSubmitted);
+      if (currentS4) setIsSubmitted(currentS4.isSubmitted);
     };
 
     setValue('');

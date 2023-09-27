@@ -6,6 +6,7 @@ import { secretaryRoleState } from '../states/congregation';
 import { ServiceYear } from './ServiceYear';
 import { Setting } from './Setting';
 import { S21s } from './S21s';
+import { UserS4MonthlyReport } from './UserS4MonthlyReport';
 
 class UserS4RecordsClass {
   constructor() {
@@ -195,5 +196,19 @@ UserS4RecordsClass.prototype.mergeFromBackup = async function (reportsBackup) {
     }
   }
 };
+
+// UserS4RecordsClass.prototype.updateFromSecretary = async function (userFieldSericeReports) {
+//   const newS4 = userFieldSericeReports.find((report) => report.isS4);
+//   const newS21 = userFieldSericeReports.find((report) => report.isS21);
+
+//   if (newS4) {
+//     const oldS4 = UserS4MonthlyReport.get(newS4.month);
+
+//     const oldDate = oldS4.changes[0] ? new Date(oldS4.changes[0].date) : undefined;
+//     const newDate = newS4.changes[0] ? new Date(newS4.changes[0].date) : undefined;
+
+//     console.log(oldDate, newDate);
+//   }
+// };
 
 export const UserS4Records = new UserS4RecordsClass();
