@@ -243,7 +243,7 @@ const DashboardMenu = () => {
           {
             title: t('publicTalksList'),
             icon: <ListAltIcon />,
-            visible: publicTalkCoordinatorRole || coordinatorRole,
+            visible: publicTalkCoordinatorRole,
             navigateTo: '/public-talks',
           },
           {

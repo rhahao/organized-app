@@ -1,4 +1,46 @@
+# [2.97.0](https://github.com/sws2apps/cpe-sws/compare/v2.96.1...v2.97.0) (2023-09-27)
+
+
+### Bug Fixes
+
+* **schedules:** display weekend public talk by circuit overseer ([4ae467e](https://github.com/sws2apps/cpe-sws/commit/4ae467e8345ae0e1bee4805795dde462018c04d7))
+
+
+### Features
+
+* **deps:** bump @mui/icons-material from 5.14.9 to 5.14.11 ([35bd75a](https://github.com/sws2apps/cpe-sws/commit/35bd75a8e887ca38f2c9fc4ceb375438446bc00d))
+* **deps:** bump @mui/material from 5.14.10 to 5.14.11 ([77b594c](https://github.com/sws2apps/cpe-sws/commit/77b594cfd77cce6f3df163c7061623517a7099e0))
+* **deps:** bump jw-epub-parser from 2.0.0 to 3.0.0 ([17ea0bb](https://github.com/sws2apps/cpe-sws/commit/17ea0bb0748e6b5d323ec9b59d95f4ec5b32cec4))
+
 ## [2.96.1](https://github.com/sws2apps/cpe-sws/compare/v2.96.0...v2.96.1) (2023-09-25)
+
+
+### Bug Fixes
+
+* **app:** app crash on some users ([8e2fdf0](https://github.com/sws2apps/cpe-sws/commit/8e2fdf02b9b686381c2aef5a4f3266b39c18aae5))
+* **app:** display refresh schedule if not full meeting editor role ([f5a7334](https://github.com/sws2apps/cpe-sws/commit/f5a73349ad2d9f8fa7f18515307d8374d19d578a))
+* **app:** use merge when restoring public talks backup ([7f4b2f8](https://github.com/sws2apps/cpe-sws/commit/7f4b2f88e13358a7b667423936d38b622223e9d6))
+* **schedules:** 2nd assignment not showing in living as christians part ([e0961f3](https://github.com/sws2apps/cpe-sws/commit/e0961f35b3f2a0a542b6d4820d07ff289cca818f))
+* **schedules:** hide opening prayer in weekend meeting if enabled ([4379c78](https://github.com/sws2apps/cpe-sws/commit/4379c7896239339f46318b5c2877b3ee9d441c80))
+* **schedules:** weekend meeting export fails for some languages ([a180425](https://github.com/sws2apps/cpe-sws/commit/a1804259d2f7ca0dc7648c8bbe70dd9fe5028c7f))
+
+# [2.96.0](https://github.com/sws2apps/cpe-sws/compare/v2.95.0...v2.96.0) (2023-09-24)
+
+
+### Bug Fixes
+
+* **app:** update route path to latest version ([e8f7c78](https://github.com/sws2apps/cpe-sws/commit/e8f7c78b944f8319a4835721031757dd9dea0bd6))
+* **app:** update route path to latest version ([0a69012](https://github.com/sws2apps/cpe-sws/commit/0a69012c28e9c6dc1babbc5c4aa0f8a07cf22d22))
+* **persons:** inactive publishers count update ([5b75d93](https://github.com/sws2apps/cpe-sws/commit/5b75d93eb49fa4010780ce89b180f71983e08dc6))
+
+
+### Features
+
+* **deps:** bump @mui/x-date-pickers from 6.14.0 to 6.15.0 ([1008e85](https://github.com/sws2apps/cpe-sws/commit/1008e8569b9a6b43f140dbadda62da140255e092))
+* **deps:** bump @mui/x-tree-view from 6.0.0-alpha.3 to 6.0.0-alpha.4 ([33242d6](https://github.com/sws2apps/cpe-sws/commit/33242d6a75740e153c85fd5d150e4dcb0ce8658f))
+
+# [2.95.0](https://github.com/sws2apps/cpe-sws/compare/v2.94.0...v2.95.0) (2023-09-22)
+
 
 ### Bug Fixes
 

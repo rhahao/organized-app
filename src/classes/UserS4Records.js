@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
 import { promiseGetRecoil } from 'recoil-outside';
+import dateFormat from 'dateformat';
 import appDb from '../indexedDb/mainDb';
 import { UserS4DailyReportClass } from './UserS4DailyReport';
 import { secretaryRoleState } from '../states/congregation';
@@ -56,7 +56,7 @@ UserS4RecordsClass.prototype.initialize = async function (month_date) {
   const monthStart = new Date(tmpMonthValue.getFullYear(), tmpMonthValue.getMonth(), 1);
 
   const dailyRecord = new UserS4DailyReportClass();
-  dailyRecord.month = format(monthStart, 'yyyy/MM/dd');
+  dailyRecord.month = dateFormat(monthStart, 'yyyy/mm/dd');
   dailyRecord.month_date = month_date;
   await dailyRecord.save();
 
