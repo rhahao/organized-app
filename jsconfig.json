@@ -4,5 +4,6 @@
     "paths": {
       "@features/*": ["src/features/*"]
     }
-  }
+  },
+  "exclude": ["node_modules"]
 }
