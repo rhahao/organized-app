@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { LANGUAGE_LIST } from '@services/i18n/locales';
+import { LANGUAGE_LIST } from '@constants/index';
 
 const resources = {};
 
