@@ -9,7 +9,7 @@ import {
   setIsSetup,
   setIsUnauthorizedRole,
   setRootModalOpen,
-} from '@services/dexie/app';
+} from '@services/recoil/app';
 import { getMessageByCode } from '@services/i18n/translation';
 import { apiPocketSignup } from '@services/api/user';
 import { POCKET_ROLES } from '@constants/index';

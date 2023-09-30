@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { apiFetchCountries } from '@services/api/congregation';
-import { displaySnackNotification } from '@services/dexie/app';
+import { displaySnackNotification } from '@services/recoil/app';
 import useAppTranslation from '@hooks/useAppTranslation';
 
 const useCountry = ({ handleCountryChange }) => {

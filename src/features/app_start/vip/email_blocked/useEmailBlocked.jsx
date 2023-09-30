@@ -1,5 +1,12 @@
+import { setEmailBlocked, setUserSignIn } from '@services/recoil/app';
+
 const useEmailBlocked = () => {
-  return (  );
-}
- 
+  const handleSignIn = () => {
+    setUserSignIn(true);
+    setEmailBlocked(false);
+  };
+
+  return { handleSignIn };
+};
+
 export default useEmailBlocked;

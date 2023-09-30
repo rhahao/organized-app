@@ -9,9 +9,9 @@ import {
   setOfflineOverride,
   setUserID,
   setUserSignIn,
-} from '@services/dexie/app';
+} from '@services/recoil/app';
 import { apiCreateCongregation } from '@services/api/congregation';
-import { handleBulkUpdateSetting } from '@services/dexie/settings';
+import { handleUpdateSetting } from '@services/dexie/settings';
 import { loadApp, runUpdater } from '@services/cpe';
 
 const useCongregationCreate = () => {
@@ -81,7 +81,7 @@ const useCongregationCreate = () => {
         obj.user_members_delegate = user_members_delegate;
         obj.cong_role = cong_role;
 
-        await handleBulkUpdateSetting(obj);
+        await handleUpdateSetting(obj);
 
         setUserID(id);
 

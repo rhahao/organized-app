@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { isAccountChooseState, isSetupState, isUnauthorizedRoleState } from '@states/app';
 import { accountTypeState } from '@states/settings';
-import { setIsAccountChoose } from '@services/dexie/app';
+import { setIsAccountChoose } from '@services/recoil/app';
 
 const useStartup = () => {
   const isUnauthorizedRole = useRecoilValue(isUnauthorizedRoleState);
@@ -27,7 +27,7 @@ const useStartup = () => {
     checkAccount();
   }, [accountType]);
 
-  return { isUnauthorizedRole, isSetup, isAuth, isAccountChoose };
+  return { isUnauthorizedRole, isSetup, isAuth, isAccountChoose, accountType };
 };
 
 export default useStartup;

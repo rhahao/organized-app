@@ -2,16 +2,21 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import useStartup from './useStartup';
 import { WaitingCircular } from '@components/index';
-import { AccountChooser } from '@features/app_start';
+import { AccountChooser, VipStartup } from '@features/app_start';
 
 const Startup = () => {
-  const { isSetup, isAuth, isAccountChoose } = useStartup();
+  const { isSetup, isAuth, isAccountChoose, accountType } = useStartup();
 
   if (isSetup) {
     return (
       <>
         {isAuth && <WaitingCircular />}
-        {!isAuth && <>{isAccountChoose && <AccountChooser />}</>}
+        {!isAuth && (
+          <>
+            {isAccountChoose && <AccountChooser />}
+            {!isAccountChoose && <>{accountType === 'vip' && <VipStartup />}</>}
+          </>
+        )}
       </>
     );
   }

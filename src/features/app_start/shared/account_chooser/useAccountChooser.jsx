@@ -1,17 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { visitorIDState } from '@states/app';
-import { setIsAccountChoose } from '@services/dexie/app';
+import { setIsAccountChoose } from '@services/recoil/app';
 import { handleUpdateSetting } from '@services/dexie/settings';
 
 const useAccountChooser = () => {
   const visitorID = useRecoilValue(visitorIDState);
 
-  const handleChangeAccountType = async (value) => {
-    await handleUpdateSetting({ account_type: value });
+  const [tmpType, setTmpType] = useState('pocket');
+
+  const handleChangeAccountType = (value) => {
+    setTmpType(value);
   };
 
   const handleConfirmOption = async () => {
+    await handleUpdateSetting({ account_type: tmpType });
     await setIsAccountChoose(false);
   };
 
@@ -23,7 +26,7 @@ const useAccountChooser = () => {
     updateSettings();
   }, []);
 
-  return { visitorID, handleConfirmOption, handleChangeAccountType };
+  return { visitorID, handleConfirmOption, handleChangeAccountType, tmpType };
 };
 
 export default useAccountChooser;

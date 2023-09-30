@@ -41,3 +41,43 @@ export const apiRequestPasswordlesssLink = async (email, uid) => {
 
   return { status: res.status, data };
 };
+
+export const apiUpdatePasswordlessInfo = async (uid) => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid } = await apiDefault();
+
+  const tmpEmail = localStorage.getItem('emailForSignIn');
+
+  const res = await fetch(`${apiHost}user-passwordless-verify`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      appclient: 'cpe',
+      appversion,
+      uid,
+    },
+    body: JSON.stringify({ email: tmpEmail, visitorid }),
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiSendAuthorization = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid } = await apiDefault();
+
+  const res = await fetch(`${apiHost}user-login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      appclient: 'cpe',
+      appversion,
+      uid,
+    },
+    body: JSON.stringify({ visitorid }),
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};

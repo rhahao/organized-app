@@ -1,6 +1,36 @@
-import { isPrecachedState, showReloadState } from '@states/app';
 import { promiseSetRecoil } from 'recoil-outside';
 import logger from '@services/logger';
+import {
+  apiHostState,
+  appMessageState,
+  appSeverityState,
+  appSnackOpenState,
+  congAccountConnectedState,
+  congIDState,
+  isAccountChooseState,
+  isAppLoadState,
+  isEmailAuthState,
+  isEmailBlockedState,
+  isOnlineState,
+  showReloadState,
+  isSetupState,
+  isUnauthorizedRoleState,
+  isUserSignInState,
+  isUserSignUpState,
+  offlineOverrideState,
+  rootModalOpenState,
+  userIDState,
+  visitorIDState,
+  isPrecachedState,
+  secretTokenPathState,
+  qrCodePathState,
+  isEmailLinkAuthenticateState,
+  isCongAccountCreateState,
+  isUserMfaVerifyState,
+  isUserMfaSetupState,
+  isAuthProcessingState,
+  currentMFAStageState,
+} from '@states/app';
 
 export const handleSWOnInstalled = async () => {
   await promiseSetRecoil(isPrecachedState, true);
@@ -10,4 +40,122 @@ export const handleSWOnInstalled = async () => {
 export const handleSWOnUpdated = async () => {
   await promiseSetRecoil(showReloadState, true);
   logger.info('service-worker', 'an updated service worker is ready to be used');
+};
+
+export const disconnectCongAccount = async () => {
+  await promiseSetRecoil(congAccountConnectedState, false);
+};
+
+export const displaySnackNotification = async ({ message, severity }) => {
+  await promiseSetRecoil(appMessageState, message);
+  await promiseSetRecoil(appSeverityState, severity);
+  await promiseSetRecoil(appSnackOpenState, true);
+};
+
+export const setApiHost = async (value) => {
+  await promiseSetRecoil(apiHostState, value);
+};
+
+export const setVisitorID = async (value) => {
+  await promiseSetRecoil(visitorIDState, value);
+};
+
+export const setIsOnline = async (value) => {
+  await promiseSetRecoil(isOnlineState, value);
+};
+
+export const setIsPrecached = async () => {
+  await promiseSetRecoil(isPrecachedState, false);
+};
+
+export const setIsAccountChoose = async (value) => {
+  await promiseSetRecoil(isAccountChooseState, value);
+};
+
+export const setIsUnauthorizedRole = async (value) => {
+  await promiseSetRecoil(isUnauthorizedRoleState, value);
+};
+
+export const setRootModalOpen = async (value) => {
+  await promiseSetRecoil(rootModalOpenState, value);
+};
+
+export const setIsSetup = async (value) => {
+  await promiseSetRecoil(isSetupState, value);
+};
+
+export const setCongAccountConnected = async (value) => {
+  await promiseSetRecoil(congAccountConnectedState, value);
+};
+
+export const setIsAppLoad = async (value) => {
+  await promiseSetRecoil(isAppLoadState, value);
+};
+
+export const setUserSignIn = async (value) => {
+  await promiseSetRecoil(isUserSignInState, value);
+};
+
+export const setCongID = async (value) => {
+  await promiseSetRecoil(congIDState, value);
+};
+
+export const setUserID = async (value) => {
+  await promiseSetRecoil(userIDState, value);
+};
+
+export const setOfflineOverride = async (value) => {
+  await promiseSetRecoil(offlineOverrideState, value);
+};
+
+export const setUserSignUp = async (value) => {
+  await promiseSetRecoil(isUserSignUpState, value);
+};
+
+export const setIsEmailAuth = async (value) => {
+  await promiseSetRecoil(isEmailAuthState, value);
+};
+
+export const setEmailBlocked = async (value) => {
+  await promiseSetRecoil(isEmailBlockedState, value);
+};
+
+export const setSecretTokenPathState = async (value) => {
+  await promiseSetRecoil(secretTokenPathState, value);
+};
+
+export const setQrCodePathState = async (value) => {
+  await promiseSetRecoil(qrCodePathState, value);
+};
+
+export const setIsEmailLinkAuthenticate = async (value) => {
+  await promiseSetRecoil(isEmailLinkAuthenticateState, value);
+};
+
+export const setIsUserSignUp = async (value) => {
+  await promiseSetRecoil(isUserSignUpState, value);
+};
+
+export const setIsUserSignIn = async (value) => {
+  await promiseSetRecoil(isUserSignInState, value);
+};
+
+export const setIsCongAccountCreate = async (value) => {
+  await promiseSetRecoil(isCongAccountCreateState, value);
+};
+
+export const setUserMfaVerify = async (value) => {
+  await promiseSetRecoil(isUserMfaVerifyState, value);
+};
+
+export const setUserMfaSetup = async (value) => {
+  await promiseSetRecoil(isUserMfaSetupState, value);
+};
+
+export const setIsAuthProcessing = async (value) => {
+  await promiseSetRecoil(isAuthProcessingState, value);
+};
+
+export const setCurrentMFAStage = async (value) => {
+  await promiseSetRecoil(currentMFAStageState, value);
 };

@@ -1,5 +1,5 @@
 import { saveSchedule } from '@services/dexie/schedules';
-import { handleBulkUpdateSetting } from '@services/dexie/settings';
+import { handleUpdateSetting } from '@services/dexie/settings';
 import { saveSource } from '@services/dexie/sources';
 
 export const handleUpdateScheduleFromRemote = async (data) => {
@@ -14,7 +14,7 @@ export const handleUpdateScheduleFromRemote = async (data) => {
   }
 
   const { class_count, source_lang, co_name, co_displayName, opening_prayer_MM_autoAssign } = cong_settings;
-  await handleBulkUpdateSetting({
+  await handleUpdateSetting({
     class_count,
     source_lang,
     co_name,

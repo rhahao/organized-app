@@ -4,7 +4,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { useRecoilValue } from 'recoil';
 import { appSnackOpenState, isLightThemeState, isOnlineState } from '@states/app';
 import logger from '@services/logger';
-import { disconnectCongAccount, setApiHost, setIsOnline, setVisitorID } from '@services/dexie/app';
+import { disconnectCongAccount, setApiHost, setIsOnline, setVisitorID } from '@services/recoil/app';
 import { useInternetChecker } from '@hooks';
 
 // creating theme

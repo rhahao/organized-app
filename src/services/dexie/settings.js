@@ -2,12 +2,18 @@ import { promiseGetRecoil } from 'recoil-outside';
 import { settingsState } from '@states/settings';
 import { appDb } from '.';
 
-export const handleUpdateSetting = async ({ field, value }) => {
+export const handleUpdateSetting = async (setting) => {
   const current = await promiseGetRecoil(settingsState);
-  const newSettings = { ...current, [field]: value };
 
-  await appDb.app_settings.put(newSettings);
+  if (current.id === 1) {
+    const newSettings = { ...current, ...setting };
+
+    console.log(newSettings);
+
+    await appDb.app_settings.put(newSettings);
+  }
 };
+
 export const handleUpdateSettingFromRemote = async (data) => {
   const current = await promiseGetRecoil(settingsState);
   const newSettings = {
@@ -20,13 +26,6 @@ export const handleUpdateSettingFromRemote = async (data) => {
     user_local_uid: data.user_local_uid,
     account_type: 'pocket',
   };
-
-  await appDb.app_settings.put(newSettings);
-};
-
-export const handleBulkUpdateSetting = async (data) => {
-  const current = await promiseGetRecoil(settingsState);
-  const newSettings = { ...current, ...data };
 
   await appDb.app_settings.put(newSettings);
 };

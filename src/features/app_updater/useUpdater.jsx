@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil';
 import { isPrecachedState, showReloadState } from '@states/app';
-import { setIsPrecached } from '@services/dexie/app';
+import { setIsPrecached } from '@services/recoil/app';
 
 const useUpdater = ({ updatePwa }) => {
   const showReload = useRecoilValue(showReloadState);

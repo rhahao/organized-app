@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { saveProfilePic } from '@services/cpe/settings';
-import { displaySnackNotification } from '@services/dexie/app';
+import { displaySnackNotification } from '@services/recoil/app';
 import { getTranslation } from '@services/i18n/translation';
 
 const useFirebaseAuth = () => {

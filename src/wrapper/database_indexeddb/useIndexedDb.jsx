@@ -61,7 +61,7 @@ const useIndexedDb = () => {
   const setSchedules = useSetRecoilState(schedulesState);
 
   const loadSettings = useCallback(async () => {
-    if (dbSettings) {
+    if (dbSettings && dbSettings[0] && dbSettings[0].id === 1) {
       setSettings(dbSettings[0]);
     }
   }, [dbSettings, setSettings]);

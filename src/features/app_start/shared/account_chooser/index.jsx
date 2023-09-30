@@ -13,7 +13,7 @@ import { useAppTranslation } from '@hooks';
 const AccountChooser = () => {
   const { t } = useAppTranslation();
 
-  const { handleChangeAccountType, handleConfirmOption, visitorID } = useAccountChooser();
+  const { tmpType, handleChangeAccountType, handleConfirmOption, visitorID } = useAccountChooser();
 
   return (
     <Container>
@@ -27,6 +27,7 @@ const AccountChooser = () => {
             aria-labelledby="radio-buttons-group-account-type"
             defaultValue="pocket"
             name="radio-buttons-group"
+            value={tmpType}
             onChange={(e) => handleChangeAccountType(e.target.value)}
             sx={{ marginTop: '15px', gap: '10px' }}
           >

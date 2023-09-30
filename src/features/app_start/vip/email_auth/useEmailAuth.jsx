@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { displaySnackNotification, setIsEmailAuth, setUserSignIn, setUserSignUp } from '@services/dexie/app';
+import { displaySnackNotification, setIsEmailAuth, setUserSignIn, setUserSignUp } from '@services/recoil/app';
 import { isEmailValid } from '@services/validator';
 import { useAppTranslation } from '@hooks';
 import { apiRequestPasswordlesssLink } from '@services/api/user';

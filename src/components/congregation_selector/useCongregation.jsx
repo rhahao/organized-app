@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { apiFetchCongregations } from '@services/api/congregation';
-import { displaySnackNotification } from '@services/dexie/app';
+import { displaySnackNotification } from '@services/recoil/app';
 import { useAppTranslation } from '@hooks';
 
 const useCongregation = ({ country }) => {

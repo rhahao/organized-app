@@ -1,4 +1,4 @@
-import { promiseGetRecoil } from 'recoil-outside"';
+import { promiseGetRecoil } from 'recoil-outside';
 import {
   accountTypeState,
   coordinatorRoleState,
