@@ -22,6 +22,7 @@ module.exports = {
         extensions: ['.js', '.jsx'],
         map: [
           ['@assets', './src/assets'],
+          ['@components', './src/components'],
           ['@constants', './src/constants'],
           ['@features', './src/features'],
           ['@hooks', './src/hooks'],
@@ -31,6 +32,7 @@ module.exports = {
           ['@services', './src/services'],
           ['@states', './src/states'],
           ['@utils', './src/utils'],
+          ['@wrapper', './src/wrapper'],
         ],
       },
     },

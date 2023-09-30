@@ -1,18 +1,15 @@
 export const convertStringToBoolean = (value) => {
   switch (value) {
     case 'true':
-      true;
-      break;
+      return true;
     case 'false':
-      false;
-      break;
+      return false;
     default:
-      false;
-      break;
+      return false;
   }
 };
 
-export const countUnreadNotifications = ({ announcements, language }) => {
+export const countUnreadNotifications = ({ announcements, language = 'E' }) => {
   let count = 0;
 
   for (const announcement of announcements) {
@@ -28,4 +25,13 @@ export const countUnreadNotifications = ({ announcements, language }) => {
   }
 
   return count;
+};
+
+export const formatCongregationInfo = (name = '', number = '') => {
+  let formatted = '';
+
+  if (name !== '' && number !== '') {
+    formatted = `${name} (${number})`;
+  }
+  return formatted;
 };

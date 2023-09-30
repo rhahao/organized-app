@@ -1,6 +1,7 @@
 import { atom, selector } from 'recoil';
 import { generateMonths, getShortDateFormat, getShortDatePickerFormat } from '@services/i18n/translation';
-import { convertStringToBoolean } from '@utils/common';
+import { convertStringToBoolean, countUnreadNotifications } from '@utils/common';
+import { LANGUAGE_LIST } from '@constants/index';
 
 export const isLightThemeState = atom({
   key: 'isLightTheme',
@@ -160,4 +161,199 @@ export const isWhatsNewOpenState = atom({
 export const appNotificationsState = atom({
   key: 'appNotifications',
   default: [],
+});
+
+export const countNotificationsState = selector({
+  key: 'countNotifications',
+  get: ({ get }) => {
+    const announcements = get(appNotificationsState);
+    const appLang = get(appLangState);
+
+    const fldKey = LANGUAGE_LIST.find((language) => language.code === appLang).locale;
+    const count = countUnreadNotifications({ announcements, languge: fldKey });
+    return count;
+  },
+});
+
+export const rootModalOpenState = atom({
+  key: 'rootModalOpen',
+  default: false,
+});
+
+export const backupDbOpenState = atom({
+  key: 'backupDbOpen',
+  default: false,
+});
+
+export const restoreDbOpenState = atom({
+  key: 'restoreDbOpen',
+  default: false,
+});
+
+export const userIDState = atom({
+  key: 'userID',
+  default: '',
+});
+
+export const isReEnrollMFAState = atom({
+  key: 'isReEnrollMFA',
+  default: false,
+});
+
+export const isMyAssignmentOpenState = atom({
+  key: 'isMyAssignmentOpen',
+  default: false,
+});
+
+export const refreshMyAssignmentsState = atom({
+  key: 'refreshMyAssignments',
+  default: false,
+});
+
+export const isCongPersonAddState = atom({
+  key: 'isCongPersonAdd',
+  default: false,
+});
+
+export const isEmailAuthState = atom({
+  key: 'isEmailAuth',
+  default: false,
+});
+
+export const isAuthProcessingState = atom({
+  key: 'isAuthProcessing',
+  default: false,
+});
+
+export const isOAuthAccountUpgradeState = atom({
+  key: 'isOAuthAccountUpgrade',
+  default: false,
+});
+
+export const userEmailState = atom({
+  key: 'userEmail',
+  default: '',
+});
+
+export const userConfirmationOpenState = atom({
+  key: 'userConfirmationOpen',
+  default: false,
+});
+
+export const userConfirmationTitleState = atom({
+  key: 'userConfirmationTitle',
+  default: false,
+});
+
+export const userConfirmationMessageState = atom({
+  key: 'userConfirmationMessage',
+  default: false,
+});
+
+export const userConfirmationActionState = atom({
+  key: 'userConfirmationAction',
+  default: undefined,
+});
+
+export const isAccountChooseState = atom({
+  key: 'isAccountChoose',
+  default: false,
+});
+
+export const isFetchingScheduleState = atom({
+  key: 'isFetchingSchedule',
+  default: true,
+});
+
+export const currentMFAStageState = atom({
+  key: 'currentMFAStage',
+  default: 'setup',
+});
+
+export const refreshScreenState = atom({
+  key: 'refreshScreen',
+  default: false,
+});
+
+export const isEmailLinkAuthenticateState = atom({
+  key: 'isEmailLinkAuthenticate',
+  default: false,
+});
+
+export const appSnackOpenState = atom({
+  key: 'appSnackOpen',
+  default: false,
+});
+
+export const appSeverityState = atom({
+  key: 'appSeverity',
+  default: 'success',
+});
+
+export const appMessageState = atom({
+  key: 'appMessage',
+  default: '',
+});
+
+export const congAccountConnectedState = atom({
+  key: 'congAccountConnected',
+  default: false,
+});
+
+export const themeOptionsState = selector({
+  key: 'themeOptions',
+  get: ({ get }) => {
+    const isLight = get(isLightThemeState);
+
+    return {
+      mainColor: '#3f51b5 !important',
+      textNotImportant: isLight ? '#707B7C' : '#D0D3D4',
+      reportIconColor: isLight ? '#CB4335' : '#FDFEFE',
+      redNoteBg: isLight ? '#F5B7B1' : '#E74C3C',
+      whatsNewBg: isLight ? '#AEB6BF' : '#2C3E50',
+      whatsNewBgSecondary: isLight ? '#F4F6F6' : '#1C2833',
+      btnProgress: isLight ? '#212F3D' : '#FBFCFC',
+      searchBg: isLight ? 'black' : 'white',
+      fsgHeadingColor: '#004d40 !important',
+    };
+  },
+});
+
+export const pendingFieldServiceReportsState = atom({
+  key: 'pendingFieldServiceReports',
+  default: [],
+});
+
+export const pendingFieldServiceReportsCountState = selector({
+  key: 'pendingFieldServiceReportsCount',
+  get: ({ get }) => {
+    const pendingReports = get(pendingFieldServiceReportsState);
+    return pendingReports.length;
+  },
+});
+
+export const congSpeakersRequestsState = atom({
+  key: 'congSpeakersRequests',
+  default: [],
+});
+
+export const congSpeakersRequestsStateCountState = selector({
+  key: 'congSpeakersRequestsStateCount',
+  get: ({ get }) => {
+    const requests = get(congSpeakersRequestsState);
+    return requests.length;
+  },
+});
+
+export const congSpeakersRequestsUpdateState = atom({
+  key: 'congSpeakersRequestsUpdate',
+  default: [],
+});
+
+export const congSpeakersRequestsUpdateCountState = selector({
+  key: 'congSpeakersRequestsUpdateCount',
+  get: ({ get }) => {
+    const requests = get(congSpeakersRequestsUpdateState);
+    return requests.length;
+  },
 });

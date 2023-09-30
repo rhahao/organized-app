@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
+      "@components/*": ["src/components/*"],
       "@constants/*": ["src/constants/*"],
       "@features/*": ["src/features/*"],
       "@hooks/*": ["src/hooks/*"],
@@ -11,7 +12,8 @@
       "@routes/*": ["src/routes/*"],
       "@services/*": ["src/services/*"],
       "@states/*": ["src/states/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@wrapper/*": ["src/wrapper/*"]
     }
   },
   "exclude": ["node_modules"]

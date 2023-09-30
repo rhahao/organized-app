@@ -14,7 +14,8 @@
     "preview": "serve -l 5000 -s dist",
     "test": "npm run cypress:component-test",
     "cypress:open": "cypress open",
-    "cypress:component-test": "cypress run --component --browser chrome"
+    "cypress:component-test": "cypress run --component --browser chrome",
+    "test:vitest": "vitest"
   },
   "eslintConfig": {
     "extends": [
@@ -38,7 +39,9 @@
     "date-fns": "^2.30.0",
     "dateformat": "^5.0.3",
     "dexie": "^3.2.4",
+    "dexie-react-hooks": "^1.1.6",
     "eslint-import-resolver-alias": "^1.1.2",
+    "fast-memoize": "^2.5.2",
     "file-select-dialog": "^1.5.4",
     "firebase": "^10.4.0",
     "html2pdf.js": "^0.10.1",

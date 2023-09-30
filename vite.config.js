@@ -10,6 +10,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: '@assets', replacement: resolve(__dirname, 'src/assets') },
+      { find: '@components', replacement: resolve(__dirname, 'src/components') },
       { find: '@constants', replacement: resolve(__dirname, 'src/constants') },
       { find: '@features', replacement: resolve(__dirname, 'src/features') },
       { find: '@hooks', replacement: resolve(__dirname, 'src/hooks') },
@@ -19,6 +20,7 @@ export default defineConfig({
       { find: '@services', replacement: resolve(__dirname, 'src/services') },
       { find: '@states', replacement: resolve(__dirname, 'src/states') },
       { find: '@utils', replacement: resolve(__dirname, 'src/utils') },
+      { find: '@wrapper', replacement: resolve(__dirname, 'src/wrapper') },
     ],
   },
   worker: { plugins: [comlink()] },
