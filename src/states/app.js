@@ -1,7 +1,6 @@
 import { atom, selector } from 'recoil';
 import { generateMonths, getShortDateFormat, getShortDatePickerFormat } from '@services/i18n/translation';
-import { convertStringToBoolean, countUnreadNotifications } from '@utils/common';
-import { LANGUAGE_LIST } from '@constants/index';
+import { convertStringToBoolean } from '@utils/common';
 
 export const isLightThemeState = atom({
   key: 'isLightTheme',
@@ -156,23 +155,6 @@ export const showReloadState = atom({
 export const isWhatsNewOpenState = atom({
   key: 'isWhatsNewOpen',
   default: false,
-});
-
-export const appNotificationsState = atom({
-  key: 'appNotifications',
-  default: [],
-});
-
-export const countNotificationsState = selector({
-  key: 'countNotifications',
-  get: ({ get }) => {
-    const announcements = get(appNotificationsState);
-    const appLang = get(appLangState);
-
-    const fldKey = LANGUAGE_LIST.find((language) => language.code === appLang).locale;
-    const count = countUnreadNotifications({ announcements, languge: fldKey });
-    return count;
-  },
 });
 
 export const rootModalOpenState = atom({
@@ -356,4 +338,9 @@ export const congSpeakersRequestsUpdateCountState = selector({
     const requests = get(congSpeakersRequestsUpdateState);
     return requests.length;
   },
+});
+
+export const congIDState = atom({
+  key: 'congID',
+  default: '',
 });

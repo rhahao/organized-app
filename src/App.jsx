@@ -8,6 +8,7 @@ import { useGlobal } from '@hooks';
 import { WaitingCircular, ErrorBoundary } from '@components';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
 import { RootLayout } from '@layouts';
+import { NotificationWrapper } from '@wrapper';
 import PrivatePublisherRoute from '@routes/PrivatePublisherRoute';
 import PrivateElderRoute from '@routes/PrivateElderRoute';
 import PrivateVipRoute from '@routes/PrivateVipRoute';
@@ -35,7 +36,7 @@ const Persons = lazy(() => import('@pages/Persons'));
 const PersonDetails = lazy(() => import('@pages/PersonDetails'));
 const Schedules = lazy(() => import('@pages/Schedules'));
 const ScheduleDetails = lazy(() => import('@pages/ScheduleDetails'));
-const S89 = lazy(() => import('@pages/S89'));
+const S89Print = lazy(() => import('@pages/S89Print'));
 const ScheduleWeekDetails = lazy(() => import('@pages/ScheduleWeekDetails'));
 const UserSettings = lazy(() => import('@pages/UserSettings'));
 const SourceMaterials = lazy(() => import('@pages/SourceMaterials'));
@@ -57,7 +58,7 @@ const VisitingSpeakers = lazy(() => import('@pages/VisitingSpeakers'));
 const queryClient = new QueryClient();
 
 const App = ({ updatePwa }) => {
-  const { isLoading, isSupported, activeTheme } = useGlobal();
+  const { isLoading, isSupported, activeTheme, appSnackOpen } = useGlobal();
 
   const adminRole = useRecoilValue(adminRoleState);
   const coordinatorRole = useRecoilValue(coordinatorRoleState);
@@ -131,7 +132,7 @@ const App = ({ updatePwa }) => {
                     },
                     {
                       path: '/assignment-form',
-                      element: <S89 />,
+                      element: <S89Print />,
                     },
                   ],
                 },
@@ -244,6 +245,7 @@ const App = ({ updatePwa }) => {
           <ThemeProvider theme={activeTheme}>
             <CssBaseline />
             <Suspense fallback={<WaitingCircular />}>
+              {appSnackOpen && <NotificationWrapper />}
               <RouterProvider router={router} />
             </Suspense>
           </ThemeProvider>

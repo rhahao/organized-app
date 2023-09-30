@@ -1,0 +1,158 @@
+import { promiseGetRecoil } from 'recoil-outside"';
+import {
+  accountTypeState,
+  coordinatorRoleState,
+  elderLocalRoleState,
+  lmmoRoleState,
+  publicTalkCoordinatorRoleState,
+} from '@states/settings';
+import { schedulesState } from '@states/schedules';
+import { publicTalkFindLocal, publicTalksLocale } from './publicTalks';
+import appDb from './db';
+
+export const saveSchedule = async (appData) => {
+  const lmmoRole = await promiseGetRecoil(lmmoRoleState);
+  const coordinatorRole = await promiseGetRecoil(coordinatorRoleState);
+  const publicTalkCoordinatorRole = await promiseGetRecoil(publicTalkCoordinatorRoleState);
+  const hasPersonAccess = await promiseGetRecoil(elderLocalRoleState);
+  const talksList = await promiseGetRecoil(publicTalksLocale);
+  const accountType = await promiseGetRecoil(accountTypeState);
+
+  const schedules = await promiseGetRecoil(schedulesState);
+
+  const tmpSchedule = schedules.find((s) => s.weekOf === appData.weekOf);
+  const schedule = { ...tmpSchedule };
+
+  if (!lmmoRole) {
+    schedule.chairmanMM_A = appData.chairmanMM_A || '';
+    schedule.chairmanMM_B = appData.chairmanMM_B || '';
+    schedule.opening_prayerMM = appData.opening_prayerMM || '';
+    schedule.tgw_talk = appData.tgw_talk || '';
+    schedule.tgw_gems = appData.tgw_gems || '';
+    schedule.bRead_stu_A = appData.bRead_stu_A || '';
+    schedule.bRead_stu_B = appData.bRead_stu_B || '';
+    schedule.ass1_stu_A = appData.ass1_stu_A || '';
+    schedule.ass1_ass_A = appData.ass1_ass_A || '';
+    schedule.ass1_stu_B = appData.ass1_stu_B || '';
+    schedule.ass1_ass_B = appData.ass1_ass_B || '';
+    schedule.ass2_stu_A = appData.ass2_stu_A || '';
+    schedule.ass2_ass_A = appData.ass2_ass_A || '';
+    schedule.ass2_stu_B = appData.ass2_stu_B || '';
+    schedule.ass2_ass_B = appData.ass2_ass_B || '';
+    schedule.ass3_stu_A = appData.ass3_stu_A || '';
+    schedule.ass3_ass_A = appData.ass3_ass_A || '';
+    schedule.ass3_stu_B = appData.ass3_stu_B || '';
+    schedule.ass3_ass_B = appData.ass3_ass_B || '';
+    schedule.ass4_stu_A = appData.ass4_stu_A || '';
+    schedule.ass4_ass_A = appData.ass4_ass_A || '';
+    schedule.ass4_stu_B = appData.ass4_stu_B || '';
+    schedule.ass4_ass_B = appData.ass4_ass_B || '';
+    schedule.lc_part1 = appData.lc_part1 || '';
+    schedule.lc_part2 = appData.lc_part2 || '';
+    schedule.cbs_conductor = appData.cbs_conductor || '';
+    schedule.cbs_reader = appData.cbs_reader || '';
+    schedule.closing_prayerMM = appData.closing_prayerMM || '';
+
+    if (appData.noMMeeting !== undefined) {
+      schedule.noMMeeting = appData.noMMeeting || false;
+    }
+  }
+
+  if (!coordinatorRole) {
+    schedule.chairman_WM = appData.chairman_WM || '';
+    schedule.opening_prayerWM = appData.opening_prayerWM || '';
+    schedule.wtstudy_reader = appData.wtstudy_reader || '';
+  }
+
+  if (!publicTalkCoordinatorRole) {
+    schedule.speaker_1 = appData.speaker_1 || '';
+    schedule.speaker_2 = appData.speaker_2 || '';
+    schedule.public_talk = appData.public_talk || '';
+    if (hasPersonAccess && schedule.public_talk !== '' && talksList.length > 0) {
+      schedule.public_talk_title = `(${schedule.public_talk}) ${publicTalkFindLocal(schedule.public_talk)}`;
+    } else {
+      schedule.public_talk_title = appData.public_talk_title || '';
+    }
+  }
+
+  if (accountType === 'pocket' || !hasPersonAccess) {
+    schedule.chairmanMM_A_name = appData.chairmanMM_A_name || '';
+    schedule.chairmanMM_A_dispName = appData.chairmanMM_A_dispName || '';
+    schedule.chairmanMM_B_name = appData.chairmanMM_B_name || '';
+    schedule.chairmanMM_B_dispName = appData.chairmanMM_B_dispName || '';
+    schedule.opening_prayerMM_name = appData.opening_prayerMM_name || '';
+    schedule.opening_prayerMM_dispName = appData.opening_prayerMM_dispName || '';
+    schedule.tgw_talk_name = appData.tgw_talk_name || '';
+    schedule.tgw_talk_dispName = appData.tgw_talk_dispName || '';
+    schedule.tgw_gems_name = appData.tgw_gems_name || '';
+    schedule.tgw_gems_dispName = appData.tgw_gems_dispName || '';
+    schedule.bRead_stu_A_name = appData.bRead_stu_A_name || '';
+    schedule.bRead_stu_A_dispName = appData.bRead_stu_A_dispName || '';
+    schedule.bRead_stu_B_name = appData.bRead_stu_B_name || '';
+    schedule.bRead_stu_B_dispName = appData.bRead_stu_B_dispName || '';
+    schedule.ass1_stu_A_name = appData.ass1_stu_A_name || '';
+    schedule.ass1_stu_A_dispName = appData.ass1_stu_A_dispName || '';
+    schedule.ass1_ass_A_name = appData.ass1_ass_A_name || '';
+    schedule.ass1_ass_A_dispName = appData.ass1_ass_A_dispName || '';
+    schedule.ass1_stu_B_name = appData.ass1_stu_B_name || '';
+    schedule.ass1_stu_B_dispName = appData.ass1_stu_B_dispName || '';
+    schedule.ass1_ass_B_name = appData.ass1_ass_B_name || '';
+    schedule.ass1_ass_B_dispName = appData.ass1_ass_B_dispName || '';
+    schedule.ass2_stu_A_name = appData.ass2_stu_A_name || '';
+    schedule.ass2_stu_A_dispName = appData.ass2_stu_A_dispName || '';
+    schedule.ass2_ass_A_name = appData.ass2_ass_A_name || '';
+    schedule.ass2_ass_A_dispName = appData.ass2_ass_A_dispName || '';
+    schedule.ass2_stu_B_name = appData.ass2_stu_B_name || '';
+    schedule.ass2_stu_B_dispName = appData.ass2_stu_B_dispName || '';
+    schedule.ass2_ass_B_name = appData.ass2_ass_B_name || '';
+    schedule.ass2_ass_B_dispName = appData.ass2_ass_B_dispName || '';
+    schedule.ass3_stu_A_name = appData.ass3_stu_A_name || '';
+    schedule.ass3_stu_A_dispName = appData.ass3_stu_A_dispName || '';
+    schedule.ass3_ass_A_name = appData.ass3_ass_A_name || '';
+    schedule.ass3_ass_A_dispName = appData.ass3_ass_A_dispName || '';
+    schedule.ass3_stu_B_name = appData.ass3_stu_B_name || '';
+    schedule.ass3_stu_B_dispName = appData.ass3_stu_B_dispName || '';
+    schedule.ass3_ass_B_name = appData.ass3_ass_B_name || '';
+    schedule.ass3_ass_B_dispName = appData.ass3_ass_B_dispName || '';
+    schedule.ass4_stu_A_name = appData.ass4_stu_A_name || '';
+    schedule.ass4_stu_A_dispName = appData.ass4_stu_A_dispName || '';
+    schedule.ass4_ass_A_name = appData.ass4_ass_A_name || '';
+    schedule.ass4_ass_A_dispName = appData.ass4_ass_A_dispName || '';
+    schedule.ass4_stu_B_name = appData.ass4_stu_B_name || '';
+    schedule.ass4_stu_B_dispName = appData.ass4_stu_B_dispName || '';
+    schedule.ass4_ass_B_name = appData.ass4_ass_B_name || '';
+    schedule.ass4_ass_B_dispName = appData.ass4_ass_B_dispName || '';
+    schedule.lc_part1_name = appData.lc_part1_name || '';
+    schedule.lc_part1_dispName = appData.lc_part1_dispName || '';
+    schedule.lc_part2_name = appData.lc_part2_name || '';
+    schedule.lc_part2_dispName = appData.lc_part2_dispName || '';
+    schedule.cbs_conductor_name = appData.cbs_conductor_name || '';
+    schedule.cbs_conductor_dispName = appData.cbs_conductor_dispName || '';
+    schedule.cbs_reader_name = appData.cbs_reader_name || '';
+    schedule.cbs_reader_dispName = appData.cbs_reader_dispName || '';
+    schedule.closing_prayerMM_name = appData.closing_prayerMM_name || '';
+    schedule.closing_prayerMM_dispName = appData.closing_prayerMM_dispName || '';
+    schedule.chairman_WM_name = appData.chairman_WM_name || '';
+    schedule.chairman_WM_dispName = appData.chairman_WM_dispName || '';
+    schedule.opening_prayerWM_name = appData.opening_prayerWM_name || '';
+    schedule.opening_prayerWM_dispName = appData.opening_prayerWM_dispName || '';
+    schedule.wtstudy_reader_name = appData.wtstudy_reader_name || '';
+    schedule.wtstudy_reader_dispName = appData.wtstudy_reader_dispName || '';
+    schedule.speaker_1_name = appData.speaker_1_name || '';
+    schedule.speaker_1_dispName = appData.speaker_1_dispName || '';
+    schedule.speaker_2_name = appData.speaker_2_name || '';
+    schedule.speaker_2_dispName = appData.speaker_2_dispName || '';
+  }
+
+  if (!coordinatorRole && !publicTalkCoordinatorRole) {
+    if (appData.noWMeeting !== undefined) {
+      schedule.noWMeeting = appData.noWMeeting || false;
+    }
+  }
+
+  if (!lmmoRole && !coordinatorRole && !publicTalkCoordinatorRole) {
+    schedule.week_type = appData.week_type ? +appData.week_type : 1;
+  }
+
+  await appDb.sched.put(schedule);
+};

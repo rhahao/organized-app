@@ -1,6 +1,6 @@
 import { useSetRecoilState } from 'recoil';
 import { useLiveQuery } from 'dexie-react-hooks';
-import appDb from '@services/dexie';
+import { appDb } from '@services/dexie';
 import { settingsState } from '@states/settings';
 import { personsState } from '@states/persons';
 import { weekTypeState } from '@states/weekType';

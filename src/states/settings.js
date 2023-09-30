@@ -269,3 +269,30 @@ export const elderLocalRoleState = selector({
     return elderRole || secretaryRole || lmmoRole || coordinatorRole || publicTalkCoordinatorRole;
   },
 });
+
+export const isMeetingEditorRoleState = selector({
+  key: 'isMeetingEditorRole',
+  get: ({ get }) => {
+    const lmmoRole = get(lmmoRoleState);
+    const coordinatorRole = get(coordinatorRoleState);
+    const publicTalkCoordinatorRole = get(publicTalkCoordinatorRoleState);
+
+    return lmmoRole || coordinatorRole || publicTalkCoordinatorRole;
+  },
+});
+
+export const avatarUrlState = selector({
+  key: 'avatarUrl',
+  get: ({ get }) => {
+    const userAvatar = get(userAvatarState);
+
+    let src = '';
+
+    if (userAvatar && typeof userAvatar === 'object') {
+      const blob = new Blob([userAvatar]);
+      src = URL.createObjectURL(blob);
+    }
+
+    return src;
+  },
+});

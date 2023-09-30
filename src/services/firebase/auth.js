@@ -7,6 +7,6 @@ export const userSignOut = async () => {
 
 export const currentAuthUser = () => {
   const auth = getAuth();
-  const user = auth.currentUser;
+  const user = auth?.currentUser;
   return user;
 };

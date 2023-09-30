@@ -6,7 +6,6 @@ import {
   congAccountConnectedState,
   congSpeakersRequestsStateCountState,
   congSpeakersRequestsUpdateCountState,
-  countNotificationsState,
   isAboutOpenState,
   isAppLoadState,
   isMyAssignmentOpenState,
@@ -20,6 +19,7 @@ import {
   pendingFieldServiceReportsCountState,
   themeOptionsState,
 } from '@states/app';
+import { countAnnouncementsState } from '@states/announcements';
 import { apiUserLogout } from '@services/api/user';
 import { accountTypeState, congNameState, congNumberState, userAvatarState, usernameState } from '@states/settings';
 import { formatCongregationInfo } from '@utils/common';
@@ -39,7 +39,7 @@ const useNavBar = () => {
   const setIsSetup = useSetRecoilState(isSetupState);
 
   const themeOptions = useRecoilValue(themeOptionsState);
-  const cnNews = useRecoilValue(countNotificationsState);
+  const cnNews = useRecoilValue(countAnnouncementsState);
   const cnPendingReports = useRecoilValue(pendingFieldServiceReportsCountState);
   const cnSpeakersRequests = useRecoilValue(congSpeakersRequestsStateCountState);
   const cnSpeakersRequestsApproved = useRecoilValue(congSpeakersRequestsUpdateCountState);

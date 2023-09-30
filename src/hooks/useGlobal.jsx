@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createTheme } from '@mui/material/styles';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { useRecoilValue } from 'recoil';
-import { isLightThemeState, isOnlineState } from '@states/app';
+import { appSnackOpenState, isLightThemeState, isOnlineState } from '@states/app';
 import logger from '@services/logger';
 import { disconnectCongAccount, setApiHost, setIsOnline, setVisitorID } from '@services/dexie/app';
 import { useInternetChecker } from '@hooks';
@@ -25,6 +25,7 @@ const useGlobal = () => {
 
   const isLight = useRecoilValue(isLightThemeState);
   const isOnline = useRecoilValue(isOnlineState);
+  const appSnackOpen = useRecoilValue(appSnackOpenState);
 
   const [activeTheme, setActiveTheme] = useState(darkTheme);
   const [isLoading, setIsLoading] = useState(true);
@@ -126,7 +127,7 @@ const useGlobal = () => {
     setIsLoading(false);
   }, []);
 
-  return { isLoading, isSupported, activeTheme };
+  return { isLoading, isSupported, activeTheme, appSnackOpen };
 };
 
 export default useGlobal;

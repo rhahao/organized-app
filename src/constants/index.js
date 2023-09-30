@@ -9,3 +9,18 @@ export const LANGUAGE_LIST = [
   { code: 'vz', locale: 'mg-VZ', name: 'Vezo', isUI: false, isSource: true, hasEPUB: true },
   { code: 'k', locale: 'uk-UA', name: 'Українська', isUI: true, isSource: true, hasEPUB: true },
 ];
+
+export const CPE_ROLES = [
+  'admin',
+  'coordinator',
+  'public_talk_coordinator',
+  'lmmo',
+  'lmmo-backup',
+  'secretary',
+  'elder',
+  'ms',
+  'publisher',
+  'view_meeting_schedule',
+];
+
+export const POCKET_ROLES = ['elder', 'ms', 'publisher', 'view_meeting_schedule'];

@@ -38,7 +38,7 @@ const AppModalWrapper = ({ children }) => {
 };
 
 AppModalWrapper.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.arrayOf(PropTypes.element),
 };
 
 export default AppModalWrapper;

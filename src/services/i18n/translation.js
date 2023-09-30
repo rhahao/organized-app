@@ -30,3 +30,24 @@ export const getShortDateFormat = (lang) => {
 export const getShortDatePickerFormat = (lang) => {
   return getTranslation({ key: 'shortDatePickerFormat', language: lang });
 };
+
+export const getMessageByCode = (code, language) => {
+  switch (code) {
+    case 'DEVICE_REMOVED':
+      return getTranslation({ key: 'deviceRemoved', language });
+    case 'INPUT_INVALID':
+      return getTranslation({ key: 'inputInvalid', language });
+    case 'POCKET_NOT_FOUND':
+      return getTranslation({ key: 'pocketNotFound', language });
+    case 'INTERNAL_ERROR':
+      return getTranslation({ key: 'internalError', language });
+    default:
+      return code;
+  }
+};
+
+export const handleAppChangeLanguage = (lang) => {
+  const I18n = getI18n();
+
+  I18n.changeLanguage(lang);
+};
