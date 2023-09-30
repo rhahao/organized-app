@@ -13,10 +13,10 @@ export const updateWeekType = async () => {
   listSourceLangs.forEach((lang) => {
     const langCode = lang.code.toUpperCase();
 
-    normWeekObj[langCode] = getTranslation({ key: 'normalWeek', language: lang.code, namespace: 'source' });
-    tgWeekObj[langCode] = getTranslation({ key: 'circuitOverseerWeek', language: lang.code, namespace: 'source' });
-    caWeekObj[langCode] = getTranslation({ key: 'assemblyWeek', language: lang.code, namespace: 'source' });
-    coWeekObj[langCode] = getTranslation({ key: 'conventionWeek', language: lang.code, namespace: 'source' });
+    normWeekObj[langCode] = getTranslation({ key: 'normalWeek', namespace: 'source' });
+    tgWeekObj[langCode] = getTranslation({ key: 'circuitOverseerWeek', namespace: 'source' });
+    caWeekObj[langCode] = getTranslation({ key: 'assemblyWeek', namespace: 'source' });
+    coWeekObj[langCode] = getTranslation({ key: 'conventionWeek', namespace: 'source' });
   });
 
   await appDb.week_type.clear();
@@ -58,15 +58,15 @@ export const updateAssignmentType = async () => {
   listSourceLangs.forEach((lang) => {
     const langCode = lang.code.toUpperCase();
 
-    bReadObj[langCode] = getTranslation({ key: 'bibleReading', language: lang.code, namespace: 'source' });
-    initCallObj[langCode] = getTranslation({ key: 'initialCall', language: lang.code, namespace: 'source' });
-    rvObj[langCode] = getTranslation({ key: 'returnVisit', language: lang.code, namespace: 'source' });
-    bsObj[langCode] = getTranslation({ key: 'bibleStudy', language: lang.code, namespace: 'source' });
-    talkObj[langCode] = getTranslation({ key: 'talk', language: lang.code, namespace: 'source' });
-    otherObj[langCode] = getTranslation({ key: 'otherPart', language: lang.code, namespace: 'source' });
-    icVideoObj[langCode] = getTranslation({ key: 'initialCallVideo', language: lang.code, namespace: 'source' });
-    rvVideoObj[langCode] = getTranslation({ key: 'returnVisitVideo', language: lang.code, namespace: 'source' });
-    memorialObj[langCode] = getTranslation({ key: 'memorialInvite', language: lang.code, namespace: 'source' });
+    bReadObj[langCode] = getTranslation({ key: 'bibleReading', namespace: 'source' });
+    initCallObj[langCode] = getTranslation({ key: 'initialCall', namespace: 'source' });
+    rvObj[langCode] = getTranslation({ key: 'returnVisit', namespace: 'source' });
+    bsObj[langCode] = getTranslation({ key: 'bibleStudy', namespace: 'source' });
+    talkObj[langCode] = getTranslation({ key: 'talk', namespace: 'source' });
+    otherObj[langCode] = getTranslation({ key: 'otherPart', namespace: 'source' });
+    icVideoObj[langCode] = getTranslation({ key: 'initialCallVideo', namespace: 'source' });
+    rvVideoObj[langCode] = getTranslation({ key: 'returnVisitVideo', namespace: 'source' });
+    memorialObj[langCode] = getTranslation({ key: 'memorialInvite', namespace: 'source' });
     memorialVideoObj[langCode] = getTranslation({
       key: 'memorialInviteVideo',
       language: lang.code,
@@ -77,12 +77,12 @@ export const updateAssignmentType = async () => {
       language: lang.code,
       namespace: 'source',
     });
-    prayerMMObj[langCode] = getTranslation({ key: 'prayerMidweekMeeting', language: lang.code, namespace: 'source' });
-    tgwTalkObj[langCode] = getTranslation({ key: 'tgwTalk', language: lang.code, namespace: 'source' });
-    tgwGemsObj[langCode] = getTranslation({ key: 'tgwGems', language: lang.code, namespace: 'source' });
-    lcPartObj[langCode] = getTranslation({ key: 'lcPart', language: lang.code, namespace: 'source' });
-    cbsConductorObj[langCode] = getTranslation({ key: 'cbsConductor', language: lang.code, namespace: 'source' });
-    cbsReaderObj[langCode] = getTranslation({ key: 'cbsReader', language: lang.code, namespace: 'source' });
+    prayerMMObj[langCode] = getTranslation({ key: 'prayerMidweekMeeting', namespace: 'source' });
+    tgwTalkObj[langCode] = getTranslation({ key: 'tgwTalk', namespace: 'source' });
+    tgwGemsObj[langCode] = getTranslation({ key: 'tgwGems', namespace: 'source' });
+    lcPartObj[langCode] = getTranslation({ key: 'lcPart', namespace: 'source' });
+    cbsConductorObj[langCode] = getTranslation({ key: 'cbsConductor', namespace: 'source' });
+    cbsReaderObj[langCode] = getTranslation({ key: 'cbsReader', namespace: 'source' });
     initCallVariationsObj[langCode] = getTranslation({
       key: 'initialCallVariations',
       language: lang.code,
@@ -98,14 +98,14 @@ export const updateAssignmentType = async () => {
       language: lang.code,
       namespace: 'source',
     });
-    prayerWMObj[langCode] = getTranslation({ key: 'prayerWeekendMeeting', language: lang.code, namespace: 'source' });
-    speakerObj[langCode] = getTranslation({ key: 'speaker', language: lang.code, namespace: 'source' });
+    prayerWMObj[langCode] = getTranslation({ key: 'prayerWeekendMeeting', namespace: 'source' });
+    speakerObj[langCode] = getTranslation({ key: 'speaker', namespace: 'source' });
     speakerSymposiumObj[langCode] = getTranslation({
       key: 'speakerSymposium',
       language: lang.code,
       namespace: 'source',
     });
-    wtStudyReaderObj[langCode] = getTranslation({ key: 'wtStudyReader', language: lang.code, namespace: 'source' });
+    wtStudyReaderObj[langCode] = getTranslation({ key: 'wtStudyReader', namespace: 'source' });
   });
 
   await appDb.assignment.clear();

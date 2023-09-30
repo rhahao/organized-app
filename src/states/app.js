@@ -42,34 +42,19 @@ export const appLangState = atom({
   default: (typeof window !== 'undefined' && localStorage.getItem('app_lang')) || 'e',
 });
 
-export const monthNamesState = selector({
+export const monthNamesState = atom({
   key: 'monthNames',
-  get: ({ get }) => {
-    const appLang = get(appLangState);
-
-    const months = generateMonths(appLang);
-    return months;
-  },
+  default: generateMonths(),
 });
 
-export const shortDateFormatState = selector({
+export const shortDateFormatState = atom({
   key: 'shortDateFormat',
-  get: ({ get }) => {
-    const appLang = get(appLangState);
-
-    const format = getShortDateFormat(appLang);
-    return format;
-  },
+  default: getShortDateFormat(),
 });
 
-export const shortDatePickerFormatState = selector({
+export const shortDatePickerFormatState = atom({
   key: 'shortDatePickerFormat',
-  get: ({ get }) => {
-    const appLang = get(appLangState);
-
-    const format = getShortDatePickerFormat(appLang);
-    return format;
-  },
+  default: getShortDatePickerFormat(),
 });
 
 export const isDeleteDbOpenState = atom({

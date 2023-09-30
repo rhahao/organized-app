@@ -27,11 +27,9 @@ export const runUpdater = async () => {
 };
 
 export const userLogoutSuccess = async () => {
-  const language = await promiseGetRecoil(appLangState);
-
   await userSignOut();
   await disconnectCongAccount();
   await displaySnackNotification({
-    message: getTranslation({ key: 'logoutSuccess', language }),
+    message: getTranslation({ key: 'logoutSuccess' }),
   });
 };

@@ -53,7 +53,7 @@ const useLanguage = () => {
       if (userChange) {
         await i18n.changeLanguage(appLangLocal);
 
-        const isoLang = getTranslation({ key: 'iso', language: appLangLocal });
+        const isoLang = getTranslation({ key: 'iso' });
         document.documentElement.setAttribute('lang', isoLang);
 
         setAppLang(appLangLocal);
@@ -64,7 +64,7 @@ const useLanguage = () => {
         let appLang = localStorage.getItem('app_lang') || 'e';
         await i18n.changeLanguage(appLang);
 
-        const isoLang = getTranslation({ key: 'iso', language: appLang });
+        const isoLang = getTranslation({ key: 'iso' });
         document.documentElement.setAttribute('lang', isoLang);
 
         setAppLang(appLang);

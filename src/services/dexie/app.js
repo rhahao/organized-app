@@ -7,13 +7,19 @@ import {
   appSeverityState,
   appSnackOpenState,
   congAccountConnectedState,
+  congIDState,
   isAccountChooseState,
   isAppLoadState,
+  isEmailAuthState,
   isOnlineState,
   isPrecachedState,
   isSetupState,
   isUnauthorizedRoleState,
+  isUserSignInState,
+  isUserSignUpState,
+  offlineOverrideState,
   rootModalOpenState,
+  userIDState,
   visitorIDState,
 } from '@states/app';
 
@@ -70,4 +76,28 @@ export const setCongAccountConnected = async (value) => {
 
 export const setIsAppLoad = async (value) => {
   await promiseSetRecoil(isAppLoadState, value);
+};
+
+export const setUserSignIn = async (value) => {
+  await promiseSetRecoil(isUserSignInState, value);
+};
+
+export const setCongID = async (value) => {
+  await promiseSetRecoil(congIDState, value);
+};
+
+export const setUserID = async (value) => {
+  await promiseSetRecoil(userIDState, value);
+};
+
+export const setOfflineOverride = async (value) => {
+  await promiseSetRecoil(offlineOverrideState, value);
+};
+
+export const setUserSignUp = async (value) => {
+  await promiseSetRecoil(isUserSignUpState, value);
+};
+
+export const setIsEmailAuth = async (value) => {
+  await promiseSetRecoil(isEmailAuthState, value);
 };

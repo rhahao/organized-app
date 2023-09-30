@@ -22,3 +22,22 @@ export const apiPocketSignup = async (code) => {
 
   return { status: res.status, data };
 };
+
+export const apiRequestPasswordlesssLink = async (email, uid) => {
+  const { apiHost, appVersion: appversion, appLang } = await apiDefault();
+
+  const res = await fetch(`${apiHost}user-passwordless-login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      appclient: 'cpe',
+      appversion,
+      applanguage: appLang,
+    },
+    body: JSON.stringify({ email, uid }),
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
