@@ -21,7 +21,7 @@ import {
 } from '@states/app';
 import { countAnnouncementsState } from '@states/announcements';
 import { apiUserLogout } from '@services/api/user';
-import { accountTypeState, congNameState, congNumberState, userAvatarState, usernameState } from '@states/settings';
+import { accountTypeState, avatarUrlState, congNameState, congNumberState, usernameState } from '@states/settings';
 import { formatCongregationInfo } from '@utils/common';
 
 const useNavBar = () => {
@@ -32,8 +32,8 @@ const useNavBar = () => {
   const setMyAssignmentOpen = useSetRecoilState(isMyAssignmentOpenState);
   const setIsAboutOpen = useSetRecoilState(isAboutOpenState);
   const setShowTermsUse = useSetRecoilState(isShowTermsUseState);
-  const setUserSignIn = useSetRecoilState(isUserSignInState);
-  const setUserSignUp = useSetRecoilState(isUserSignUpState);
+  const setIsUserSignIn = useSetRecoilState(isUserSignInState);
+  const setIsUserSignUp = useSetRecoilState(isUserSignUpState);
   const setOfflineOverride = useSetRecoilState(offlineOverrideState);
   const setIsAppLoad = useSetRecoilState(isAppLoadState);
   const setIsSetup = useSetRecoilState(isSetupState);
@@ -45,7 +45,7 @@ const useNavBar = () => {
   const cnSpeakersRequestsApproved = useRecoilValue(congSpeakersRequestsUpdateCountState);
   const isAppLoad = useRecoilValue(isAppLoadState);
   const username = useRecoilValue(usernameState);
-  const userAvatar = useRecoilValue(userAvatarState);
+  const userAvatar = useRecoilValue(avatarUrlState);
   const congName = useRecoilValue(congNameState);
   const congNumber = useRecoilValue(congNumberState);
   const accountType = useRecoilValue(accountTypeState);
@@ -87,8 +87,8 @@ const useNavBar = () => {
   const handleUseOnlineAccount = () => {
     handleClose();
     setShowTermsUse(false);
-    setUserSignUp(false);
-    setUserSignIn(true);
+    setIsUserSignUp(false);
+    setIsUserSignIn(true);
     setOfflineOverride(true);
     setIsAppLoad(true);
     setIsSetup(true);

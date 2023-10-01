@@ -1,8 +1,8 @@
-import { setEmailBlocked, setUserSignIn } from '@services/recoil/app';
+import { setEmailBlocked, setIsUserSignIn } from '@services/recoil/app';
 
 const useEmailBlocked = () => {
   const handleSignIn = () => {
-    setUserSignIn(true);
+    setIsUserSignIn(true);
     setEmailBlocked(false);
   };
 

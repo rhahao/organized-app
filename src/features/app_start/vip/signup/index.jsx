@@ -1,6 +1,7 @@
 import { useAppTranslation } from '@hooks/index';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import OAuth from '../oauth';
@@ -9,7 +10,7 @@ import useSignup from './useSignup';
 const Signup = () => {
   const { t } = useAppTranslation();
 
-  const { handleSignIn } = useSignup();
+  const { handleSignIn, handleReturnChooser } = useSignup();
 
   return (
     <Container sx={{ marginTop: '20px' }}>
@@ -21,9 +22,21 @@ const Signup = () => {
 
       <OAuth />
 
-      <Link component="button" underline="none" variant="body1" onClick={handleSignIn} sx={{ marginTop: '15px' }}>
-        {t('hasAccount')}
-      </Link>
+      <Box sx={{ display: 'flex', gap: '10px' }}>
+        <Link
+          component="button"
+          variant="body1"
+          onClick={handleReturnChooser}
+          sx={{ marginTop: '15px', display: 'flex', gap: '5px' }}
+        >
+          <KeyboardBackspaceIcon />
+          <Typography>{t('back')}</Typography>
+        </Link>
+
+        <Link component="button" variant="body1" onClick={handleSignIn} sx={{ marginTop: '15px' }}>
+          {t('hasAccount')}
+        </Link>
+      </Box>
 
       <Box
         sx={{ fontSize: '14px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginTop: '25px' }}

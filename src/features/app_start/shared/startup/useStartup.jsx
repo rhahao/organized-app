@@ -4,6 +4,8 @@ import { isAccountChooseState, isSetupState, isUnauthorizedRoleState } from '@st
 import { accountTypeState } from '@states/settings';
 import { setIsAccountChoose } from '@services/recoil/app';
 
+let timeout;
+
 const useStartup = () => {
   const isUnauthorizedRole = useRecoilValue(isUnauthorizedRoleState);
   const isSetup = useRecoilValue(isSetupState);
@@ -24,7 +26,11 @@ const useStartup = () => {
       setIsAuth(false);
     };
 
-    checkAccount();
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+      checkAccount();
+    }, 1500);
   }, [accountType]);
 
   return { isUnauthorizedRole, isSetup, isAuth, isAccountChoose, accountType };

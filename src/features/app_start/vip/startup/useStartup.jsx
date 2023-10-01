@@ -1,14 +1,12 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useFirebaseAuth } from '@hooks/index';
 import {
   isAuthProcessingState,
   isCongAccountCreateState,
   isEmailAuthState,
-  isEmailBlockedState,
   isOnlineState,
   isShowTermsUseState,
-  isUserMfaSetupState,
   isUserMfaVerifyState,
   isUserSignInState,
   isUserSignUpState,
@@ -28,6 +26,7 @@ import {
   setIsUserSignUp,
   setOfflineOverride,
   setRootModalOpen,
+  setShowTermsUse,
   setUserMfaSetup,
   setUserMfaVerify,
 } from '@services/recoil/app';
@@ -38,55 +37,41 @@ import { apiSendAuthorization } from '@services/api/user';
 import { handleUpdateSetting } from '@services/dexie/settings';
 import { apiFetchSchedule } from '@services/api/schedule';
 import { handleUpdateScheduleFromRemote } from '@services/cpe/schedules';
+import { convertStringToBoolean } from '@utils/common';
+import { getMessageByCode } from '@services/i18n/translation';
 
 const useStartup = () => {
   const { isAuthenticated } = useFirebaseAuth();
 
   const showTermsUse = useRecoilValue(isShowTermsUseState);
-  const isEmailBlocked = useRecoilValue(isEmailBlockedState);
   const isEmailAuth = useRecoilValue(isEmailAuthState);
   const isOnline = useRecoilValue(isOnlineState);
   const visitorID = useRecoilValue(visitorIDState);
   const isUserSignUp = useRecoilValue(isUserSignUpState);
   const isUserSignIn = useRecoilValue(isUserSignInState);
   const isUserMfaVerify = useRecoilValue(isUserMfaVerifyState);
-  const isUserMfaSetup = useRecoilValue(isUserMfaSetupState);
   const isCongAccountCreate = useRecoilValue(isCongAccountCreateState);
   const isAuthProcessing = useRecoilValue(isAuthProcessingState);
   const isOfflineOverride = useRecoilValue(offlineOverrideState);
-  const cong_name = useRecoilValue(congNameState);
-  const cong_role = useRecoilValue(congRoleState);
+  const congName = useRecoilValue(congNameState);
+  const congRole = useRecoilValue(congRoleState);
 
-  useEffect(() => {
-    if (showTermsUse) return;
+  const showSignup = useCallback(() => {
+    setIsUserSignUp(true);
+    setIsUserSignIn(false);
+    setIsCongAccountCreate(false);
+    setUserMfaVerify(false);
+    setUserMfaSetup(false);
+  }, []);
 
-    const showSignup = () => {
-      setIsUserSignUp(true);
+  const runAuthenticatedStep = useCallback(async () => {
+    try {
       setIsUserSignIn(false);
-      setIsCongAccountCreate(false);
-      setUserMfaVerify(false);
-      setUserMfaSetup(false);
-    };
+      setIsAuthProcessing(true);
 
-    const runNotAuthenticatedStep = async () => {
-      if (isOfflineOverride) {
-        showSignup();
-        return;
-      }
+      const approvedRole = congRole.some((role) => CPE_ROLES.includes(role));
 
-      if (cong_name.length === 0) {
-        showSignup();
-        return;
-      }
-
-      const approvedRole = cong_role.some((role) => CPE_ROLES.includes(role));
-
-      if (!approvedRole) {
-        showSignup();
-        return;
-      }
-
-      if (cong_name.length > 0) {
+      if (!isOfflineOverride && congName.length > 0 && approvedRole) {
         setIsSetup(false);
         await loadApp();
         await runUpdater();
@@ -94,143 +79,177 @@ const useStartup = () => {
           setIsSetup(false);
           setIsAppLoad(false);
         }, [1000]);
+        return;
       }
-    };
 
-    if (!isAuthenticated) runNotAuthenticatedStep();
-  }, [isAuthenticated, isOfflineOverride, isOnline, showTermsUse, cong_name, cong_role]);
+      setIsAuthProcessing(true);
 
-  useEffect(() => {
-    if (showTermsUse) return;
-    if (visitorID.toString().length === 0) return;
+      const { status, data } = await apiSendAuthorization();
 
-    const runAuthenticatedStep = async () => {
-      try {
-        setIsUserSignIn(false);
-        setIsAuthProcessing(true);
-
-        const approvedRole = cong_role.some((role) => CPE_ROLES.includes(role));
-
-        if (!isOfflineOverride && cong_name.length > 0 && approvedRole) {
-          setIsSetup(false);
-          await loadApp();
-          await runUpdater();
-          setTimeout(() => {
-            setIsSetup(false);
-            setIsAppLoad(false);
-          }, [1000]);
-          return;
-        }
-
-        setIsAuthProcessing(true);
-
-        const { status, data } = await apiSendAuthorization();
-
-        if (status !== 200) {
-          await displaySnackNotification({
-            message: data.message,
-            severity: 'warning',
-          });
-
-          setIsAuthProcessing(false);
-          return;
-        }
-
-        const result = {};
-        const { cong_name, cong_role, mfa } = data;
-
-        if (mfa === 'not_enabled') {
-          if (cong_name.length === 0) {
-            result.createCongregation = true;
-          }
-
-          if (cong_name.length > 0 && cong_role.length === 0) {
-            result.unauthorized = true;
-          }
-
-          if (cong_name.length > 0 && cong_role.length > 0) {
-            const approvedRole = cong_role.some((role) => CPE_ROLES.includes(role));
-
-            if (!approvedRole) {
-              result.unauthorized = true;
-            }
-
-            if (approvedRole) {
-              await updateUserInfoAfterLogin(data);
-
-              result.success = true;
-            }
-          }
-        } else {
-          result.isVerifyMFA = true;
-        }
-
-        if (result.isVerifyMFA || result.success || result.createCongregation) {
-          await handleUpdateSetting({ account_type: 'vip' });
-
-          if (result.isVerifyMFA) {
-            setCurrentMFAStage('verify');
-            setIsUserSignUp(false);
-            setUserMfaVerify(true);
-            setIsCongAccountCreate(false);
-            setIsUnauthorizedRole(false);
-          }
-
-          if (result.success) {
-            setIsSetup(false);
-
-            await runUpdater();
-
-            await setRootModalOpen(true);
-            const { status: scheduleStatus, data: scheduleData } = await apiFetchSchedule();
-            if (scheduleStatus === 200) {
-              await handleUpdateScheduleFromRemote(scheduleData);
-            }
-            await setRootModalOpen(false);
-
-            setTimeout(() => {
-              setOfflineOverride(false);
-              setCongAccountConnected(true);
-              setIsAppLoad(false);
-            }, [2000]);
-          }
-
-          if (result.createCongregation) {
-            setIsUserSignUp(false);
-            setIsUserSignIn(false);
-            setIsCongAccountCreate(true);
-          }
-        }
-
-        if (result.unauthorized) {
-          setIsUserSignUp(false);
-          setUserMfaVerify(true);
-          setIsCongAccountCreate(false);
-          setIsUnauthorizedRole(true);
-        }
-
-        setIsAuthProcessing(false);
-      } catch (err) {
+      if (status !== 200) {
         await displaySnackNotification({
-          message: err.message,
-          severity: 'error',
+          message: getMessageByCode(data.message),
+          severity: 'warning',
         });
 
         setIsAuthProcessing(false);
+        return;
       }
+
+      const result = {};
+      const { cong_name, cong_role, mfa } = data;
+
+      if (mfa === 'not_enabled') {
+        if (cong_name.length === 0) {
+          result.createCongregation = true;
+        }
+
+        if (cong_name.length > 0 && cong_role.length === 0) {
+          result.unauthorized = true;
+        }
+
+        if (cong_name.length > 0 && cong_role.length > 0) {
+          const approvedRole = cong_role.some((role) => CPE_ROLES.includes(role));
+
+          if (!approvedRole) {
+            result.unauthorized = true;
+          }
+
+          if (approvedRole) {
+            await updateUserInfoAfterLogin(data);
+
+            result.success = true;
+          }
+        }
+      } else {
+        result.isVerifyMFA = true;
+      }
+
+      if (result.isVerifyMFA || result.success || result.createCongregation) {
+        await handleUpdateSetting({ account_type: 'vip' });
+
+        if (result.isVerifyMFA) {
+          setCurrentMFAStage('verify');
+          setIsUserSignUp(false);
+          setUserMfaVerify(true);
+          setIsCongAccountCreate(false);
+          setIsUnauthorizedRole(false);
+        }
+
+        if (result.success) {
+          setIsSetup(false);
+
+          await runUpdater();
+
+          await setRootModalOpen(true);
+          const { status: scheduleStatus, data: scheduleData } = await apiFetchSchedule();
+          if (scheduleStatus === 200) {
+            await handleUpdateScheduleFromRemote(scheduleData);
+          }
+          await setRootModalOpen(false);
+
+          setTimeout(() => {
+            setOfflineOverride(false);
+            setCongAccountConnected(true);
+            setIsAppLoad(false);
+          }, [2000]);
+        }
+
+        if (result.createCongregation) {
+          setIsUserSignUp(false);
+          setIsUserSignIn(false);
+          setIsCongAccountCreate(true);
+        }
+      }
+
+      if (result.unauthorized) {
+        setIsUserSignUp(false);
+        setUserMfaVerify(true);
+        setIsCongAccountCreate(false);
+        setIsUnauthorizedRole(true);
+      }
+
+      setIsAuthProcessing(false);
+    } catch (err) {
+      await displaySnackNotification({
+        message: getMessageByCode(err.message),
+        severity: 'error',
+      });
+
+      setIsAuthProcessing(false);
+    }
+  }, [isOfflineOverride, congName, congRole]);
+
+  const runNotAuthenticatedStep = useCallback(async () => {
+    if (isOfflineOverride) {
+      showSignup();
+      return;
+    }
+
+    if (congName.length === 0) {
+      showSignup();
+      return;
+    }
+
+    const approvedRole = congRole.some((role) => CPE_ROLES.includes(role));
+
+    if (!approvedRole) {
+      showSignup();
+      return;
+    }
+
+    if (congName.length > 0) {
+      setIsSetup(false);
+      await loadApp();
+      await runUpdater();
+      setTimeout(() => {
+        setIsSetup(false);
+        setIsAppLoad(false);
+      }, [1000]);
+    }
+  }, [isOfflineOverride, congName, congRole, showSignup]);
+
+  useEffect(() => {
+    if (showTermsUse) {
+      setIsUserSignUp(false);
+      setIsUserSignIn(false);
+      return;
+    }
+
+    if (!isAuthenticated) runNotAuthenticatedStep();
+  }, [isAuthenticated, runNotAuthenticatedStep, showTermsUse]);
+
+  useEffect(() => {
+    if (showTermsUse) {
+      setIsUserSignUp(false);
+      setIsUserSignIn(false);
+      return;
+    }
+
+    if (visitorID.toString().length === 0) return;
+
+    if (isUserSignUp || isUserSignIn) {
+      if (isAuthenticated && visitorID !== '') {
+        runAuthenticatedStep();
+      }
+    }
+  }, [isUserSignUp, isUserSignIn, runAuthenticatedStep, visitorID, isAuthenticated, showTermsUse, isOnline]);
+
+  useEffect(() => {
+    const checkTermsUseStatus = async () => {
+      const localValue = convertStringToBoolean(localStorage.getItem('termsUse') || 'true');
+      setShowTermsUse(localValue);
     };
 
-    if (isAuthenticated && visitorID !== '') runAuthenticatedStep();
-  }, [isAuthenticated, isOfflineOverride, showTermsUse, visitorID]);
+    checkTermsUseStatus();
+  }, []);
 
   return {
     showTermsUse,
-    isEmailBlocked,
     isEmailAuth,
     isUserSignUp,
     isUserSignIn,
     isUserMfaVerify,
-    isUserMfaSetup,
     isCongAccountCreate,
     isAuthProcessing,
   };

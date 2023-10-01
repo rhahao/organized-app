@@ -30,6 +30,7 @@ import {
   isUserMfaSetupState,
   isAuthProcessingState,
   currentMFAStageState,
+  isShowTermsUseState,
 } from '@states/app';
 
 export const handleSWOnInstalled = async () => {
@@ -92,7 +93,7 @@ export const setIsAppLoad = async (value) => {
   await promiseSetRecoil(isAppLoadState, value);
 };
 
-export const setUserSignIn = async (value) => {
+export const setIsUserSignIn = async (value) => {
   await promiseSetRecoil(isUserSignInState, value);
 };
 
@@ -108,7 +109,7 @@ export const setOfflineOverride = async (value) => {
   await promiseSetRecoil(offlineOverrideState, value);
 };
 
-export const setUserSignUp = async (value) => {
+export const setIsUserSignUp = async (value) => {
   await promiseSetRecoil(isUserSignUpState, value);
 };
 
@@ -132,14 +133,6 @@ export const setIsEmailLinkAuthenticate = async (value) => {
   await promiseSetRecoil(isEmailLinkAuthenticateState, value);
 };
 
-export const setIsUserSignUp = async (value) => {
-  await promiseSetRecoil(isUserSignUpState, value);
-};
-
-export const setIsUserSignIn = async (value) => {
-  await promiseSetRecoil(isUserSignInState, value);
-};
-
 export const setIsCongAccountCreate = async (value) => {
   await promiseSetRecoil(isCongAccountCreateState, value);
 };
@@ -158,4 +151,8 @@ export const setIsAuthProcessing = async (value) => {
 
 export const setCurrentMFAStage = async (value) => {
   await promiseSetRecoil(currentMFAStageState, value);
+};
+
+export const setShowTermsUse = async (value) => {
+  await promiseSetRecoil(isShowTermsUseState, value);
 };

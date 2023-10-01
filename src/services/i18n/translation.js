@@ -45,8 +45,12 @@ export const getMessageByCode = (code) => {
       return getTranslation({ key: 'inputInvalid' });
     case 'POCKET_NOT_FOUND':
       return getTranslation({ key: 'pocketNotFound' });
+    case 'TOKEN_INVALID':
+      return getTranslation({ key: 'mfaTokenInvalidExpired' });
     case 'INTERNAL_ERROR':
       return getTranslation({ key: 'internalError' });
+    case 'Failed to fetch':
+      return getTranslation({ key: 'oauthError' });
     default:
       return code;
   }

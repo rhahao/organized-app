@@ -96,7 +96,7 @@ const CongregationCreate = () => {
               onChange={(e) => setUserTmpFullname(e.target.value)}
             />
 
-            <CountrySelector setCountry={setCountry} />
+            <CountrySelector handleCountryChange={setCountry} />
             {country !== null && <CongregationSelector country={country} setCongregation={setCongregation} />}
             {congregation !== null && <CongregationRole role={role} setRole={setRole} />}
           </Box>

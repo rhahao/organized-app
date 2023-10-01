@@ -49,13 +49,7 @@ const PocketSignUp = () => {
           gap: '10px',
         }}
       >
-        <Button
-          color="inherit"
-          variant="contained"
-          disabled={isProcessing}
-          sx={{ color: 'black !important' }}
-          onClick={handleReturnChooser}
-        >
+        <Button color="inherit" variant="contained" disabled={isProcessing} onClick={handleReturnChooser}>
           {t('back')}
         </Button>
         <Button

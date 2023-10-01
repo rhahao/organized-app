@@ -8,7 +8,8 @@ import {
   setIsSetup,
   setOfflineOverride,
   setUserID,
-  setUserSignIn,
+  setIsUserSignIn,
+  setIsCongAccountCreate,
 } from '@services/recoil/app';
 import { apiCreateCongregation } from '@services/api/congregation';
 import { handleUpdateSetting } from '@services/dexie/settings';
@@ -109,7 +110,8 @@ const useCongregationCreate = () => {
   };
 
   const handleSignIn = async () => {
-    await setUserSignIn(true);
+    await setIsUserSignIn(true);
+    await setIsCongAccountCreate(false);
     await setCongAccountConnected(false);
   };
 

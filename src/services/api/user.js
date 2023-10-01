@@ -81,3 +81,30 @@ export const apiSendAuthorization = async () => {
 
   return { status: res.status, data };
 };
+
+export const apiHandleVerifyOTP = async (userOTP, trustedDevice) => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/mfa/verify-token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+    body: JSON.stringify({ token: userOTP, trusted: trustedDevice }),
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiValidateMe = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/users/validate-me`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};

@@ -10,7 +10,7 @@ export const apiDefault = async () => {
   const congID = await promiseGetRecoil(congIDState);
   const isOnline = await promiseGetRecoil(isOnlineState);
 
-  const userUID = currentAuthUser?.uid;
+  const userUID = currentAuthUser()?.uid;
 
   return { apiHost, visitorID, appVersion, userUID, appLang, congID, isOnline };
 };

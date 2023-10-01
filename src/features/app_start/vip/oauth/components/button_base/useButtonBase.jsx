@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
 import { isAuthProcessingState, isUserSignInState, isUserSignUpState, visitorIDState } from '@states/app';
 import { setAuthPersistence, userSignInPopup } from '@services/firebase/auth';
-import { displaySnackNotification, setIsEmailAuth, setUserSignIn, setUserSignUp } from '@services/recoil/app';
+import { displaySnackNotification, setIsEmailAuth, setIsUserSignIn, setIsUserSignUp } from '@services/recoil/app';
 import useAppTranslation from '@hooks/useAppTranslation';
 
 const useButtonBase = ({ provider, isEmail }) => {
@@ -35,8 +35,8 @@ const useButtonBase = ({ provider, isEmail }) => {
 
   const handleEmailAuth = () => {
     setIsEmailAuth(true);
-    if (isUserSignIn) setUserSignIn(false);
-    if (isUserSignUp) setUserSignUp(false);
+    if (isUserSignIn) setIsUserSignIn(false);
+    if (isUserSignUp) setIsUserSignUp(false);
   };
 
   const handleAction = () => {

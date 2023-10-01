@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import useCountry from './useCountry';
 import { useAppTranslation } from '@hooks';
 
-const CountrySelect = ({ handleCountryChange }) => {
+const CountrySelector = ({ handleCountryChange }) => {
   const { setOpenPicker, selected, options, handleOnChange, isLoading, openPicker } = useCountry({
     handleCountryChange,
   });
@@ -56,8 +56,8 @@ const CountrySelect = ({ handleCountryChange }) => {
   );
 };
 
-CountrySelect.propTypes = {
+CountrySelector.propTypes = {
   handleCountryChange: PropTypes.func.isRequired,
 };
 
-export default CountrySelect;
+export default CountrySelector;

@@ -4,11 +4,19 @@ import { accountTypeState, isMeetingEditorRoleState } from '@states/settings';
 import { getTranslation, handleAppChangeLanguage } from '@services/i18n/translation';
 import { appLangState } from '@states/app';
 import { userSignOut } from '@services/firebase/auth';
-import { disconnectCongAccount, displaySnackNotification, setCongID, setUserID } from '@services/recoil/app';
+import {
+  disconnectCongAccount,
+  displaySnackNotification,
+  setCongAccountConnected,
+  setCongID,
+  setRootModalOpen,
+  setUserID,
+} from '@services/recoil/app';
 import { updateAssignmentType, updateWeekType } from './updater';
 import { handleUpdateSetting } from '@services/dexie/settings';
 import { resetPersons } from '@services/dexie/persons';
 import { mergeUserFieldServiceReportsFromBackup } from '@services/dexie/userFieldSericeReports';
+import { deleteAppDb } from '@services/dexie/app';
 
 export const loadApp = async () => {
   const isMeetingEditor = await promiseGetRecoil(isMeetingEditorRoleState);
@@ -40,6 +48,7 @@ export const userLogoutSuccess = async () => {
 export const updateUserInfoAfterLogin = async (data) => {
   const { id, cong_id, cong_name, cong_role, cong_number, user_members_delegate, user_local_uid } = data;
 
+  await setCongAccountConnected(true);
   await setCongID(cong_id);
 
   // save congregation update if any
@@ -69,4 +78,12 @@ export const updateUserInfoAfterLogin = async (data) => {
   if (data.user_fieldServiceReports) {
     await mergeUserFieldServiceReportsFromBackup(data.user_fieldServiceReports);
   }
+};
+
+export const handleRoleDisapproved = async () => {
+  setRootModalOpen(true);
+  await deleteAppDb();
+  await userSignOut();
+  localStorage.removeItem('email');
+  window.location.href = './';
 };

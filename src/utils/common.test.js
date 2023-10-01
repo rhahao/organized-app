@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { convertStringToBoolean, countUnreadNotifications, formatCongregationInfo } from './common';
+import { convertStringToBoolean, countUnreadNotifications, formatCongregationInfo, matchIsNumeric } from './common';
 
 describe('testing convertStringToBoolean', () => {
   it('returns true with true string', () => {
@@ -65,5 +65,22 @@ describe('testing formatCongregationInfo', () => {
   it('return correct value if params provided', () => {
     const result = formatCongregationInfo('Test Congregation', 12345);
     expect(result).toBe('Test Congregation (12345)');
+  });
+});
+
+describe('testing matchIsNumeric', () => {
+  it('return false if not numeric', () => {
+    const result = matchIsNumeric('hello');
+    expect(result).toBe(false);
+  });
+
+  it('return true if num string', () => {
+    const result = matchIsNumeric('1234');
+    expect(result).toBe(true);
+  });
+
+  it('return true if num', () => {
+    const result = matchIsNumeric(1234);
+    expect(result).toBe(true);
   });
 });

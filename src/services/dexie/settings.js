@@ -8,8 +8,6 @@ export const handleUpdateSetting = async (setting) => {
   if (current.id === 1) {
     const newSettings = { ...current, ...setting };
 
-    console.log(newSettings);
-
     await appDb.app_settings.put(newSettings);
   }
 };

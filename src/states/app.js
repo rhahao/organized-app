@@ -89,7 +89,7 @@ export const isCongAccountCreateState = atom({
 
 export const isShowTermsUseState = atom({
   key: 'isShowLAG',
-  default: typeof window !== 'undefined' && convertStringToBoolean(localStorage.getItem('termsUse')),
+  default: typeof window !== 'undefined' && convertStringToBoolean(localStorage.getItem('termsUse') || 'true'),
 });
 
 export const visitorIDState = atom({

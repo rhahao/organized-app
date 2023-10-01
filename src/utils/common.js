@@ -35,3 +35,7 @@ export const formatCongregationInfo = (name = '', number = '') => {
   }
   return formatted;
 };
+
+export const matchIsNumeric = (text) => {
+  return !isNaN(Number(text));
+};

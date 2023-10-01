@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { displaySnackNotification, setIsEmailAuth, setUserSignIn, setUserSignUp } from '@services/recoil/app';
+import { displaySnackNotification, setIsEmailAuth, setIsUserSignIn, setIsUserSignUp } from '@services/recoil/app';
 import { isEmailValid } from '@services/validator';
 import { useAppTranslation } from '@hooks';
 import { apiRequestPasswordlesssLink } from '@services/api/user';
@@ -13,8 +13,8 @@ const useEmailAuth = () => {
   const [userTmpEmail, setUserTmpEmail] = useState('');
 
   const handleProviderSignIn = () => {
-    setUserSignUp(false);
-    setUserSignIn(true);
+    setIsUserSignUp(false);
+    setIsUserSignIn(true);
     setIsEmailAuth(false);
   };
 

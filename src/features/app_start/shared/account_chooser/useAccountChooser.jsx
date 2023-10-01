@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { visitorIDState } from '@states/app';
 import { setIsAccountChoose } from '@services/recoil/app';
@@ -17,14 +17,6 @@ const useAccountChooser = () => {
     await handleUpdateSetting({ account_type: tmpType });
     await setIsAccountChoose(false);
   };
-
-  useEffect(() => {
-    const updateSettings = async () => {
-      await handleUpdateSetting({ account_type: 'pocket' });
-    };
-
-    updateSettings();
-  }, []);
 
   return { visitorID, handleConfirmOption, handleChangeAccountType, tmpType };
 };

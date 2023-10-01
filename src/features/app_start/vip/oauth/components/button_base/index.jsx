@@ -4,8 +4,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import useButtonBase from './useButtonBase';
 
-const OAuthButtonBase = ({ buttonStyles, logo, text, provider }) => {
-  const { handleAction, isAuthProcessing, visitorID } = useButtonBase({ provider });
+const OAuthButtonBase = ({ buttonStyles, logo, text, provider, isEmail }) => {
+  const { handleAction, isAuthProcessing, visitorID } = useButtonBase({ provider, isEmail });
 
   return (
     <Button
@@ -39,6 +39,7 @@ OAuthButtonBase.propTypes = {
   logo: PropTypes.string,
   text: PropTypes.string,
   provider: PropTypes.object,
+  isEmail: PropTypes.bool,
 };
 
 export default OAuthButtonBase;
