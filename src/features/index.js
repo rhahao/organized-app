@@ -1,5 +1,6 @@
 export { default as About } from './about';
 export { default as AppUpdater } from './app_updater';
+export { default as ImportEPUB } from './source_material/import_epub';
 export { default as ImportJWOrg } from './source_material/import_jworg';
 export { default as LanguageSwitcher } from './language_switcher';
 export { default as ThemeSwitcher } from './theme_switcher';

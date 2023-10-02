@@ -5,13 +5,22 @@ import Box from '@mui/material/Box';
 import { AppModalWrapper } from '@wrapper/index';
 import { AppNavBar } from '@layouts';
 import { EmailLinkAuthentication, Startup } from '@features/app_start';
-import { About, AppUpdater, ImportJWOrg, WhatsNewContent } from '@features/index';
+import { About, AppUpdater, ImportEPUB, ImportJWOrg, WhatsNewContent } from '@features/index';
 import useRootLayout from './useRootLayout';
 import logger from '@services/logger';
 
 const RootLayout = ({ updatePwa }) => {
-  const { enabledInstall, installPwa, isLoading, isAppLoad, isEmailAuth, isOpenAbout, autoLoginStatus, isImportJWOrg } =
-    useRootLayout();
+  const {
+    enabledInstall,
+    installPwa,
+    isLoading,
+    isAppLoad,
+    isEmailAuth,
+    isOpenAbout,
+    autoLoginStatus,
+    isImportJWOrg,
+    isImportEPUB,
+  } = useRootLayout();
 
   useEffect(() => {
     if (autoLoginStatus !== '') {
@@ -27,6 +36,7 @@ const RootLayout = ({ updatePwa }) => {
       <Box sx={{ padding: '10px' }}>
         <WhatsNewContent />
         {isOpenAbout && <About />}
+        {isImportEPUB && <ImportEPUB />}
         {isImportJWOrg && <ImportJWOrg />}
         {isAppLoad && isEmailAuth && <EmailLinkAuthentication />}
         {isAppLoad && !isEmailAuth && <Startup />}
