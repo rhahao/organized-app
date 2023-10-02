@@ -178,11 +178,15 @@ export const setIsAboutOpen = async (value) => {
   await promiseSetRecoil(isAboutOpenState, value);
 };
 
+export const setUserConfirmationOpen = async (value) => {
+  await promiseSetRecoil(userConfirmationOpenState, value);
+};
+
 export const displayUserConfirmation = async ({ title, message, action }) => {
   await promiseSetRecoil(userConfirmationTitleState, title);
   await promiseSetRecoil(userConfirmationMessageState, message);
   await promiseSetRecoil(userConfirmationActionState, action);
-  await promiseSetRecoil(userConfirmationOpenState, true);
+  await setUserConfirmationOpen(true);
 };
 
 export const setIsBackupDb = async (value) => {

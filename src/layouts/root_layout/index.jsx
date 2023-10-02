@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -6,8 +5,8 @@ import { AppModalWrapper } from '@wrapper/index';
 import { AppNavBar } from '@layouts';
 import { EmailLinkAuthentication, Startup } from '@features/app_start';
 import { About, AppUpdater, ImportEPUB, ImportJWOrg, WhatsNewContent } from '@features/index';
+import { UserConfirmation } from '@components/index';
 import useRootLayout from './useRootLayout';
-import logger from '@services/logger';
 
 const RootLayout = ({ updatePwa }) => {
   const {
@@ -17,16 +16,10 @@ const RootLayout = ({ updatePwa }) => {
     isAppLoad,
     isEmailAuth,
     isOpenAbout,
-    autoLoginStatus,
     isImportJWOrg,
     isImportEPUB,
+    isUserConfirm,
   } = useRootLayout();
-
-  useEffect(() => {
-    if (autoLoginStatus !== '') {
-      logger.info('app', autoLoginStatus);
-    }
-  }, [autoLoginStatus]);
 
   return (
     <AppModalWrapper>
@@ -38,6 +31,8 @@ const RootLayout = ({ updatePwa }) => {
         {isOpenAbout && <About />}
         {isImportEPUB && <ImportEPUB />}
         {isImportJWOrg && <ImportJWOrg />}
+        {isUserConfirm && <UserConfirmation />}
+
         {isAppLoad && isEmailAuth && <EmailLinkAuthentication />}
         {isAppLoad && !isEmailAuth && <Startup />}
 

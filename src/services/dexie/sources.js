@@ -335,3 +335,18 @@ export const epubSaveSource = async (data) => {
     await saveScheduleInfo({ scheduleInfo: obj, isOverride: false });
   }
 };
+
+export const deleteSource = async (week) => {
+  const sources = await promiseGetRecoil(sourcesState);
+  const schedules = await promiseGetRecoil(schedulesState);
+
+  const isSourceExist = sources.find((source) => source.weekOf === week);
+  if (isSourceExist) {
+    await appDb.sources.delete(week);
+  }
+
+  const isSchedExist = schedules.find((schedule) => schedule.weekOf === week);
+  if (isSchedExist) {
+    await appDb.sched.delete(week);
+  }
+};

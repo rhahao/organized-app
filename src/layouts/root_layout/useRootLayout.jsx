@@ -1,17 +1,18 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useSearchParams } from 'react-router-dom';
 import usePwa2 from 'use-pwa2';
-import { isAboutOpenState, isAppLoadState, isEmailLinkAuthenticateState } from '@states/app';
+import { isAboutOpenState, isAppLoadState, isEmailLinkAuthenticateState, userConfirmationOpenState } from '@states/app';
 import { useEffect } from 'react';
 import { useUserAutoLogin } from '@hooks/index';
 import { isImportEPUBState, isImportJWOrgState } from '@states/sources';
+import logger from '@services/logger';
 
 const useRootLayout = () => {
   const { enabledInstall, installPwa, isLoading } = usePwa2();
 
-  const { autoLoginStatus } = useUserAutoLogin();
-
   const [searchParams] = useSearchParams();
+
+  const { autoLoginStatus } = useUserAutoLogin();
 
   const [isEmailAuth, setIsEmailAuth] = useRecoilState(isEmailLinkAuthenticateState);
 
@@ -19,11 +20,18 @@ const useRootLayout = () => {
   const isOpenAbout = useRecoilValue(isAboutOpenState);
   const isImportJWOrg = useRecoilValue(isImportJWOrgState);
   const isImportEPUB = useRecoilValue(isImportEPUBState);
+  const isUserConfirm = useRecoilValue(userConfirmationOpenState);
 
   useEffect(() => {
     const value = searchParams.get('code') !== null;
     setIsEmailAuth(value);
   }, [setIsEmailAuth, searchParams]);
+
+  useEffect(() => {
+    if (autoLoginStatus !== '') {
+      logger.info('app', autoLoginStatus);
+    }
+  }, [autoLoginStatus]);
 
   return {
     enabledInstall,
@@ -32,9 +40,9 @@ const useRootLayout = () => {
     isAppLoad,
     isEmailAuth,
     isOpenAbout,
-    autoLoginStatus,
     isImportJWOrg,
     isImportEPUB,
+    isUserConfirm,
   };
 };
 
