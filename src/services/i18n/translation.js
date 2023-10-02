@@ -51,6 +51,10 @@ export const getMessageByCode = (code) => {
       return getTranslation({ key: 'internalError' });
     case 'Failed to fetch':
       return getTranslation({ key: 'oauthError' });
+    case 'sourceNotFoundUnavailable':
+      return getTranslation({ key: 'sourceNotFoundUnavailable' });
+    case 'BACKUP_DISCREPANCY':
+      return getTranslation({ key: 'backupDiscrepancy' });
     default:
       return code;
   }

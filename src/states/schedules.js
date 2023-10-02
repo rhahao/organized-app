@@ -21,3 +21,8 @@ export const scheduleByWeek = memoize((weekOf) =>
     },
   })
 );
+
+export const isPublishOpenState = atom({
+  key: 'isPublishOpen',
+  default: false,
+});

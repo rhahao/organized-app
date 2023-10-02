@@ -39,3 +39,20 @@ export const formatCongregationInfo = (name = '', number = '') => {
 export const matchIsNumeric = (text) => {
   return !isNaN(Number(text));
 };
+
+export const generateDisplayName = (name) => {
+  const txtArray = name.split(' ');
+  if (txtArray.length === 1) {
+    return name;
+  } else {
+    let varDisplay = '';
+    for (let i = 0; i < txtArray.length; i++) {
+      if (i === txtArray.length - 1) {
+        varDisplay += txtArray[i];
+      } else {
+        varDisplay += txtArray[i].substring(0, 1) + '. ';
+      }
+    }
+    return varDisplay;
+  }
+};

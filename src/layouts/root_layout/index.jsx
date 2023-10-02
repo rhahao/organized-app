@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import { AppModalWrapper } from '@wrapper/index';
 import { AppNavBar } from '@layouts';
-import { About, AppUpdater } from '@features/index';
-import useRootLayout from './useRootLayout';
 import { EmailLinkAuthentication, Startup } from '@features/app_start';
+import { About, AppUpdater, ImportJWOrg, WhatsNewContent } from '@features/index';
+import useRootLayout from './useRootLayout';
 import logger from '@services/logger';
 
 const RootLayout = ({ updatePwa }) => {
-  const { enabledInstall, installPwa, isLoading, isAppLoad, isEmailAuth, isOpenAbout, autoLoginStatus } =
+  const { enabledInstall, installPwa, isLoading, isAppLoad, isEmailAuth, isOpenAbout, autoLoginStatus, isImportJWOrg } =
     useRootLayout();
 
   useEffect(() => {
@@ -24,9 +25,13 @@ const RootLayout = ({ updatePwa }) => {
       <AppUpdater updatePwa={updatePwa} enabledInstall={enabledInstall} />
 
       <Box sx={{ padding: '10px' }}>
+        <WhatsNewContent />
         {isOpenAbout && <About />}
+        {isImportJWOrg && <ImportJWOrg />}
         {isAppLoad && isEmailAuth && <EmailLinkAuthentication />}
         {isAppLoad && !isEmailAuth && <Startup />}
+
+        {!isAppLoad && <Outlet />}
       </Box>
     </AppModalWrapper>
   );

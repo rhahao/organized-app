@@ -1,21 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { useMediaQuery, useTheme } from '@mui/material';
 import {
   congAccountConnectedState,
   congSpeakersRequestsStateCountState,
   congSpeakersRequestsUpdateCountState,
-  isAboutOpenState,
   isAppLoadState,
-  isMyAssignmentOpenState,
   isOnlineState,
-  isSetupState,
-  isShowTermsUseState,
-  isUserSignInState,
-  isUserSignUpState,
-  isWhatsNewOpenState,
-  offlineOverrideState,
   pendingFieldServiceReportsCountState,
   themeOptionsState,
 } from '@states/app';
@@ -23,20 +15,18 @@ import { countAnnouncementsState } from '@states/announcements';
 import { apiUserLogout } from '@services/api/user';
 import { accountTypeState, avatarUrlState, congNameState, congNumberState, usernameState } from '@states/settings';
 import { formatCongregationInfo } from '@utils/common';
+import {
+  setIsAboutOpen,
+  setIsAppLoad,
+  setIsSetup,
+  setMyAssignmentOpen,
+  setOfflineOverride,
+  setWhatsNewOpen,
+} from '@services/recoil/app';
 
 const useNavBar = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-
-  const setWhatsNewOpen = useSetRecoilState(isWhatsNewOpenState);
-  const setMyAssignmentOpen = useSetRecoilState(isMyAssignmentOpenState);
-  const setIsAboutOpen = useSetRecoilState(isAboutOpenState);
-  const setShowTermsUse = useSetRecoilState(isShowTermsUseState);
-  const setIsUserSignIn = useSetRecoilState(isUserSignInState);
-  const setIsUserSignUp = useSetRecoilState(isUserSignUpState);
-  const setOfflineOverride = useSetRecoilState(offlineOverrideState);
-  const setIsAppLoad = useSetRecoilState(isAppLoadState);
-  const setIsSetup = useSetRecoilState(isSetupState);
 
   const themeOptions = useRecoilValue(themeOptionsState);
   const cnNews = useRecoilValue(countAnnouncementsState);
@@ -86,9 +76,6 @@ const useNavBar = () => {
 
   const handleUseOnlineAccount = () => {
     handleClose();
-    setShowTermsUse(false);
-    setIsUserSignUp(false);
-    setIsUserSignIn(true);
     setOfflineOverride(true);
     setIsAppLoad(true);
     setIsSetup(true);

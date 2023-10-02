@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { convertStringToBoolean, countUnreadNotifications, formatCongregationInfo, matchIsNumeric } from './common';
+import {
+  convertStringToBoolean,
+  countUnreadNotifications,
+  formatCongregationInfo,
+  generateDisplayName,
+  matchIsNumeric,
+} from './common';
 
 describe('testing convertStringToBoolean', () => {
   it('returns true with true string', () => {
@@ -82,5 +88,22 @@ describe('testing matchIsNumeric', () => {
   it('return true if num', () => {
     const result = matchIsNumeric(1234);
     expect(result).toBe(true);
+  });
+});
+
+describe('testing generateDisplayName', () => {
+  it('return input if single word', () => {
+    const result = generateDisplayName('Bob');
+    expect(result).toBe('Bob');
+  });
+
+  it('return formatted if two words', () => {
+    const result = generateDisplayName('Bob King');
+    expect(result).toBe('B. King');
+  });
+
+  it('return formatted if more words', () => {
+    const result = generateDisplayName('Bob Lion King');
+    expect(result).toBe('B. L. King');
   });
 });

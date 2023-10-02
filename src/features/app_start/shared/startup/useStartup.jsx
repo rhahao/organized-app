@@ -30,7 +30,7 @@ const useStartup = () => {
 
     timeout = setTimeout(() => {
       checkAccount();
-    }, 1500);
+    }, 3000);
   }, [accountType]);
 
   return { isUnauthorizedRole, isSetup, isAuth, isAccountChoose, accountType };

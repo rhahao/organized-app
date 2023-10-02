@@ -31,6 +31,15 @@ import {
   isAuthProcessingState,
   currentMFAStageState,
   isShowTermsUseState,
+  isMyAssignmentOpenState,
+  isWhatsNewOpenState,
+  isAboutOpenState,
+  userConfirmationTitleState,
+  userConfirmationMessageState,
+  userConfirmationActionState,
+  userConfirmationOpenState,
+  backupDbOpenState,
+  restoreDbOpenState,
 } from '@states/app';
 
 export const handleSWOnInstalled = async () => {
@@ -155,4 +164,31 @@ export const setCurrentMFAStage = async (value) => {
 
 export const setShowTermsUse = async (value) => {
   await promiseSetRecoil(isShowTermsUseState, value);
+};
+
+export const setMyAssignmentOpen = async (value) => {
+  await promiseSetRecoil(isMyAssignmentOpenState, value);
+};
+
+export const setWhatsNewOpen = async (value) => {
+  await promiseSetRecoil(isWhatsNewOpenState, value);
+};
+
+export const setIsAboutOpen = async (value) => {
+  await promiseSetRecoil(isAboutOpenState, value);
+};
+
+export const displayUserConfirmation = async ({ title, message, action }) => {
+  await promiseSetRecoil(userConfirmationTitleState, title);
+  await promiseSetRecoil(userConfirmationMessageState, message);
+  await promiseSetRecoil(userConfirmationActionState, action);
+  await promiseSetRecoil(userConfirmationOpenState, true);
+};
+
+export const setIsBackupDb = async (value) => {
+  await promiseSetRecoil(backupDbOpenState, value);
+};
+
+export const setIsRestoreDb = async (value) => {
+  await promiseSetRecoil(restoreDbOpenState, value);
 };

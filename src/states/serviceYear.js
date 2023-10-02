@@ -8,3 +8,8 @@ export const serviceYearState = atom({
   key: 'serviceYear',
   default: [],
 });
+
+export const isAddSYOpenState = atom({
+  key: 'isAddSYOpen',
+  default: false,
+});

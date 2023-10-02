@@ -64,6 +64,14 @@ const useStartup = () => {
     setUserMfaSetup(false);
   }, []);
 
+  const showSignin = useCallback(() => {
+    setIsUserSignUp(false);
+    setIsUserSignIn(true);
+    setIsCongAccountCreate(false);
+    setUserMfaVerify(false);
+    setUserMfaSetup(false);
+  }, []);
+
   const runAuthenticatedStep = useCallback(async () => {
     try {
       setIsUserSignIn(false);
@@ -182,7 +190,7 @@ const useStartup = () => {
 
   const runNotAuthenticatedStep = useCallback(async () => {
     if (isOfflineOverride) {
-      showSignup();
+      showSignin();
       return;
     }
 
@@ -207,7 +215,7 @@ const useStartup = () => {
         setIsAppLoad(false);
       }, [1000]);
     }
-  }, [isOfflineOverride, congName, congRole, showSignup]);
+  }, [isOfflineOverride, congName, congRole, showSignup, showSignin]);
 
   useEffect(() => {
     if (showTermsUse) {

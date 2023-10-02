@@ -65,3 +65,54 @@ export const apiCreateCongregation = async (country_code, cong_name, cong_number
 
   return { status: res.status, data };
 };
+
+export const apiApproveCongregationSpeakersRequest = async (cong_id) => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid, congID } = await apiDefault();
+
+  try {
+    const res = await fetch(`${apiHost}api/congregations/meeting/${congID}/request-speakers/approve`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid, cong_id },
+    });
+
+    const data = await res.json();
+
+    return { status: res.status, data };
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const apiDisapproveCongregationSpeakersRequest = async (cong_id) => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid, congID } = await apiDefault();
+
+  try {
+    const res = await fetch(`${apiHost}api/congregations/meeting/${congID}/request-speakers/disapprove`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid, cong_id },
+    });
+
+    const data = await res.json();
+
+    return { status: res.status, data };
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const apiGetCongregationSpeakersRequests = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid, congID } = await apiDefault();
+
+  try {
+    const res = await fetch(`${apiHost}api/congregations/meeting/${congID}/request-speakers`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+    });
+
+    const data = await res.json();
+
+    return { status: res.status, data };
+  } catch (err) {
+    throw new Error(err);
+  }
+};

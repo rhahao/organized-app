@@ -21,3 +21,18 @@ export const sourceByWeek = memoize((weekOf) =>
     },
   })
 );
+
+export const epubFileState = atom({
+  key: 'epubFile',
+  default: {},
+});
+
+export const isImportJWOrgState = atom({
+  key: 'isImportJWOrg',
+  default: false,
+});
+
+export const isImportEPUBState = atom({
+  key: 'isImportEPUB',
+  default: false,
+});

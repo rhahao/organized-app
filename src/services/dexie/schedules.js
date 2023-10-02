@@ -8,6 +8,8 @@ import {
 } from '@states/settings';
 import { schedulesState } from '@states/schedules';
 import { publicTalkFindLocal, publicTalksLocale } from './publicTalks';
+import { formatDate } from '@services/dateformat';
+import { scheduleSchema } from '@services/dexie/schema';
 import appDb from './db';
 
 export const saveSchedule = async (appData) => {
@@ -155,4 +157,83 @@ export const saveSchedule = async (appData) => {
   }
 
   await appDb.sched.put(schedule);
+};
+
+export const getCurrentExistingWeekDate = async () => {
+  const schedules = await appDb.sched.toArray();
+
+  const today = new Date();
+  const day = today.getDay();
+  const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+  let monDay = new Date(today.setDate(diff));
+
+  let currentWeek = formatDate(monDay, 'yyyy/mm/dd');
+  let isExist = false;
+
+  if (schedules.length > 0) {
+    do {
+      const fDate = formatDate(monDay, 'yyyy/mm/dd');
+      const schedule = schedules.find((data) => data.weekOf === fDate);
+      if (schedule) {
+        currentWeek = fDate;
+        isExist = true;
+      }
+      monDay.setDate(monDay.getDate() + 7);
+    } while (isExist === false);
+  }
+
+  return currentWeek;
+};
+
+export const saveScheduleInfo = async ({ scheduleInfo, isOverride }) => {
+  const schedules = await promiseGetRecoil(schedulesState);
+  const tmpWeek = schedules.find((schedule) => schedule.weekOf === scheduleInfo.weekOf);
+
+  const model = structuredClone(scheduleSchema);
+
+  // creating new record
+  if (!tmpWeek) {
+    const data = Object.assign(model, {
+      weekOf: scheduleInfo.weekOf,
+      week_type: scheduleInfo.week_type,
+      changes: [{ date: new Date().toISOString(), field: 'week_type', value: scheduleInfo.week_type }],
+    });
+
+    if (scheduleInfo.noMMeeting !== undefined) {
+      data.noMMeeting = scheduleInfo.noMMeeting;
+      data.changes.push({ date: new Date().toISOString(), field: 'noMMeeting', value: scheduleInfo.noMMeeting });
+    }
+
+    if (scheduleInfo.noWMeeting !== undefined) {
+      data.noWMeeting = scheduleInfo.noWMeeting;
+      data.changes.push({ date: new Date().toISOString(), field: 'noWMeeting', value: scheduleInfo.noWMeeting });
+    }
+
+    await appDb.sched.put(data);
+    return;
+  }
+
+  const week = structuredClone(tmpWeek);
+  const data = Object.assign(model, week);
+
+  // editing record if override true
+  if (isOverride && week.week_type !== scheduleInfo.week_type) {
+    data.week_type = scheduleInfo.week_type;
+    data.changes = data.changes.filter((change) => change.field !== 'week_type');
+    data.changes.push({ date: new Date().toISOString(), field: 'week_type', value: scheduleInfo.week_type });
+  }
+
+  if (scheduleInfo.noMMeeting !== undefined && isOverride && data.noMMeeting !== scheduleInfo.noMMeeting) {
+    data.noMMeeting = scheduleInfo.noMMeeting;
+    data.changes = week.changes.filter((change) => change.field !== 'noMMeeting');
+    data.changes.push({ date: new Date().toISOString(), field: 'noMMeeting', value: scheduleInfo.noMMeeting });
+  }
+
+  if (scheduleInfo.noWMeeting !== undefined && isOverride && data.noWMeeting !== scheduleInfo.noWMeeting) {
+    data.noWMeeting = scheduleInfo.noWMeeting;
+    data.changes = week.changes.filter((change) => change.field !== 'noWMeeting');
+    data.changes.push({ date: new Date().toISOString(), field: 'noWMeeting', value: scheduleInfo.noWMeeting });
+  }
+
+  await appDb.sched.put(data);
 };

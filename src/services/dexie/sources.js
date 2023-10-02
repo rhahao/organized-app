@@ -4,8 +4,10 @@ import { getWeekDate, getOldestWeekDate } from '@utils/date';
 import { sourcesState } from '@states/sources';
 import { formatDate } from '@services/dateformat';
 import appDb from './db';
-import { appLangState } from '@states/app';
-import { coordinatorRoleState, lmmoRoleState } from '@states/settings';
+import { coordinatorRoleState, lmmoRoleState, sourceLangState } from '@states/settings';
+import { saveScheduleInfo } from './schedules';
+import { assignmentTypeAYFOnlyState } from '@states/assignment';
+import { sourceSchema } from '@services/dexie/schema';
 
 export const removeSourcesOutdatedRecords = async () => {
   const oldestWeekDate = getOldestWeekDate();
@@ -48,7 +50,7 @@ export const sourcesAddWeekManually = async () => {
       return a.weekOf < b.weekOf ? 1 : -1;
     });
 
-    const lastWeek = sources.list[0].weekOf;
+    const lastWeek = sources[0].weekOf;
     const day = lastWeek.split('/')[2];
     const month = lastWeek.split('/')[1];
     const year = lastWeek.split('/')[0];
@@ -61,12 +63,12 @@ export const sourcesAddWeekManually = async () => {
 
   const foundSource = sources.find((source) => source.weekOf === fMonday);
   if (!foundSource) {
-    await appDb.sources.add({ weekOf: fMonday });
+    await appDb.sources.put({ weekOf: fMonday });
   }
 
   const foundSchedule = schedules.find((schedule) => schedule.weekOf === fMonday);
   if (!foundSchedule) {
-    await appDb.sched.add({ weekOf: fMonday });
+    await appDb.sched.put({ weekOf: fMonday });
   }
 };
 
@@ -79,7 +81,7 @@ export const checkCurrentWeek = async () => {
 };
 
 export const saveSource = async ({ srcData, localOverride, forPocket }) => {
-  const sourceLang = await promiseGetRecoil(appLangState);
+  const sourceLang = await promiseGetRecoil(sourceLangState);
   const lmmoRole = await promiseGetRecoil(lmmoRoleState);
   const coordinatorRole = await promiseGetRecoil(coordinatorRoleState);
   const sources = await promiseGetRecoil(sourcesState);
@@ -89,7 +91,15 @@ export const saveSource = async ({ srcData, localOverride, forPocket }) => {
   const isUpdateWeekend = !forPocket || (forPocket && !coordinatorRole);
 
   const tmpSource = sources.find((s) => s.weekOf === srcData.weekOf);
-  const source = { ...tmpSource };
+  const model = structuredClone(sourceSchema);
+  const source = {};
+
+  if (tmpSource) {
+    const old = structuredClone(tmpSource);
+    Object.assign(source, model, old);
+  } else {
+    Object.assign(source, model, { weekOf: srcData.weekOf });
+  }
 
   if (isUpdateMidweek) {
     source.mwb_week_date_locale[source_lang] = srcData.mwb_week_date_locale || '';
@@ -160,5 +170,168 @@ export const saveSource = async ({ srcData, localOverride, forPocket }) => {
 
   source.keepOverride = localOverride ? source.keepOverride : new Date().toISOString();
 
-  await appDb.sources.put(sources);
+  await appDb.sources.put(source);
+};
+
+export const epubSaveSource = async (data) => {
+  for await (const src of data) {
+    let obj = {};
+
+    let isMWB = false;
+    let isW = false;
+
+    for (const [key] of Object.entries(src)) {
+      if (key === 'mwb_week_date_locale') {
+        isMWB = true;
+      }
+
+      if (key === 'w_study_date_locale') {
+        isW = true;
+      }
+    }
+
+    if (isMWB) {
+      const assTypeList = await promiseGetRecoil(assignmentTypeAYFOnlyState);
+
+      let assType = '';
+
+      obj.weekOf = src.mwb_week_date || src.week_date;
+      obj.mwb_week_date_locale = src.mwb_week_date_locale;
+
+      // Weekly Bible Reading
+      obj.mwb_weekly_bible_reading = src.mwb_weekly_bible_reading;
+
+      // Opening Song
+      obj.mwb_song_first = src.mwb_song_first;
+
+      // TGW Talk 10 min
+      obj.mwb_tgw_talk = src.mwb_tgw_talk;
+
+      //Bible Reading Source
+      obj.mwb_tgw_bread = src.mwb_tgw_bread;
+
+      // AYF Count
+      const cnAYF = src.mwb_ayf_count;
+      obj.mwb_ayf_count = src.mwb_ayf_count;
+
+      //AYF1 Assignment Type
+      assType = assTypeList.find((type) => type.label === src.mwb_ayf_part1_type).value;
+      obj.mwb_ayf_part1_type = assType;
+
+      //AYF1 Assignment Time
+      obj.mwb_ayf_part1_time = src.mwb_ayf_part1_time;
+
+      //AYF1 Assignment Source
+      obj.mwb_ayf_part1 = src.mwb_ayf_part1;
+
+      obj.mwb_ayf_part2_type = '';
+      obj.mwb_ayf_part2_time = '';
+      obj.mwb_ayf_part2 = '';
+      obj.mwb_ayf_part3_type = '';
+      obj.mwb_ayf_part3_time = '';
+      obj.mwb_ayf_part3 = '';
+      obj.mwb_ayf_part4_type = '';
+      obj.mwb_ayf_part4_time = '';
+      obj.mwb_ayf_part4 = '';
+
+      if (cnAYF > 1) {
+        //AYF2 Assignment Type
+        assType = assTypeList.find((type) => type.label === src.mwb_ayf_part2_type).value;
+        obj.mwb_ayf_part2_type = assType;
+
+        //AYF2 Assignment Time
+        obj.mwb_ayf_part2_time = src.mwb_ayf_part2_time;
+
+        //AYF2 Assignment Source
+        obj.mwb_ayf_part2 = src.mwb_ayf_part2;
+      }
+
+      if (cnAYF > 2) {
+        //AYF3 Assignment Type
+        assType = assTypeList.find((type) => type.label === src.mwb_ayf_part3_type).value;
+        obj.mwb_ayf_part3_type = assType;
+
+        //AYF3 Assignment Time
+        obj.mwb_ayf_part3_time = src.mwb_ayf_part3_time;
+
+        //AYF3 Assignment Source
+        obj.mwb_ayf_part3 = src.mwb_ayf_part3;
+      }
+
+      if (cnAYF > 3) {
+        //AYF4 Assignment Type
+        assType = assTypeList.find((type) => type.label === src.mwb_ayf_part4_type).value;
+        obj.mwb_ayf_part4_type = assType;
+
+        //AYF4 Assignment Time
+        obj.mwb_ayf_part4_time = src.mwb_ayf_part4_time;
+
+        //AYF3 Assignment Source
+        obj.mwb_ayf_part2 = src.mwb_ayf_part2;
+      }
+
+      // Middle Song
+      obj.mwb_song_middle = src.mwb_song_middle;
+
+      // LC Count
+      obj.mwb_lc_count = src.mwb_lc_count;
+
+      // LC Part 1 Time
+      obj.mwb_lc_part1_time = src.mwb_lc_part1_time;
+
+      // LC Part 1 Source
+      obj.mwb_lc_part1 = src.mwb_lc_part1;
+
+      // LC Part 1 Content
+      obj.mwb_lc_part1_content = src.mwb_lc_part1_content;
+
+      obj.mwb_lc_part2 = '';
+      obj.mwb_lc_part2_content = '';
+      obj.mwb_lc_part2_time = '';
+
+      // LC Part 2
+      if (src.mwb_lc_count > 1) {
+        // LC Part 2 Time
+        obj.mwb_lc_part2_time = src.mwb_lc_part2_time;
+
+        // LC Part 2 Source
+        obj.mwb_lc_part2 = src.mwb_lc_part2;
+
+        // LC Part 2 Content
+        obj.mwb_lc_part2_content = src.mwb_lc_part2_content;
+      }
+
+      // CBS Source
+      obj.mwb_lc_cbs = src.mwb_lc_cbs;
+
+      // Concluding Song
+      obj.mwb_song_conclude = src.mwb_song_conclude;
+    }
+
+    if (isW) {
+      obj.weekOf = src.w_study_date || src.week_date;
+      obj.w_study_date_locale = src.w_study_date_locale;
+      obj.w_study_title = src.w_study_title;
+      obj.w_study_opening_song = src.w_study_opening_song;
+      obj.w_study_concluding_song = src.w_study_concluding_song;
+    }
+
+    await saveSource({ srcData: obj, localOverride: true });
+
+    // edit schedule info
+    obj = {};
+    obj.week_type = 1;
+    obj.noMMeeting = false;
+    obj.noWMeeting = false;
+
+    if (isMWB) {
+      obj.weekOf = src.mwb_week_date || src.week_date;
+    }
+
+    if (isW) {
+      obj.weekOf = src.w_study_date || src.week_date;
+    }
+
+    await saveScheduleInfo({ scheduleInfo: obj, isOverride: false });
+  }
 };

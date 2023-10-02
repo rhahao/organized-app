@@ -21,7 +21,7 @@ import PrivateVipConnectedRoute from '@routes/PrivateVipConnectedRoute';
 import {
   adminRoleState,
   coordinatorRoleState,
-  elderRoleState,
+  elderLocalRoleState,
   lmmoRoleState,
   publicTalkCoordinatorRoleState,
   publisherRoleState,
@@ -31,7 +31,7 @@ import { congAccountConnectedState } from '@states/app';
 
 // lazy loading
 const Administration = lazy(() => import('@pages/Administration'));
-const DashboardMenu = lazy(() => import('@pages/DashboardMenu'));
+const DashboardMenu = lazy(() => import('@pages/dashboard'));
 const Persons = lazy(() => import('@pages/Persons'));
 const PersonDetails = lazy(() => import('@pages/PersonDetails'));
 const Schedules = lazy(() => import('@pages/Schedules'));
@@ -62,7 +62,7 @@ const App = ({ updatePwa }) => {
 
   const adminRole = useRecoilValue(adminRoleState);
   const coordinatorRole = useRecoilValue(coordinatorRoleState);
-  const elderRole = useRecoilValue(elderRoleState);
+  const elderLocalRole = useRecoilValue(elderLocalRoleState);
   const lmmoRole = useRecoilValue(lmmoRoleState);
   const publicTalkCoordinatorRole = useRecoilValue(publicTalkCoordinatorRoleState);
   const publisherRole = useRecoilValue(publisherRoleState);
@@ -91,7 +91,7 @@ const App = ({ updatePwa }) => {
           ],
         },
         {
-          element: <PrivateElderRoute isElder={elderRole} />,
+          element: <PrivateElderRoute isElder={elderLocalRole} />,
           children: [
             {
               path: '/persons',
