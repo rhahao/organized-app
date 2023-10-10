@@ -1,16 +1,7 @@
+import { personsState } from '@states/persons';
+import { promiseGetRecoil } from 'recoil-outside';
+
 const excludeFields = ['changes', 'id', 'lastAssignment', 'person_uid'];
-
-export const comparePerson = (source, modified) => {
-  let changes = source.changes ? [...source.changes] : [];
-
-  changes = compareNonArray(source, modified, changes);
-  changes = compareAssignments(source, modified, changes);
-  changes = compareTimeAway(source, modified, changes);
-  changes = compareSpiritualStatus(source, modified, changes);
-  changes = compareOtherService(source, modified, changes);
-
-  return changes;
-};
 
 const compareNonArray = (source, modified, changes) => {
   const localExclude = [...excludeFields, 'timeAway', 'assignments', 'spiritualStatus', 'otherService'];
@@ -242,4 +233,40 @@ const compareOtherService = (source, modified, changes) => {
   }
 
   return changes;
+};
+
+export const comparePerson = (source, modified) => {
+  let changes = source.changes ? [...source.changes] : [];
+
+  changes = compareNonArray(source, modified, changes);
+  changes = compareAssignments(source, modified, changes);
+  changes = compareTimeAway(source, modified, changes);
+  changes = compareSpiritualStatus(source, modified, changes);
+  changes = compareOtherService(source, modified, changes);
+
+  return changes;
+};
+
+export const getRecentPersons = async (data) => {
+  const recentPersons = data ? JSON.parse(data) : [];
+  const persons = await promiseGetRecoil(personsState);
+
+  const result = [];
+  if (persons.length === 0) {
+    localStorage.removeItem('recentPersons');
+  } else {
+    let temp = recentPersons;
+    for await (const recent of recentPersons) {
+      const findPerson = persons.find((person) => person.person_uid === recent);
+
+      if (findPerson) {
+        result.push(findPerson);
+      } else {
+        temp = temp.filter((tmp) => tmp !== recent);
+        localStorage.setItem('recentPersons', JSON.stringify(temp));
+      }
+    }
+  }
+
+  return result;
 };

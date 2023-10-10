@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import useDashboard from './useDashboard';
-import { MenuCard } from './components';
+import { MenuCard } from '@features/index';
 
 const DashboardMenu = () => {
   const { dashboardMenus } = useDashboard();

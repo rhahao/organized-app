@@ -32,7 +32,7 @@ import { congAccountConnectedState } from '@states/app';
 // lazy loading
 const Administration = lazy(() => import('@pages/Administration'));
 const DashboardMenu = lazy(() => import('@pages/dashboard'));
-const Persons = lazy(() => import('@pages/Persons'));
+const Persons = lazy(() => import('@pages/persons'));
 const PersonDetails = lazy(() => import('@pages/PersonDetails'));
 const Schedules = lazy(() => import('@pages/Schedules'));
 const ScheduleDetails = lazy(() => import('@pages/ScheduleDetails'));

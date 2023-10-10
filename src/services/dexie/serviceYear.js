@@ -1,4 +1,6 @@
+import { serviceYearState } from '@states/serviceYear';
 import { addMonths } from '@utils/date';
+import { promiseGetRecoil } from 'recoil-outside';
 
 export const currentReportMonth = () => {
   const currentYear = new Date().getFullYear();
@@ -16,4 +18,23 @@ export const currentReportMonth = () => {
   }
 
   return month;
+};
+
+export const getServiceYearByValue = async (value) => {
+  const list = await promiseGetRecoil(serviceYearState);
+
+  return list.find((service) => service.value === value);
+};
+
+export const getServiceYearByMonth = async (month) => {
+  const currentYear = new Date(month).getFullYear();
+  const currentMonth = new Date(month).getMonth() + 1;
+  let current;
+
+  if (currentMonth < 9) current = `${+currentYear - 1}-${currentYear}`;
+  if (currentMonth >= 9) current = `${currentYear}-${+currentYear + 1}`;
+
+  const found = await getServiceYearByValue(current);
+
+  return found;
 };
