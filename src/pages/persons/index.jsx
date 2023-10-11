@@ -39,6 +39,7 @@ const Persons = () => {
     persons,
     handleSearchEnter,
     isSearch,
+    handleSearchPerson,
   } = usePersons();
 
   return (
@@ -74,6 +75,7 @@ const Persons = () => {
                 marginTop: '-5px',
                 marginRight: '5px',
               }}
+              onClick={handleSearchPerson}
             >
               <PersonSearchIcon sx={{ fontSize: '25px' }} />
             </IconButton>
@@ -103,6 +105,7 @@ const Persons = () => {
                   marginTop: '-5px',
                   marginRight: '5px',
                 }}
+                onClick={handleSearchPerson}
               >
                 <PersonSearchIcon sx={{ fontSize: '25px' }} />
               </IconButton>
@@ -135,7 +138,7 @@ const Persons = () => {
                   'aria-labelledby': 'persons-small-button',
                 }}
               >
-                <MenuItem>
+                <MenuItem onClick={handleSearchPerson}>
                   <ListItemIcon>
                     <PersonSearchIcon sx={{ fontSize: '25px' }} />
                   </ListItemIcon>

@@ -1,14 +1,10 @@
 import { Suspense, lazy } from 'react';
+import { RouterProvider, createHashRouter } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import CssBaseline from '@mui/material/CssBaseline';
-import { useGlobal } from '@hooks';
-import { WaitingCircular, ErrorBoundary } from '@components';
-import { RouterProvider, createHashRouter } from 'react-router-dom';
-import { RootLayout } from '@layouts';
-import { NotificationWrapper } from '@wrapper';
 import PrivatePublisherRoute from '@routes/PrivatePublisherRoute';
 import PrivateElderRoute from '@routes/PrivateElderRoute';
 import PrivateVipRoute from '@routes/PrivateVipRoute';
@@ -18,6 +14,10 @@ import PrivateSecretaryRoute from '@routes/PrivateSecretaryRoute';
 import PrivatePublicTalkCoordinatorRoute from '@routes/PrivatePublicTalkCoordinatorRoute';
 import PrivateWeekendMeetingRoute from '@routes/PrivateWeekendMeetingRoute';
 import PrivateVipConnectedRoute from '@routes/PrivateVipConnectedRoute';
+import { useGlobal } from '@hooks';
+import { WaitingCircular, ErrorBoundary } from '@components';
+import { RootLayout } from '@layouts';
+import { NotificationWrapper } from '@wrapper';
 import {
   adminRoleState,
   coordinatorRoleState,
@@ -33,7 +33,7 @@ import { congAccountConnectedState } from '@states/app';
 const Administration = lazy(() => import('@pages/Administration'));
 const DashboardMenu = lazy(() => import('@pages/dashboard'));
 const Persons = lazy(() => import('@pages/persons'));
-const PersonDetails = lazy(() => import('@pages/PersonDetails'));
+const PersonDetails = lazy(() => import('@pages/person_details'));
 const Schedules = lazy(() => import('@pages/Schedules'));
 const ScheduleDetails = lazy(() => import('@pages/ScheduleDetails'));
 const S89Print = lazy(() => import('@pages/S89Print'));

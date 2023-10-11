@@ -32,9 +32,14 @@ const PersonCard = ({ person }) => {
     isBaptized,
     isElder,
     isMS,
-    isPublisher,
     isRegularPioneer,
     isSpecialPioneer,
+    isBR,
+    isBS,
+    isIC,
+    isPublisherOnly,
+    isRV,
+    isT,
   } = useCard(person);
 
   return (
@@ -43,20 +48,12 @@ const PersonCard = ({ person }) => {
         <CardHeader
           sx={{
             padding: '5px',
-            '& .MuiCardHeader-title': {
-              fontSize: '16px',
-              fontWeight: 'bold',
-            },
-            '& .MuiCardHeader-action': {
-              alignSelf: 'center',
-            },
+            '& .MuiCardHeader-title': { fontSize: '16px', fontWeight: 'bold' },
+            '& .MuiCardHeader-action': { alignSelf: 'center' },
           }}
           avatar={
             <Avatar
-              sx={{
-                height: '50px',
-                width: '50px',
-              }}
+              sx={{ height: '50px', width: '50px' }}
               alt="Student icon"
               src={person.isMale ? maleIcon : femaleIcon}
             />
@@ -89,23 +86,13 @@ const PersonCard = ({ person }) => {
             },
           }}
         >
-          {person.assignments.find((assignment) => assignment.code === 100) && (
-            <Chip label={t('abbrBibleReading')} size="small" sx={sharedStyles.chip} />
-          )}
-          {person.assignments.find((assignment) => assignment.code === 101) && (
-            <Chip label={t('abbrInitialCall')} size="small" sx={sharedStyles.chip} />
-          )}
-          {person.assignments.find((assignment) => assignment.code === 102) && (
-            <Chip label={t('abbrReturnVisit')} size="small" sx={sharedStyles.chip} />
-          )}
-          {person.assignments.find((assignment) => assignment.code === 103) && (
-            <Chip label={t('abbrBibleStudy')} size="small" sx={sharedStyles.chip} />
-          )}
-          {person.assignments.find((assignment) => assignment.code === 104) && (
-            <Chip label={t('abbrTalk')} size="small" sx={sharedStyles.chip} />
-          )}
+          {isBR && <Chip label={t('abbrBibleReading')} size="small" sx={sharedStyles.chip} />}
+          {isIC && <Chip label={t('abbrInitialCall')} size="small" sx={sharedStyles.chip} />}
+          {isRV && <Chip label={t('abbrReturnVisit')} size="small" sx={sharedStyles.chip} />}
+          {isBS && <Chip label={t('abbrBibleStudy')} size="small" sx={sharedStyles.chip} />}
+          {isT && <Chip label={t('abbrTalk')} size="small" sx={sharedStyles.chip} />}
 
-          {isPublisher && !isAuxiliaryPioneer && !isRegularPioneer && !isSpecialPioneer && (
+          {isPublisherOnly && (
             <>
               <Chip label={t('abbrPublisher')} size="small" sx={sharedStyles.chip} />
               {isBaptized && <Chip label={t('abbrBaptized')} size="small" sx={sharedStyles.chip} />}

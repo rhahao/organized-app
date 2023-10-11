@@ -23,11 +23,11 @@ const PersonDelete = () => {
           <DialogContentText id="dialog-delete-person-desc">{t('deleteConfirmation')}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDelete} color="primary">
-            {t('delete')}
-          </Button>
           <Button onClick={handleClose} color="primary" autoFocus>
             {t('cancel')}
+          </Button>
+          <Button onClick={handleDelete} color="primary">
+            {t('delete')}
           </Button>
         </DialogActions>
       </Dialog>

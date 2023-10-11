@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { alpha, useMediaQuery, useTheme } from '@mui/material';
-import { isPersonDeleteState } from '@states/persons';
+import { isPersonDeleteState, personsActiveState } from '@states/persons';
 import { themeOptionsState } from '@states/app';
 import {
   coordinatorRoleState,
@@ -35,6 +35,7 @@ const usePersons = () => {
   const secretaryRole = useRecoilValue(secretaryRoleState);
   const publicTalkCoordinatorRole = useRecoilValue(publicTalkCoordinatorRoleState);
   const coordinatorRole = useRecoilValue(coordinatorRoleState);
+  const activePersons = useRecoilValue(personsActiveState);
 
   const [anchorElMenuSmall, setAnchorElMenuSmall] = useState(null);
   const [txtSearch, setTxtSearch] = useState(txtSearchInitial);
@@ -70,7 +71,7 @@ const usePersons = () => {
     if (newValue === 0) {
       setTimeout(async () => {
         await handleSearchPerson();
-      }, 1000);
+      }, 500);
     }
   };
 
@@ -84,13 +85,12 @@ const usePersons = () => {
   };
 
   const handleSearchPerson = useCallback(async () => {
+    handleCloseMenuSmall();
     setIsSearch(true);
     setPersons([]);
 
     setTimeout(async () => {
       setTabValue(0);
-
-      handleCloseMenuSmall();
 
       let searchParams = localStorage.getItem('searchParams');
       searchParams = searchParams ? JSON.parse(searchParams) : {};
@@ -102,7 +102,7 @@ const usePersons = () => {
       const assTypes = searchParams.assTypes || [];
       const filter = searchParams.filter === undefined ? 'allPersons' : searchParams.filter;
 
-      const result = await personsFilter({
+      const result = await personsFilter(activePersons, {
         txtSearch,
         isMale,
         isFemale,
@@ -115,7 +115,7 @@ const usePersons = () => {
 
       setIsSearch(false);
     }, 1000);
-  }, []);
+  }, [activePersons]);
 
   const handleSearchEnter = (e) => {
     if (e.key === 'Enter') handleSearchPerson();

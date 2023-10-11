@@ -1,6 +1,6 @@
 import { promiseGetRecoil } from 'recoil-outside';
 import { comparePerson } from '@services/cpe/persons';
-import { personsActiveState, personsState } from '@states/persons';
+import { personsState } from '@states/persons';
 import appDb from './db';
 import { getServiceYearByMonth } from './serviceYear';
 import { addMonths } from '@utils/date';
@@ -49,7 +49,8 @@ export const savePerson = async (data) => {
 };
 
 export const deletePerson = async (uid) => {
-  const persons = await promiseGetRecoil(personsState);
+  const oldPersons = await promiseGetRecoil(personsState);
+  const persons = structuredClone(oldPersons);
 
   const person = persons.find((p) => p.person_uid === uid);
 
@@ -356,9 +357,7 @@ export const personIsActivePublisher = async (uid, month) => {
   return isActive;
 };
 
-export const personsFilter = async (data) => {
-  const persons = await promiseGetRecoil(personsActiveState);
-
+export const personsFilter = async (persons, data) => {
   const txtSearch = data.txtSearch || '';
   const filter = data.filter || 'allPersons';
 
