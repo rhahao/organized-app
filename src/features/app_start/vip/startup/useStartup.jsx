@@ -40,7 +40,7 @@ import { handleUpdateScheduleFromRemote } from '@services/cpe/schedules';
 import { convertStringToBoolean } from '@utils/common';
 import { getMessageByCode } from '@services/i18n/translation';
 
-let userLoginRan = false;
+window.userLoginRan = false;
 
 const useStartup = () => {
   const { isAuthenticated } = useFirebaseAuth();
@@ -92,8 +92,8 @@ const useStartup = () => {
         return;
       }
 
-      if (!userLoginRan) {
-        userLoginRan = true;
+      if (!window.userLoginRan) {
+        window.userLoginRan = true;
 
         const { status, data } = await apiSendAuthorization();
 

@@ -6,7 +6,7 @@ import { comlink } from 'vite-plugin-comlink';
 import { resolve } from 'path';
 
 export default defineConfig({
-  plugins: [react(), splitVendorChunkPlugin(), comlink(), eslint(), loadVersion()],
+  plugins: [react(), splitVendorChunkPlugin(), comlink(), eslint({ useEslintrc: true }), loadVersion()],
   resolve: {
     alias: [
       { find: '@assets', replacement: resolve(__dirname, 'src/assets') },

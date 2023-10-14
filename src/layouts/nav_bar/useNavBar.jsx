@@ -23,6 +23,7 @@ import {
   setOfflineOverride,
   setWhatsNewOpen,
 } from '@services/recoil/app';
+import { userLogoutSuccess } from '@services/cpe';
 
 const useNavBar = () => {
   const theme = useTheme();
@@ -75,6 +76,7 @@ const useNavBar = () => {
   };
 
   const handleUseOnlineAccount = () => {
+    window.userLoginRan = false;
     handleClose();
     setOfflineOverride(true);
     setIsAppLoad(true);
@@ -84,6 +86,7 @@ const useNavBar = () => {
   const handleLogout = async () => {
     handleClose();
     await apiUserLogout();
+    await userLogoutSuccess();
   };
 
   const handleGoDashboard = () => {
