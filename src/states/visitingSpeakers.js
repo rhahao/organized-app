@@ -66,13 +66,14 @@ export const visitingSpeakersCongregationsState = selector({
 
     const list = [];
 
-    for await (const cong of visitingSpeakers) {
-      const tmpSpeakers = structuredClone(cong.cong_speakers);
+    for await (const oldCong of visitingSpeakers) {
+      const cong = structuredClone(oldCong);
       const isSelf = cong.cong_number === +congNumber;
 
       cong.cong_speakers.length = 0;
 
-      for await (const speaker of tmpSpeakers) {
+      for await (const oldSpeaker of oldCong.cong_speakers) {
+        const speaker = structuredClone(oldSpeaker);
         if (isSelf) {
           const person = await getPerson(speaker.person_uid);
 
@@ -98,4 +99,9 @@ export const visitingSpeakersCongregationsState = selector({
 
     return list;
   },
+});
+
+export const congSpeakersRequestsStatusState = atom({
+  key: 'congSpeakersRequestsStatus',
+  default: [],
 });

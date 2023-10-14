@@ -1,8 +1,12 @@
 export { default as About } from './about';
+export { default as CongregationAdd } from './visiting_speakers/congregation_add';
 export { default as AppUpdater } from './app_updater';
 export { default as ImportEPUB } from './source_material/import_epub';
 export { default as ImportJWOrg } from './source_material/import_jworg';
+export { default as IncomingCongregationsHeader } from './visiting_speakers/incoming_header';
+export { default as IncomingSpeakers } from './visiting_speakers/incoming_speakers';
 export { default as LanguageSwitcher } from './language_switcher';
+export { default as LocalSpeakers } from './visiting_speakers/local';
 export { default as MenuCard } from './dashboard_menu_card';
 export { default as PersonAssignments } from './persons/assignments';
 export { default as PersonAssignmentsHistory } from './persons/assignments_history';
@@ -15,4 +19,5 @@ export { default as PersonSearchBar } from './persons/search';
 export { default as PersonSpiritualStatus } from './persons/spiritual_status';
 export { default as PersonTimeAway } from './persons/time_away';
 export { default as ThemeSwitcher } from './theme_switcher';
+export { default as VisitingSpeakersHeader } from './visiting_speakers/header';
 export { default as WhatsNewContent } from './whats_new';

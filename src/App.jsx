@@ -53,7 +53,7 @@ const UserBibleStudies = lazy(() => import('@pages/UserBibleStudies'));
 const PendingFieldServiceReports = lazy(() => import('@pages/PendingFieldServiceReports'));
 const PublicTalksList = lazy(() => import('@pages/PublicTalksList'));
 const WeekendMeetingSchedule = lazy(() => import('@pages/WeekendMeetingSchedule'));
-const VisitingSpeakers = lazy(() => import('@pages/VisitingSpeakers'));
+const VisitingSpeakers = lazy(() => import('@pages/visiting_speakers'));
 
 const queryClient = new QueryClient();
 

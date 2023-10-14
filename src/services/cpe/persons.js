@@ -540,7 +540,7 @@ export const personIsActivePublisher = async (uid, month) => {
 
   do {
     if (SY) {
-      const isValid = await personIsValidPublisher(month);
+      const isValid = await personIsValidPublisher(uid, month);
 
       if (!isValid) {
         isActive = true;
@@ -580,6 +580,7 @@ export const personIsActivePublisher = async (uid, month) => {
 export const personsFilter = async (persons, data) => {
   const txtSearch = data.txtSearch || '';
   const filter = data.filter || 'allPersons';
+  const assTypes = data.assTypes || [];
 
   let firstPassFiltered = [];
   if (filter === 'allPersons') {
@@ -663,14 +664,31 @@ export const personsFilter = async (persons, data) => {
 
   const secondPassFiltered = [];
   for (const person of firstPassFiltered) {
+    const assignments = person.assignments;
+
+    let passed = true;
+
+    for (const type of assTypes) {
+      const found = assignments.find((assignment) => assignment.code === type);
+      if (!found) {
+        passed = false;
+        break;
+      }
+    }
+
+    if (passed) secondPassFiltered.push(person);
+  }
+
+  const thirdPassFiltered = [];
+  for (const person of secondPassFiltered) {
     if (person.person_name.toLowerCase().includes(txtSearch.toLowerCase())) {
-      secondPassFiltered.push(person);
+      thirdPassFiltered.push(person);
     }
   }
 
-  secondPassFiltered.sort((a, b) => {
+  thirdPassFiltered.sort((a, b) => {
     return a.person_name > b.person_name ? 1 : -1;
   });
 
-  return secondPassFiltered;
+  return thirdPassFiltered;
 };

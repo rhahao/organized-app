@@ -181,3 +181,21 @@ export const personSchema = {
   firstMonthReport: null,
   changes: [],
 };
+
+export const visitingSpeakerSchema = {
+  person_uid: '',
+  person_name: '',
+  person_displayName: '',
+  is_elder: false,
+  is_ms: false,
+  talks: [],
+  is_unavailable: false,
+  is_deleted: false,
+  cong_name: '',
+  cong_number: '',
+  cong_id: '',
+  is_local: false,
+  email: '',
+  phone: '',
+  changes: [],
+};

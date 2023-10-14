@@ -1,13 +1,13 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useRecoilValue } from 'recoil';
 import { congSpeakersRequestsState } from '@states/app';
+import { displaySnackNotification } from '@services/recoil/app';
+import { getMessageByCode } from '@services/i18n/translation';
 import {
   apiApproveCongregationSpeakersRequest,
   apiDisapproveCongregationSpeakersRequest,
   apiGetCongregationSpeakersRequests,
-} from '@services/api/congregation';
-import { displaySnackNotification } from '@services/recoil/app';
-import { getMessageByCode } from '@services/i18n/translation';
+} from '@services/api/visitingSpeakers';
 
 const useRequests = () => {
   const queryClient = useQueryClient();

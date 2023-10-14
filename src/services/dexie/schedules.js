@@ -7,7 +7,7 @@ import {
   publicTalkCoordinatorRoleState,
 } from '@states/settings';
 import { schedulesState } from '@states/schedules';
-import { publicTalkFindLocal, publicTalksLocale } from './publicTalks';
+import { publicTalkFindLocal, publicTalksLocale } from '../cpe/publicTalks';
 import { formatDate } from '@services/dateformat';
 import { scheduleSchema } from '@services/dexie/schema';
 import appDb from './db';
