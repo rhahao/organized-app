@@ -87,6 +87,10 @@ const PersonDetails = () => {
     historyAssignments,
     timeAway,
     setTimeAway,
+    handlePersonDisqualified,
+    handlePersonEnabled,
+    handlePersonMove,
+    handleSavePerson,
   } = usePersonDetails();
 
   return (
@@ -139,7 +143,7 @@ const PersonDetails = () => {
                 >
                   {isEdit && person.isDisqualified === false && (
                     <Tooltip title={lgUp ? '' : t('markDisqualified')}>
-                      <IconButton edge="start" color="inherit" sx={iconButtonStyles}>
+                      <IconButton edge="start" color="inherit" sx={iconButtonStyles} onClick={handlePersonDisqualified}>
                         <RemoveCircleIcon color="error" />
                         {lgUp && <Typography sx={txtButtonStyles}>{t('markDisqualified')}</Typography>}
                       </IconButton>
@@ -148,7 +152,7 @@ const PersonDetails = () => {
 
                   {isEdit && person.isDisqualified === true && (
                     <Tooltip title={lgUp ? '' : t('enablePerson')}>
-                      <IconButton edge="start" color="inherit" sx={iconButtonStyles}>
+                      <IconButton edge="start" color="inherit" sx={iconButtonStyles} onClick={handlePersonEnabled}>
                         <HandshakeIcon color="success" />
                         {lgUp && <Typography sx={txtButtonStyles}>{t('enablePerson')}</Typography>}
                       </IconButton>
@@ -157,7 +161,7 @@ const PersonDetails = () => {
 
                   {isEdit && (
                     <Tooltip title={lgUp ? '' : t('markTransfer')}>
-                      <IconButton edge="start" color="inherit" sx={iconButtonStyles}>
+                      <IconButton edge="start" color="inherit" sx={iconButtonStyles} onClick={handlePersonMove}>
                         <TransferWithinAStationIcon sx={{ color: '#6C3483' }} />
                         {lgUp && <Typography sx={txtButtonStyles}>{t('markTransfer')}</Typography>}
                       </IconButton>
@@ -165,7 +169,7 @@ const PersonDetails = () => {
                   )}
 
                   <Tooltip title={lgUp ? '' : t('save')}>
-                    <IconButton edge="start" color="inherit" sx={iconButtonStyles}>
+                    <IconButton edge="start" color="inherit" sx={iconButtonStyles} onClick={handleSavePerson}>
                       <SaveIcon color="primary" />
                       {lgUp && <Typography sx={txtButtonStyles}>{t('save')}</Typography>}
                     </IconButton>
@@ -174,6 +178,7 @@ const PersonDetails = () => {
               )}
             </Box>
           </Box>
+
           <Box id="person-details-content" sx={{ marginTop: '20px' }}>
             <Box
               sx={{

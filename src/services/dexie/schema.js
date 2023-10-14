@@ -156,3 +156,28 @@ export const scheduleSchema = {
   wtstudy_reader_dispName: '',
   changes: [],
 };
+
+export const personSchema = {
+  person_uid: '',
+  person_name: '',
+  person_displayName: '',
+  isMale: true,
+  isFemale: true,
+  birthDate: null,
+  isAnointed: false,
+  isOtherSheep: true,
+  isBaptized: false,
+  immersedDate: null,
+  isUnavailable: false,
+  assignments: [],
+  timeAway: [],
+  isMoved: false,
+  isDisqualified: false,
+  email: '',
+  address: '',
+  phone: '',
+  spiritualStatus: [],
+  otherService: [],
+  firstMonthReport: null,
+  changes: [],
+};

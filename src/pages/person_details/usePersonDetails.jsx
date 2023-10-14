@@ -6,11 +6,17 @@ import { currentReportMonth } from '@services/cpe/serviceYear';
 import { personEditorRoleState } from '@states/settings';
 import { personsActiveState } from '@states/persons';
 import { assignmentsHistoryState } from '@states/schedules';
+import { displaySnackNotification, setRootModalOpen } from '@services/recoil/app';
+import { personSchema } from '@services/dexie/schema';
+import { savePerson } from '@services/dexie/persons';
+import { useAppTranslation } from '@hooks/index';
 
 const usePersonDetails = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
+
+  const { t } = useAppTranslation();
 
   const theme = useTheme();
   const lgUp = useMediaQuery(theme.breakpoints.up('lg'), { noSsr: true });
@@ -48,6 +54,103 @@ const usePersonDetails = () => {
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
+  };
+
+  const handlePersonDisqualified = async () => {
+    try {
+      const data = { ...person, isDisqualified: true };
+      const isSuccess = await savePerson(data);
+
+      if (!isSuccess) {
+        await displaySnackNotification({
+          message: t('missingInfo'),
+          severity: 'warning',
+        });
+      }
+    } catch (err) {
+      await displaySnackNotification({
+        message: err.message,
+        severity: 'error',
+      });
+    }
+  };
+
+  const handlePersonEnabled = async () => {
+    try {
+      const data = { ...person, isDisqualified: false };
+      const isSuccess = await savePerson(data);
+
+      if (!isSuccess) {
+        await displaySnackNotification({
+          message: t('missingInfo'),
+          severity: 'warning',
+        });
+      }
+    } catch (err) {
+      await displaySnackNotification({
+        message: err.message,
+        severity: 'error',
+      });
+    }
+  };
+
+  const handlePersonMove = async () => {
+    try {
+      await setRootModalOpen(true);
+      const data = { ...person, isMoved: true };
+      const isSuccess = await savePerson(data);
+
+      if (isSuccess) {
+        setTimeout(async () => {
+          await setRootModalOpen(false);
+          navigate('/persons');
+        }, 1500);
+      } else {
+        await setRootModalOpen(true);
+        await displaySnackNotification({
+          message: t('missingInfo'),
+          severity: 'warning',
+        });
+      }
+    } catch (err) {
+      await displaySnackNotification({
+        message: err.message,
+        severity: 'error',
+      });
+    }
+  };
+
+  const handleSavePerson = async () => {
+    try {
+      await setRootModalOpen(true);
+      const isSuccess = await savePerson(person);
+
+      if (!isSuccess) {
+        await setRootModalOpen(false);
+        await displaySnackNotification({
+          message: t('missingInfo'),
+          severity: 'warning',
+        });
+
+        return;
+      }
+
+      if (typeof isSuccess === 'string') {
+        setTimeout(async () => {
+          await setRootModalOpen(false);
+          navigate(`/persons/${isSuccess}`);
+        }, 1500);
+
+        return;
+      }
+
+      await setRootModalOpen(false);
+    } catch (err) {
+      await displaySnackNotification({
+        message: err.message,
+        severity: 'error',
+      });
+    }
   };
 
   useEffect(() => {
@@ -160,7 +263,11 @@ const usePersonDetails = () => {
     if (id) {
       const data = activePersons.find((person) => person.person_uid === id);
       if (data) {
-        setPerson(data);
+        const model = structuredClone(personSchema);
+        const person = { ...model, ...data };
+
+        setPerson(person);
+
         setName(data.person_name);
         setDisplayName(data.person_displayName);
         setIsMale(data.isMale);
@@ -168,8 +275,8 @@ const usePersonDetails = () => {
         setBirthDate(data.birthDate);
         setIsBaptized(data.isBaptized);
         setImmersedDate(data.immersedDate);
-        setIsOtherSheep(data.isOtherSheep);
-        setIsAnointed(data.isAnointed);
+        setIsOtherSheep(data.isOtherSheep || true);
+        setIsAnointed(data.isAnointed || false);
         setFirstMonthReport(data.firstMonthReport);
         setAssignments(data.assignments);
         setTimeAway(data.timeAway);
@@ -233,6 +340,10 @@ const usePersonDetails = () => {
     setAssignments,
     timeAway,
     setTimeAway,
+    handlePersonDisqualified,
+    handlePersonEnabled,
+    handlePersonMove,
+    handleSavePerson,
   };
 };
 

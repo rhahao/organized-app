@@ -1,6 +1,6 @@
 import { promiseGetRecoil } from 'recoil-outside';
 import appDb from './db';
-import { comparePerson } from '@services/cpe/persons';
+import { comparePerson, getPerson } from '@services/cpe/persons';
 import { personsState } from '@states/persons';
 
 export const resetPersons = async (cong_persons) => {
@@ -16,16 +16,14 @@ export const savePerson = async (data) => {
 
   if (person_name && person_displayName) {
     if (person_uid) {
-      const persons = await promiseGetRecoil(personsState);
-      const currentPerson = persons.find((person) => person.person_uid === data.person_uid);
-      const newPerson = structuredClone(currentPerson);
+      const currentPerson = await getPerson(data.person_uid);
 
       if (!data.isMoved) {
-        newPerson.changes = comparePerson(newPerson, data);
-        newPerson.changes = data.changes.filter((item) => item.field !== 'lastAssignment');
+        data.changes = comparePerson(currentPerson, data);
+        data.changes = data.changes.filter((item) => item.field !== 'lastAssignment');
       }
 
-      await appDb.persons.put(newPerson);
+      await appDb.persons.put(data);
     }
 
     if (!person_uid) {
@@ -37,6 +35,8 @@ export const savePerson = async (data) => {
       };
 
       await appDb.persons.put(newPerson);
+
+      return newPerson.person_uid;
     }
 
     return true;

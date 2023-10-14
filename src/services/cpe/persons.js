@@ -581,8 +581,6 @@ export const personsFilter = async (persons, data) => {
   const txtSearch = data.txtSearch || '';
   const filter = data.filter || 'allPersons';
 
-  const month = data.month || `${new Date().getFullYear()}/${String(new Date().getMonth() + 1).padStart(2, '0')}/01`;
-
   let firstPassFiltered = [];
   if (filter === 'allPersons') {
     firstPassFiltered = structuredClone(persons);
@@ -590,14 +588,8 @@ export const personsFilter = async (persons, data) => {
 
   const allPublishers = [];
   for await (const person of persons) {
-    const isElder = await personIsElder(person.person_uid, month);
-    const isMS = await personIsMS(person.person_uid, month);
-    const isPublisher = await personIsPublisher(person.person_uid, month);
-    const isValid = await personIsValidPublisher(person.person_uid, month);
-
-    if (isValid && (isElder || isMS || isPublisher)) {
-      const obj = { ...structuredClone(person), isElder, isMS, isPublisher, isValid };
-      allPublishers.push(obj);
+    if (person.isValid && (person.isElder || person.isMS || person.isPublisher)) {
+      allPublishers.push(person);
     }
   }
 
@@ -607,11 +599,8 @@ export const personsFilter = async (persons, data) => {
 
   if (filter === 'baptizedPublishers') {
     for await (const person of allPublishers) {
-      const isBaptized = await personIsBaptized(person.person_uid, month);
-
-      if (isBaptized && (person.isElder || person.isMS || person.isPublisher)) {
-        const obj = { ...person, isBaptized };
-        firstPassFiltered.push(obj);
+      if (person.isBaptized && (person.isElder || person.isMS || person.isPublisher)) {
+        firstPassFiltered.push(person);
       }
     }
   }
@@ -640,24 +629,9 @@ export const personsFilter = async (persons, data) => {
     }
   }
 
-  if (filter === 'unpostedReports') {
-    for await (const person of allPublishers) {
-      const isActive = await personIsActivePublisher(person.person_uid, month);
-      if (isActive) {
-        const hasReport = await isPublisherHasReport({ person_uid: person.person_uid, month });
-
-        if (!hasReport) {
-          firstPassFiltered.push(person);
-        }
-      }
-    }
-  }
-
   if (filter === 'auxiliaryPioneers') {
     for await (const person of allPublishers) {
-      const isAuxP = await personIsAuxiliaryPioneer(person.person_uid, month);
-
-      if (isAuxP) {
+      if (person.isAuxP) {
         firstPassFiltered.push(person);
       }
     }
@@ -665,19 +639,7 @@ export const personsFilter = async (persons, data) => {
 
   if (filter === 'regularPioneers') {
     for await (const person of allPublishers) {
-      const isFR = await personIsRegularPioneer(person.person_uid, month);
-
-      if (isFR) {
-        firstPassFiltered.push(person);
-      }
-    }
-  }
-
-  if (filter === 'haveReports') {
-    for await (const person of allPublishers) {
-      const hasReport = await isPublisherHasReport({ person_uid: person.person_uid, month });
-
-      if (hasReport) {
+      if (person.isFR) {
         firstPassFiltered.push(person);
       }
     }
@@ -685,9 +647,7 @@ export const personsFilter = async (persons, data) => {
 
   if (filter === 'inactivePublishers') {
     for await (const person of allPublishers) {
-      const isActive = await personIsActivePublisher(person.person_uid, month);
-
-      if (!isActive) {
+      if (!person.isActive) {
         firstPassFiltered.push(person);
       }
     }
@@ -695,9 +655,7 @@ export const personsFilter = async (persons, data) => {
 
   if (filter === 'activePublishers') {
     for await (const person of allPublishers) {
-      const isActive = await personIsActivePublisher(person.person_uid, month);
-
-      if (isActive) {
+      if (person.isActive) {
         firstPassFiltered.push(person);
       }
     }

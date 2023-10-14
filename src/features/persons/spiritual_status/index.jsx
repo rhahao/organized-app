@@ -177,7 +177,7 @@ PersonSpiritualStatus.propTypes = {
   setIsOtherSheep: PropTypes.func,
   isAnointed: PropTypes.bool,
   setIsAnointed: PropTypes.func,
-  birthDate: PropTypes.string,
+  birthDate: PropTypes.any,
   firstMonthReport: PropTypes.any,
   setFirstMonthReport: PropTypes.func,
   otherService: PropTypes.arrayOf(PropTypes.object),

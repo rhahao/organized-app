@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { alpha, useMediaQuery, useTheme } from '@mui/material';
-import { isPersonDeleteState, personsActiveState } from '@states/persons';
+import { isPersonDeleteState, personsSearchableState } from '@states/persons';
 import { themeOptionsState } from '@states/app';
 import { personEditorRoleState } from '@states/settings';
 import { personsFilter } from '@services/cpe/persons';
@@ -26,7 +26,7 @@ const usePersons = () => {
 
   const isPersonDelete = useRecoilValue(isPersonDeleteState);
   const themeOptions = useRecoilValue(themeOptionsState);
-  const activePersons = useRecoilValue(personsActiveState);
+  const activePersons = useRecoilValue(personsSearchableState);
   const isPersonEditor = useRecoilValue(personEditorRoleState);
 
   const [anchorElMenuSmall, setAnchorElMenuSmall] = useState(null);

@@ -40,6 +40,7 @@ const PersonCard = ({ person }) => {
     isPublisherOnly,
     isRV,
     isT,
+    isDisqualified,
   } = useCard(person);
 
   return (
@@ -86,23 +87,31 @@ const PersonCard = ({ person }) => {
             },
           }}
         >
-          {isBR && <Chip label={t('abbrBibleReading')} size="small" sx={sharedStyles.chip} />}
-          {isIC && <Chip label={t('abbrInitialCall')} size="small" sx={sharedStyles.chip} />}
-          {isRV && <Chip label={t('abbrReturnVisit')} size="small" sx={sharedStyles.chip} />}
-          {isBS && <Chip label={t('abbrBibleStudy')} size="small" sx={sharedStyles.chip} />}
-          {isT && <Chip label={t('abbrTalk')} size="small" sx={sharedStyles.chip} />}
+          {isDisqualified && (
+            <Chip label={t('disqualifiedLabel')} size="small" color="error" sx={{ marginLeft: '10px' }} />
+          )}
 
-          {isPublisherOnly && (
+          {!isDisqualified && (
             <>
-              <Chip label={t('abbrPublisher')} size="small" sx={sharedStyles.chip} />
-              {isBaptized && <Chip label={t('abbrBaptized')} size="small" sx={sharedStyles.chip} />}
+              {isBR && <Chip label={t('abbrBibleReading')} size="small" sx={sharedStyles.chip} />}
+              {isIC && <Chip label={t('abbrInitialCall')} size="small" sx={sharedStyles.chip} />}
+              {isRV && <Chip label={t('abbrReturnVisit')} size="small" sx={sharedStyles.chip} />}
+              {isBS && <Chip label={t('abbrBibleStudy')} size="small" sx={sharedStyles.chip} />}
+              {isT && <Chip label={t('abbrTalk')} size="small" sx={sharedStyles.chip} />}
+
+              {isPublisherOnly && (
+                <>
+                  <Chip label={t('abbrPublisher')} size="small" sx={sharedStyles.chip} />
+                  {isBaptized && <Chip label={t('abbrBaptized')} size="small" sx={sharedStyles.chip} />}
+                </>
+              )}
+              {isMS && <Chip label={t('abbrMinisterialServant')} size="small" sx={sharedStyles.chip} />}
+              {isElder && <Chip label={t('abbrElder')} size="small" sx={sharedStyles.chip} />}
+              {isSpecialPioneer && <Chip label={t('abbrSpecialPioneer')} size="small" sx={sharedStyles.chip} />}
+              {isRegularPioneer && <Chip label="FR" size="small" sx={sharedStyles.chip} />}
+              {isAuxiliaryPioneer && <Chip label={t('abbrAuxiliaryPioneer')} size="small" sx={sharedStyles.chip} />}
             </>
           )}
-          {isMS && <Chip label={t('abbrMinisterialServant')} size="small" sx={sharedStyles.chip} />}
-          {isElder && <Chip label={t('abbrElder')} size="small" sx={sharedStyles.chip} />}
-          {isSpecialPioneer && <Chip label={t('abbrSpecialPioneer')} size="small" sx={sharedStyles.chip} />}
-          {isRegularPioneer && <Chip label="FR" size="small" sx={sharedStyles.chip} />}
-          {isAuxiliaryPioneer && <Chip label={t('abbrAuxiliaryPioneer')} size="small" sx={sharedStyles.chip} />}
         </CardContent>
       </Card>
     </Grid>
