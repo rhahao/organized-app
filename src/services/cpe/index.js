@@ -87,3 +87,13 @@ export const handleRoleDisapproved = async () => {
   localStorage.removeItem('email');
   window.location.href = './';
 };
+
+export const addRecentPerson = (id) => {
+  const recentPersons = localStorage.getItem('recentPersons') ? JSON.parse(localStorage.getItem('recentPersons')) : [];
+  const isExistRecent = recentPersons.find((person) => person === id) ? true : false;
+
+  if (!isExistRecent) {
+    recentPersons.push(id);
+    localStorage.setItem('recentPersons', JSON.stringify(recentPersons));
+  }
+};

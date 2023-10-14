@@ -40,6 +40,8 @@ import { handleUpdateScheduleFromRemote } from '@services/cpe/schedules';
 import { convertStringToBoolean } from '@utils/common';
 import { getMessageByCode } from '@services/i18n/translation';
 
+let userLoginRan = false;
+
 const useStartup = () => {
   const { isAuthenticated } = useFirebaseAuth();
 
@@ -90,94 +92,96 @@ const useStartup = () => {
         return;
       }
 
-      setIsAuthProcessing(true);
+      if (!userLoginRan) {
+        userLoginRan = true;
 
-      const { status, data } = await apiSendAuthorization();
+        const { status, data } = await apiSendAuthorization();
 
-      if (status !== 200) {
-        await displaySnackNotification({
-          message: getMessageByCode(data.message),
-          severity: 'warning',
-        });
+        if (status !== 200) {
+          await displaySnackNotification({
+            message: getMessageByCode(data.message),
+            severity: 'warning',
+          });
 
-        setIsAuthProcessing(false);
-        return;
-      }
-
-      const result = {};
-      const { cong_name, cong_role, mfa } = data;
-
-      if (mfa === 'not_enabled') {
-        if (cong_name.length === 0) {
-          result.createCongregation = true;
+          setIsAuthProcessing(false);
+          return;
         }
 
-        if (cong_name.length > 0 && cong_role.length === 0) {
-          result.unauthorized = true;
-        }
+        const result = {};
+        const { cong_name, cong_role, mfa } = data;
 
-        if (cong_name.length > 0 && cong_role.length > 0) {
-          const approvedRole = cong_role.some((role) => CPE_ROLES.includes(role));
+        if (mfa === 'not_enabled') {
+          if (cong_name.length === 0) {
+            result.createCongregation = true;
+          }
 
-          if (!approvedRole) {
+          if (cong_name.length > 0 && cong_role.length === 0) {
             result.unauthorized = true;
           }
 
-          if (approvedRole) {
-            await updateUserInfoAfterLogin(data);
+          if (cong_name.length > 0 && cong_role.length > 0) {
+            const approvedRole = cong_role.some((role) => CPE_ROLES.includes(role));
 
-            result.success = true;
+            if (!approvedRole) {
+              result.unauthorized = true;
+            }
+
+            if (approvedRole) {
+              await updateUserInfoAfterLogin(data);
+
+              result.success = true;
+            }
+          }
+        } else {
+          result.isVerifyMFA = true;
+        }
+
+        if (result.isVerifyMFA || result.success || result.createCongregation) {
+          await handleUpdateSetting({ account_type: 'vip' });
+
+          if (result.isVerifyMFA) {
+            setCurrentMFAStage('verify');
+            setIsUserSignUp(false);
+            setUserMfaVerify(true);
+            setIsCongAccountCreate(false);
+            setIsUnauthorizedRole(false);
+          }
+
+          if (result.success) {
+            setIsSetup(false);
+
+            await runUpdater();
+
+            await setRootModalOpen(true);
+            const { status: scheduleStatus, data: scheduleData } = await apiFetchSchedule();
+            if (scheduleStatus === 200) {
+              await handleUpdateScheduleFromRemote(scheduleData);
+            }
+            await setRootModalOpen(false);
+
+            setTimeout(() => {
+              setOfflineOverride(false);
+              setCongAccountConnected(true);
+              setIsAppLoad(false);
+            }, [2000]);
+          }
+
+          if (result.createCongregation) {
+            setIsUserSignUp(false);
+            setIsUserSignIn(false);
+            setIsCongAccountCreate(true);
           }
         }
-      } else {
-        result.isVerifyMFA = true;
-      }
 
-      if (result.isVerifyMFA || result.success || result.createCongregation) {
-        await handleUpdateSetting({ account_type: 'vip' });
-
-        if (result.isVerifyMFA) {
-          setCurrentMFAStage('verify');
+        if (result.unauthorized) {
           setIsUserSignUp(false);
           setUserMfaVerify(true);
           setIsCongAccountCreate(false);
-          setIsUnauthorizedRole(false);
+          setIsUnauthorizedRole(true);
         }
 
-        if (result.success) {
-          setIsSetup(false);
-
-          await runUpdater();
-
-          await setRootModalOpen(true);
-          const { status: scheduleStatus, data: scheduleData } = await apiFetchSchedule();
-          if (scheduleStatus === 200) {
-            await handleUpdateScheduleFromRemote(scheduleData);
-          }
-          await setRootModalOpen(false);
-
-          setTimeout(() => {
-            setOfflineOverride(false);
-            setCongAccountConnected(true);
-            setIsAppLoad(false);
-          }, [2000]);
-        }
-
-        if (result.createCongregation) {
-          setIsUserSignUp(false);
-          setIsUserSignIn(false);
-          setIsCongAccountCreate(true);
-        }
+        setIsAuthProcessing(false);
       }
-
-      if (result.unauthorized) {
-        setIsUserSignUp(false);
-        setUserMfaVerify(true);
-        setIsCongAccountCreate(false);
-        setIsUnauthorizedRole(true);
-      }
-
-      setIsAuthProcessing(false);
     } catch (err) {
       await displaySnackNotification({
         message: getMessageByCode(err.message),

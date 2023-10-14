@@ -270,6 +270,18 @@ export const elderLocalRoleState = selector({
   },
 });
 
+export const personEditorRoleState = selector({
+  key: 'personEditorRole',
+  get: ({ get }) => {
+    const secretaryRole = get(secretaryRoleState);
+    const lmmoRole = get(lmmoRoleState);
+    const coordinatorRole = get(coordinatorRoleState);
+    const publicTalkCoordinatorRole = get(publicTalkCoordinatorRoleState);
+
+    return secretaryRole || lmmoRole || coordinatorRole || publicTalkCoordinatorRole;
+  },
+});
+
 export const isMeetingEditorRoleState = selector({
   key: 'isMeetingEditorRole',
   get: ({ get }) => {

@@ -1,9 +1,8 @@
 /*
 This file holds the source of the truth from the table "persons".
 */
-
-import { personsFilter } from '@services/dexie/persons';
 import { atom, selector } from 'recoil';
+import { personsFilter } from '@services/cpe/persons';
 
 export const personsState = atom({
   key: 'persons',

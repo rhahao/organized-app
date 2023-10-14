@@ -1,3 +1,6 @@
+export { default as Accordion } from './accordion/Accordion';
+export { default as AccordionDetails } from './accordion/AccordionDetails';
+export { default as AccordionSummary } from './accordion/AccordionSummary';
 export { default as CongregationSelector } from './congregation_selector';
 export { default as CountrySelector } from './country_selector';
 export { default as ErrorBoundary } from './error_boundary';

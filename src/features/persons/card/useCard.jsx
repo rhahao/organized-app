@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import {
-  coordinatorRoleState,
-  lmmoRoleState,
-  publicTalkCoordinatorRoleState,
-  secretaryRoleState,
-} from '@states/settings';
+import { personEditorRoleState } from '@states/settings';
 import { setCurrentPerson, setIsPersonDelete } from '@services/recoil/persons';
 import femaleIcon from '@assets/img/person_female.svg';
 import maleIcon from '@assets/img/person_male.svg';
@@ -18,15 +13,12 @@ import {
   personIsPublisher,
   personIsRegularPioneer,
   personIsSpecialPioneer,
-} from '@services/dexie/persons';
+} from '@services/cpe/persons';
 
 const useCard = (person) => {
   const navigate = useNavigate();
 
-  const lmmoRole = useRecoilValue(lmmoRoleState);
-  const secretaryRole = useRecoilValue(secretaryRoleState);
-  const publicTalkCoordinatorRole = useRecoilValue(publicTalkCoordinatorRoleState);
-  const coordinatorRole = useRecoilValue(coordinatorRoleState);
+  const isPersonEditor = useRecoilValue(personEditorRoleState);
 
   const [isPublisher, setIsPublisher] = useState(false);
   const [isAuxiliaryPioneer, setIsAuxiliaryPioneer] = useState(false);
@@ -36,7 +28,6 @@ const useCard = (person) => {
   const [isMS, setIsMS] = useState(false);
   const [isElder, setIsElder] = useState(false);
 
-  const isPersonEditor = lmmoRole || secretaryRole || coordinatorRole || publicTalkCoordinatorRole;
   const isBR = person.assignments.find((assignment) => assignment.code === 100);
   const isIC = person.assignments.find((assignment) => assignment.code === 101);
   const isRV = person.assignments.find((assignment) => assignment.code === 102);

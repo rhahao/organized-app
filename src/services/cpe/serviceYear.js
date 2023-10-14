@@ -1,6 +1,6 @@
+import { promiseGetRecoil } from 'recoil-outside';
 import { serviceYearState } from '@states/serviceYear';
 import { addMonths } from '@utils/date';
-import { promiseGetRecoil } from 'recoil-outside';
 
 export const currentReportMonth = () => {
   const currentYear = new Date().getFullYear();

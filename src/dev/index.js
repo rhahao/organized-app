@@ -1,6 +1,6 @@
 import { appDb } from '@services/dexie';
 import { savePerson } from '@services/dexie/persons';
-import { currentReportMonth } from '@services/dexie/serviceYear';
+import { currentReportMonth } from '@services/cpe/serviceYear';
 import { setRootModalOpen } from '@services/recoil/app';
 import { generateDisplayName } from '@utils/common';
 import { computeYearsDiff } from '@utils/date';

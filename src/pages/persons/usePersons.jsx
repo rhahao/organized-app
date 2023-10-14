@@ -4,13 +4,8 @@ import { useRecoilValue } from 'recoil';
 import { alpha, useMediaQuery, useTheme } from '@mui/material';
 import { isPersonDeleteState, personsActiveState } from '@states/persons';
 import { themeOptionsState } from '@states/app';
-import {
-  coordinatorRoleState,
-  lmmoRoleState,
-  publicTalkCoordinatorRoleState,
-  secretaryRoleState,
-} from '@states/settings';
-import { personsFilter } from '@services/dexie/persons';
+import { personEditorRoleState } from '@states/settings';
+import { personsFilter } from '@services/cpe/persons';
 
 const a11yProps = (index) => {
   return {
@@ -31,11 +26,8 @@ const usePersons = () => {
 
   const isPersonDelete = useRecoilValue(isPersonDeleteState);
   const themeOptions = useRecoilValue(themeOptionsState);
-  const lmmoRole = useRecoilValue(lmmoRoleState);
-  const secretaryRole = useRecoilValue(secretaryRoleState);
-  const publicTalkCoordinatorRole = useRecoilValue(publicTalkCoordinatorRoleState);
-  const coordinatorRole = useRecoilValue(coordinatorRoleState);
   const activePersons = useRecoilValue(personsActiveState);
+  const isPersonEditor = useRecoilValue(personEditorRoleState);
 
   const [anchorElMenuSmall, setAnchorElMenuSmall] = useState(null);
   const [txtSearch, setTxtSearch] = useState(txtSearchInitial);
@@ -47,7 +39,6 @@ const usePersons = () => {
 
   const backgroundColor = alpha(theme.palette.common[themeOptions.searchBg], 0.5);
   const backgroundColorHover = alpha(theme.palette.common[themeOptions.searchBg], 0.3);
-  const isPersonEditor = lmmoRole || secretaryRole || coordinatorRole || publicTalkCoordinatorRole;
 
   const handleClickMenuSmall = (event) => {
     setAnchorElMenuSmall(event.currentTarget);
