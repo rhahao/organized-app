@@ -1,6 +1,5 @@
 import { Suspense, lazy } from 'react';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
@@ -18,16 +17,6 @@ import { useGlobal } from '@hooks';
 import { WaitingCircular, ErrorBoundary } from '@components';
 import { RootLayout } from '@layouts';
 import { NotificationWrapper } from '@wrapper';
-import {
-  adminRoleState,
-  coordinatorRoleState,
-  elderLocalRoleState,
-  lmmoRoleState,
-  publicTalkCoordinatorRoleState,
-  publisherRoleState,
-  secretaryRoleState,
-} from '@states/settings';
-import { congAccountConnectedState } from '@states/app';
 
 // lazy loading
 const Administration = lazy(() => import('@pages/administration'));
@@ -58,16 +47,20 @@ const VisitingSpeakers = lazy(() => import('@pages/visiting_speakers'));
 const queryClient = new QueryClient();
 
 const App = ({ updatePwa }) => {
-  const { isLoading, isSupported, activeTheme, appSnackOpen } = useGlobal();
-
-  const adminRole = useRecoilValue(adminRoleState);
-  const coordinatorRole = useRecoilValue(coordinatorRoleState);
-  const elderLocalRole = useRecoilValue(elderLocalRoleState);
-  const lmmoRole = useRecoilValue(lmmoRoleState);
-  const publicTalkCoordinatorRole = useRecoilValue(publicTalkCoordinatorRoleState);
-  const publisherRole = useRecoilValue(publisherRoleState);
-  const secretaryRole = useRecoilValue(secretaryRoleState);
-  const isCongAccountConnected = useRecoilValue(congAccountConnectedState);
+  const {
+    isLoading,
+    isSupported,
+    activeTheme,
+    appSnackOpen,
+    adminRole,
+    coordinatorRole,
+    elderLocalRole,
+    lmmoRole,
+    publicTalkCoordinatorRole,
+    publisherRole,
+    secretaryRole,
+    isCongAccountConnected,
+  } = useGlobal();
 
   const router = createHashRouter([
     {

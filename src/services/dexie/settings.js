@@ -1,4 +1,5 @@
 import { promiseGetRecoil } from 'recoil-outside';
+import backupWorkerInstance from '@services/worker/backupWorker';
 import { settingsState } from '@states/settings';
 import { appDb } from '.';
 
@@ -26,4 +27,10 @@ export const handleUpdateSettingFromRemote = async (data) => {
   };
 
   await appDb.app_settings.put(newSettings);
+
+  backupWorkerInstance.setUserRole(data.cong_role);
+  backupWorkerInstance.setAccountType('pocket');
+  backupWorkerInstance.setUserID(data.id);
+  backupWorkerInstance.setCongID(data.cong_id);
+  backupWorkerInstance.setIsCongAccountConnected(true);
 };

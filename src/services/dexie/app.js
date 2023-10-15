@@ -23,10 +23,8 @@ export const dbExportTable = async (table_name) => {
   return result;
 };
 
-export const dbExportDataOnline = async (cong_role) => {
-  if (!cong_role) {
-    cong_role = await promiseGetRecoil(congRoleState);
-  }
+export const dbExportDataOnline = async () => {
+  const cong_role = await promiseGetRecoil(congRoleState);
 
   const data = {};
 

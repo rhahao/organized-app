@@ -14,6 +14,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './global.css';
+import './services/worker/backupWorker.js';
 
 logger.info('app', `cpe version ${import.meta.env.PACKAGE_VERSION}`);
 

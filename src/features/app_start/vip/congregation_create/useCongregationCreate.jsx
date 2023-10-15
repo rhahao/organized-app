@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import backupWorkerInstance from '@services/worker/backupWorker';
 import { useAppTranslation, useFirebaseAuth } from '@hooks';
 import {
   displaySnackNotification,
@@ -74,6 +75,7 @@ const useCongregationCreate = () => {
         const { id, cong_id, cong_name, cong_role, cong_number, user_members_delegate } = data;
 
         setCongID(cong_id);
+        backupWorkerInstance.setCongID(cong_id);
 
         let obj = {};
         obj.username = data.username;

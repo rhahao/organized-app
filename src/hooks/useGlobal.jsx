@@ -2,10 +2,20 @@ import { useEffect, useState } from 'react';
 import { createTheme } from '@mui/material/styles';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { useRecoilValue } from 'recoil';
-import { appSnackOpenState, isLightThemeState, isOnlineState } from '@states/app';
+import { appSnackOpenState, congAccountConnectedState, isLightThemeState, isOnlineState } from '@states/app';
 import logger from '@services/logger';
 import { disconnectCongAccount, setApiHost, setIsOnline, setVisitorID } from '@services/recoil/app';
 import { useInternetChecker } from '@hooks';
+import backupWorkerInstance from '@services/worker/backupWorker';
+import {
+  adminRoleState,
+  coordinatorRoleState,
+  elderLocalRoleState,
+  lmmoRoleState,
+  publicTalkCoordinatorRoleState,
+  publisherRoleState,
+  secretaryRoleState,
+} from '@states/settings';
 
 // creating theme
 const lightTheme = createTheme({
@@ -26,6 +36,14 @@ const useGlobal = () => {
   const isLight = useRecoilValue(isLightThemeState);
   const isOnline = useRecoilValue(isOnlineState);
   const appSnackOpen = useRecoilValue(appSnackOpenState);
+  const adminRole = useRecoilValue(adminRoleState);
+  const coordinatorRole = useRecoilValue(coordinatorRoleState);
+  const elderLocalRole = useRecoilValue(elderLocalRoleState);
+  const lmmoRole = useRecoilValue(lmmoRoleState);
+  const publicTalkCoordinatorRole = useRecoilValue(publicTalkCoordinatorRoleState);
+  const publisherRole = useRecoilValue(publisherRoleState);
+  const secretaryRole = useRecoilValue(secretaryRoleState);
+  const isCongAccountConnected = useRecoilValue(congAccountConnectedState);
 
   const [activeTheme, setActiveTheme] = useState(darkTheme);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +52,7 @@ const useGlobal = () => {
   useEffect(() => {
     const updateNetworkStatus = async () => {
       await setIsOnline(isNavigatorOnline);
+      backupWorkerInstance.setIsOnline(isNavigatorOnline);
 
       if (!isNavigatorOnline) {
         await disconnectCongAccount();
@@ -59,6 +78,7 @@ const useGlobal = () => {
         const visitorId = result.visitorId;
 
         await setVisitorID(visitorId);
+        backupWorkerInstance.setVisitorID(visitorId);
 
         logger.info('app', 'device fingerprint visitor id has been set');
       } catch (error) {
@@ -84,6 +104,7 @@ const useGlobal = () => {
       }
 
       await setApiHost(apiHost);
+      backupWorkerInstance.setApiHost(apiHost);
 
       logger.info('app', `the client API is set to: ${apiHost}`);
     };
@@ -127,7 +148,20 @@ const useGlobal = () => {
     setIsLoading(false);
   }, []);
 
-  return { isLoading, isSupported, activeTheme, appSnackOpen };
+  return {
+    isLoading,
+    isSupported,
+    activeTheme,
+    appSnackOpen,
+    adminRole,
+    coordinatorRole,
+    elderLocalRole,
+    lmmoRole,
+    publicTalkCoordinatorRole,
+    publisherRole,
+    secretaryRole,
+    isCongAccountConnected,
+  };
 };
 
 export default useGlobal;

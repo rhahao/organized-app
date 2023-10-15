@@ -12,7 +12,9 @@ import {
 
 export const userSignOut = async () => {
   const auth = await getAuth();
-  await signOut(auth);
+  if (auth) {
+    await signOut(auth);
+  }
 };
 
 export const currentAuthUser = () => {

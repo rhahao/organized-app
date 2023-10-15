@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import backupWorkerInstance from '@services/worker/backupWorker';
 import { saveProfilePic } from '@services/cpe/settings';
 import { displaySnackNotification } from '@services/recoil/app';
 import { getTranslation } from '@services/i18n/translation';
@@ -13,6 +14,8 @@ const useFirebaseAuth = () => {
 
     onAuthStateChanged(auth, async (user) => {
       setUser(user);
+      backupWorkerInstance.setUserUID(user?.uid || undefined);
+
       if (user) {
         if (user.providerData.length > 1) {
           await displaySnackNotification({

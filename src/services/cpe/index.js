@@ -17,6 +17,7 @@ import { handleUpdateSetting } from '@services/dexie/settings';
 import { resetPersons } from '@services/dexie/persons';
 import { mergeUserFieldServiceReportsFromBackup } from '@services/dexie/userFieldSericeReports';
 import { deleteAppDb } from '@services/dexie/app';
+import backupWorkerInstance from '@services/worker/backupWorker';
 
 export const loadApp = async () => {
   const isMeetingEditor = await promiseGetRecoil(isMeetingEditorRoleState);
@@ -78,6 +79,11 @@ export const updateUserInfoAfterLogin = async (data) => {
   if (data.user_fieldServiceReports) {
     await mergeUserFieldServiceReportsFromBackup(data.user_fieldServiceReports);
   }
+
+  backupWorkerInstance.setUserRole(cong_role);
+  backupWorkerInstance.setCongID(cong_id);
+  backupWorkerInstance.setIsCongAccountConnected(true);
+  backupWorkerInstance.setAccountType('vip');
 };
 
 export const handleDeleteDatabase = async () => {

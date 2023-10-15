@@ -214,3 +214,16 @@ export const apiRestoreUserBackup = async () => {
 
   return { status: res.status, data };
 };
+
+export const apiPocketValidate = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/sws-pocket/validate-me`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid },
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};

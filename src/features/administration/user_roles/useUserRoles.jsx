@@ -1,36 +1,46 @@
-import { personsSearchableState } from '@states/persons';
-import { lmmoRoleState, secretaryRoleState } from '@states/settings';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-
-let isRoleCheckerRan = false;
+import { personsSearchableState } from '@states/persons';
 
 const useUserRoles = ({ member, handleCheckViewMeetingSchedule }) => {
-  const persons = useRecoilValue(personsSearchableState);
-  const secretaryRole = useRecoilValue(secretaryRoleState);
-  const lmmoRole = useRecoilValue(lmmoRoleState);
+  const isRoleCheckerRan = useRef();
 
-  const [disableViewMeetingRole, setDisableViewMeetingRole] = useState(false);
+  isRoleCheckerRan.current = false;
+
+  const persons = useRecoilValue(personsSearchableState);
+
+  const [disableViewMeetingRole, setDisableViewMeetingRole] = useState(true);
+
+  const currentPerson = persons.find((person) => person.person_uid === member.user_local_uid);
+  const isElder = currentPerson?.isElder;
+  const isMS = currentPerson?.isMS;
+  const isPublisher = currentPerson?.isPublisher;
+
+  const secretaryRole = member.cong_role.includes('secretary');
+  const lmmoRole = member.cong_role.includes('lmmo') || member.cong_role.includes('lmmo-backup');
+  const coordinatorRole = member.cong_role.includes('coordinator');
+  const publicTalkCoordinatorRole = member.cong_role.includes('public_talk_coordinator');
+  const publisherRole = member.cong_role.includes('publisher');
+  const msRole = member.cong_role.includes('ms');
+  const elderRole = member.cong_role.includes('elder');
+
+  const bronzeRole =
+    secretaryRole || lmmoRole || coordinatorRole || publicTalkCoordinatorRole || publisherRole || msRole || elderRole;
 
   useEffect(() => {
-    if (!isRoleCheckerRan) {
+    if (!isRoleCheckerRan.current) {
       setDisableViewMeetingRole(false);
 
-      if (member.cong_role) {
-        const currentPerson = persons.find((person) => person.person_uid === member.user_local_uid);
-        const isElder = currentPerson?.isElder();
-        const isMS = currentPerson?.isMS();
-        const isPublisher = currentPerson?.isPublisher();
-
-        if (secretaryRole || lmmoRole || isElder || isMS || isPublisher) {
-          handleCheckViewMeetingSchedule(false);
-          setDisableViewMeetingRole(true);
-        }
-
-        isRoleCheckerRan = true;
+      if (bronzeRole || isElder || isMS || isPublisher) {
+        handleCheckViewMeetingSchedule(false);
+        setDisableViewMeetingRole(true);
       }
     }
-  }, [member.cong_role, member.user_local_uid, handleCheckViewMeetingSchedule, persons, secretaryRole, lmmoRole]);
+
+    return () => {
+      isRoleCheckerRan.current = true;
+    };
+  }, [handleCheckViewMeetingSchedule, bronzeRole, isElder, isMS, isPublisher]);
 
   return { disableViewMeetingRole };
 };

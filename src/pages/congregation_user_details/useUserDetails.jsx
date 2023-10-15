@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { displaySnackNotification, setRootModalOpen } from '@services/recoil/app';
@@ -111,18 +111,21 @@ const useUserDetails = () => {
     });
   };
 
-  const handleCheckViewMeetingSchedule = (value) => {
-    let role = [];
-    if (value) {
-      role = [...member.cong_role, 'view_meeting_schedule'];
-    } else {
-      role = member.cong_role.filter((role) => role !== 'view_meeting_schedule');
-    }
+  const handleCheckViewMeetingSchedule = useCallback(
+    (value) => {
+      let role = [];
+      if (value) {
+        role = [...member.cong_role, 'view_meeting_schedule'];
+      } else {
+        role = member.cong_role.filter((role) => role !== 'view_meeting_schedule');
+      }
 
-    setMember((prev) => {
-      return { ...prev, cong_role: role };
-    });
-  };
+      setMember((prev) => {
+        return { ...prev, cong_role: role };
+      });
+    },
+    [member.cong_role]
+  );
 
   const handleUpdatePocketCode = (value) => {
     setMember((prev) => {

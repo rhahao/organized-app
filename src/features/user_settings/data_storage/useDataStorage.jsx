@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import backupWorkerInstance from '@services/worker/backupWorker';
 import {
   autoBackupIntervalState,
   autoBackupState,
@@ -34,11 +35,13 @@ const useDataStorage = () => {
   const handleAutoBackupChange = async (value) => {
     setIsTmpAutoBackup(value);
     await handleUpdateSetting({ autoBackup: value });
+    backupWorkerInstance.setIsEnabled(value);
   };
 
   const handleBackupIntervalChange = async (value) => {
     setTmpBackupInterval(value);
     await handleUpdateSetting({ autoBackup_interval: value });
+    backupWorkerInstance.setBackupInterval(value);
   };
 
   const handleDelete = async () => {
