@@ -98,3 +98,12 @@ export const mergeUserFieldServiceReportsFromBackup = async (reportsBackup) => {
     }
   }
 };
+
+export const cleanUserFieldServiceReportsDeleted = async () => {
+  const allData = await appDb.user_field_service_reports.toArray();
+  const appData = allData.filter((record) => record.isDeleted === true);
+
+  for await (const record of appData) {
+    await appDb.user_field_service_reports.delete(record.report_uid);
+  }
+};

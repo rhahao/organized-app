@@ -214,3 +214,43 @@ export const apiDeleteCongregationUser = async (id) => {
 
   return { status: res.status, data };
 };
+
+export const apiFetchCongregationLastBackup = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid, congID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/congregations/${congID}/backup/last`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiSendCongregationBackup = async (reqPayload) => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid, congID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/congregations/${congID}/backup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+    body: JSON.stringify(reqPayload),
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiRestoreCongregationBackup = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid, congID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/congregations/${congID}/backup`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};

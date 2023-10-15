@@ -4,7 +4,15 @@ import Box from '@mui/material/Box';
 import { AppModalWrapper } from '@wrapper/index';
 import { AppNavBar } from '@layouts';
 import { EmailLinkAuthentication, Startup } from '@features/app_start';
-import { About, AppUpdater, ImportEPUB, ImportJWOrg, WhatsNewContent } from '@features/index';
+import {
+  About,
+  AppUpdater,
+  BackupDbDialog,
+  ImportEPUB,
+  ImportJWOrg,
+  RestoreDbDialog,
+  WhatsNewContent,
+} from '@features/index';
 import { UserConfirmation } from '@components/index';
 import useRootLayout from './useRootLayout';
 
@@ -19,6 +27,8 @@ const RootLayout = ({ updatePwa }) => {
     isImportJWOrg,
     isImportEPUB,
     isUserConfirm,
+    isBackupDb,
+    isRestoreDb,
   } = useRootLayout();
 
   return (
@@ -28,10 +38,13 @@ const RootLayout = ({ updatePwa }) => {
 
       <Box sx={{ padding: '10px' }}>
         <WhatsNewContent />
+
         {isOpenAbout && <About />}
         {isImportEPUB && <ImportEPUB />}
         {isImportJWOrg && <ImportJWOrg />}
         {isUserConfirm && <UserConfirmation />}
+        {isBackupDb && <BackupDbDialog />}
+        {isRestoreDb && <RestoreDbDialog />}
 
         {isAppLoad && isEmailAuth && <EmailLinkAuthentication />}
         {isAppLoad && !isEmailAuth && <Startup />}

@@ -1,7 +1,14 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useSearchParams } from 'react-router-dom';
 import usePwa2 from 'use-pwa2';
-import { isAboutOpenState, isAppLoadState, isEmailLinkAuthenticateState, userConfirmationOpenState } from '@states/app';
+import {
+  backupDbOpenState,
+  isAboutOpenState,
+  isAppLoadState,
+  isEmailLinkAuthenticateState,
+  restoreDbOpenState,
+  userConfirmationOpenState,
+} from '@states/app';
 import { useEffect } from 'react';
 import { useUserAutoLogin } from '@hooks/index';
 import { isImportEPUBState, isImportJWOrgState } from '@states/sources';
@@ -21,6 +28,8 @@ const useRootLayout = () => {
   const isImportJWOrg = useRecoilValue(isImportJWOrgState);
   const isImportEPUB = useRecoilValue(isImportEPUBState);
   const isUserConfirm = useRecoilValue(userConfirmationOpenState);
+  const isBackupDb = useRecoilValue(backupDbOpenState);
+  const isRestoreDb = useRecoilValue(restoreDbOpenState);
 
   useEffect(() => {
     const value = searchParams.get('code') !== null;
@@ -43,6 +52,8 @@ const useRootLayout = () => {
     isImportJWOrg,
     isImportEPUB,
     isUserConfirm,
+    isBackupDb,
+    isRestoreDb,
   };
 };
 

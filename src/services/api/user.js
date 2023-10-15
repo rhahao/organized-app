@@ -174,3 +174,43 @@ export const apiFetchPocketSessions = async () => {
 
   return { status: res.status, data };
 };
+
+export const apiFetchUserLastBackup = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/sws-pocket/${userID}/backup/last`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid },
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiSendUserBackup = async (reqPayload) => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/sws-pocket/${userID}/backup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid },
+    body: JSON.stringify(reqPayload),
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiRestoreUserBackup = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/sws-pocket/${userID}/backup`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid },
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
