@@ -28,12 +28,7 @@ export const apiRequestPasswordlesssLink = async (email, uid) => {
 
   const res = await fetch(`${apiHost}user-passwordless-login`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      appclient: 'cpe',
-      appversion,
-      applanguage: appLang,
-    },
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, applanguage: appLang },
     body: JSON.stringify({ email, uid }),
   });
 
@@ -49,12 +44,7 @@ export const apiUpdatePasswordlessInfo = async (uid) => {
 
   const res = await fetch(`${apiHost}user-passwordless-verify`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      appclient: 'cpe',
-      appversion,
-      uid,
-    },
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, uid },
     body: JSON.stringify({ email: tmpEmail, visitorid }),
   });
 
@@ -68,12 +58,7 @@ export const apiSendAuthorization = async () => {
 
   const res = await fetch(`${apiHost}user-login`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      appclient: 'cpe',
-      appversion,
-      uid,
-    },
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, uid },
     body: JSON.stringify({ visitorid }),
   });
 
@@ -102,6 +87,87 @@ export const apiValidateMe = async () => {
   const res = await fetch(`${apiHost}api/users/validate-me`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiUpdateUserFullname = async (fullname) => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid, userID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/users/${userID}/fullname`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+    body: JSON.stringify({ fullname }),
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiGetUser2FA = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid, userID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/users/${userID}/2fa`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiRevokeVIPSession = async (id) => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid, userID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/users/${userID}/sessions`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+    body: JSON.stringify({ session: id }),
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiGetUserSessions = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid, userID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/users/${userID}/sessions`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiDeletePocketDevice = async (pocket_visitorid) => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/sws-pocket/${userID}/devices`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid },
+    body: JSON.stringify({ pocket_visitorid }),
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};
+
+export const apiFetchPocketSessions = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/sws-pocket/${userID}/devices`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid },
   });
 
   const data = await res.json();

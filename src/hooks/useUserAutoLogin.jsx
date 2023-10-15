@@ -5,7 +5,7 @@ import { useFirebaseAuth } from '.';
 import { apiHostState, isAppLoadState, isOnlineState, visitorIDState } from '@states/app';
 import { apiValidateMe } from '@services/api/user';
 import { userSignOut } from '@services/firebase/auth';
-import { handleRoleDisapproved, updateUserInfoAfterLogin } from '@services/cpe';
+import { handleDeleteDatabase, updateUserInfoAfterLogin } from '@services/cpe';
 import { CPE_ROLES } from '@constants/index';
 import { setCongAccountConnected, setRootModalOpen } from '@services/recoil/app';
 import { apiFetchSchedule } from '@services/api/schedule';
@@ -37,7 +37,7 @@ const useUserAutoLogin = () => {
 
         // congregation not found -> user not authorized and delete local data
         if (status === 404) {
-          await handleRoleDisapproved();
+          await handleDeleteDatabase();
           return;
         }
 
@@ -45,7 +45,7 @@ const useUserAutoLogin = () => {
           const approvedRole = data.cong_role.some((role) => CPE_ROLES.includes(role));
 
           if (!approvedRole) {
-            await handleRoleDisapproved();
+            await handleDeleteDatabase();
             return;
           }
 

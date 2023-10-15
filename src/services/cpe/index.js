@@ -80,7 +80,7 @@ export const updateUserInfoAfterLogin = async (data) => {
   }
 };
 
-export const handleRoleDisapproved = async () => {
+export const handleDeleteDatabase = async () => {
   setRootModalOpen(true);
   await deleteAppDb();
   await userSignOut();

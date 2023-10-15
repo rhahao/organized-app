@@ -1,5 +1,6 @@
 export { default as About } from './about';
 export { default as CongregationAdd } from './visiting_speakers/congregation_add';
+export { default as DataStorage } from './user_settings/data_storage';
 export { default as AppUpdater } from './app_updater';
 export { default as ImportEPUB } from './source_material/import_epub';
 export { default as ImportJWOrg } from './source_material/import_jworg';
@@ -8,6 +9,7 @@ export { default as IncomingSpeakers } from './visiting_speakers/incoming_speake
 export { default as LanguageSwitcher } from './language_switcher';
 export { default as LocalSpeakers } from './visiting_speakers/local';
 export { default as MenuCard } from './dashboard_menu_card';
+export { default as MyUserAccount } from './user_settings/my_account';
 export { default as PersonAssignments } from './persons/assignments';
 export { default as PersonAssignmentsHistory } from './persons/assignments_history';
 export { default as PersonBasic } from './persons/basic';
