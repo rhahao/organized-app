@@ -40,6 +40,7 @@ import {
   userConfirmationOpenState,
   backupDbOpenState,
   restoreDbOpenState,
+  isCongPersonAddState,
 } from '@states/app';
 
 export const handleSWOnInstalled = async () => {
@@ -195,4 +196,8 @@ export const setIsBackupDb = async (value) => {
 
 export const setIsRestoreDb = async (value) => {
   await promiseSetRecoil(restoreDbOpenState, value);
+};
+
+export const setIsCongPersonAdd = async (value) => {
+  await promiseSetRecoil(isCongPersonAddState, value);
 };

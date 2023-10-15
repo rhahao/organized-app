@@ -1,5 +1,14 @@
 export { default as About } from './about';
 export { default as CongregationAdd } from './visiting_speakers/congregation_add';
+export { default as CongregationCreateUser } from './administration/create_user';
+export { default as CongregationUserBasic } from './administration/user_basic';
+export { default as CongregationUserDelegates } from './administration/user_delegates';
+export { default as CongregationUserLocalRecord } from './administration/user_local_record';
+export { default as CongregationUserPocketDevices } from './administration/pocket_devices';
+export { default as CongregationUserPocketSetup } from './administration/pocket_setup';
+export { default as CongregationUserRoles } from './administration/user_roles';
+export { default as CongregationUserVIPSessions } from './administration/vip_sessions';
+export { default as CongregationUsers } from './administration/users';
 export { default as DataStorage } from './user_settings/data_storage';
 export { default as AppUpdater } from './app_updater';
 export { default as ImportEPUB } from './source_material/import_epub';

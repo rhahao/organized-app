@@ -30,7 +30,7 @@ import {
 import { congAccountConnectedState } from '@states/app';
 
 // lazy loading
-const Administration = lazy(() => import('@pages/Administration'));
+const Administration = lazy(() => import('@pages/administration'));
 const DashboardMenu = lazy(() => import('@pages/dashboard'));
 const Persons = lazy(() => import('@pages/persons'));
 const PersonDetails = lazy(() => import('@pages/person_details'));
@@ -41,7 +41,7 @@ const ScheduleWeekDetails = lazy(() => import('@pages/ScheduleWeekDetails'));
 const UserSettings = lazy(() => import('@pages/user_settings'));
 const SourceMaterials = lazy(() => import('@pages/SourceMaterials'));
 const SourceWeekDetails = lazy(() => import('@pages/SourceWeekDetails'));
-const CongregationPersonDetails = lazy(() => import('@pages/CongregationPersonDetails'));
+const CongregationUserDetails = lazy(() => import('@pages/congregation_user_details'));
 const WeeklyAssignments = lazy(() => import('@pages/WeeklyAssignments'));
 const CongregationSettings = lazy(() => import('@pages/CongregationSettings'));
 const FieldServiceGroup = lazy(() => import('@pages/FieldServiceGroup'));
@@ -217,7 +217,7 @@ const App = ({ updatePwa }) => {
                 },
                 {
                   path: '/administration/members/:id',
-                  element: <CongregationPersonDetails />,
+                  element: <CongregationUserDetails />,
                 },
               ],
             },

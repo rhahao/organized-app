@@ -25,7 +25,9 @@ export const personsActiveState = selector({
   get: ({ get }) => {
     const persons = get(personsState);
 
-    return persons.filter((person) => !person.is_deleted && !person.isMoved);
+    return persons
+      .filter((person) => !person.is_deleted && !person.isMoved)
+      .sort((a, b) => (a.person_name > b.person_name ? 1 : -1));
   },
 });
 
