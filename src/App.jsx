@@ -28,7 +28,7 @@ const ScheduleDetails = lazy(() => import('@pages/ScheduleDetails'));
 const S89Print = lazy(() => import('@pages/S89Print'));
 const ScheduleWeekDetails = lazy(() => import('@pages/ScheduleWeekDetails'));
 const UserSettings = lazy(() => import('@pages/user_settings'));
-const SourceMaterials = lazy(() => import('@pages/SourceMaterials'));
+const SourceMaterials = lazy(() => import('@pages/source_materials'));
 const SourceWeekDetails = lazy(() => import('@pages/SourceWeekDetails'));
 const CongregationUserDetails = lazy(() => import('@pages/congregation_user_details'));
 const WeeklyAssignments = lazy(() => import('@pages/WeeklyAssignments'));

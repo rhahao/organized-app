@@ -2,11 +2,10 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import Typography from '@mui/material/Typography';
-import PublicTalkPagination from '@features/public_talks/pagination';
+import { PublicTalkContainer, PublicTalkPagination } from '@features/index';
 import { WaitingCircular } from '@components/index';
 import useTalksList from './useTalksList';
 import { useAppTranslation } from '@hooks/index';
-import PublicTalkContainer from '@features/public_talks/container';
 
 const PublicTalksList = () => {
   const { t } = useAppTranslation();

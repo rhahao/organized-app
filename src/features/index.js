@@ -31,6 +31,8 @@ export { default as PersonRecents } from './persons/recents';
 export { default as PersonSearchBar } from './persons/search';
 export { default as PersonSpiritualStatus } from './persons/spiritual_status';
 export { default as PersonTimeAway } from './persons/time_away';
+export { default as PublicTalkContainer } from './public_talks/container';
+export { default as PublicTalkPagination } from './public_talks/pagination';
 export { default as RestoreDbDialog } from './backupRestore/restore';
 export { default as SourcesFormsSettings } from './congregation_settings/sources_forms';
 export { default as ThemeSwitcher } from './theme_switcher';
