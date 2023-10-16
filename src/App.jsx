@@ -32,7 +32,7 @@ const SourceMaterials = lazy(() => import('@pages/SourceMaterials'));
 const SourceWeekDetails = lazy(() => import('@pages/SourceWeekDetails'));
 const CongregationUserDetails = lazy(() => import('@pages/congregation_user_details'));
 const WeeklyAssignments = lazy(() => import('@pages/WeeklyAssignments'));
-const CongregationSettings = lazy(() => import('@pages/CongregationSettings'));
+const CongregationSettings = lazy(() => import('@pages/congregation_settings'));
 const FieldServiceGroup = lazy(() => import('@pages/FieldServiceGroup'));
 const MeetingAttendance = lazy(() => import('@pages/MeetingAttendance'));
 const FieldServiceReport = lazy(() => import('@pages/FieldServiceReport'));

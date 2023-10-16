@@ -308,3 +308,39 @@ export const avatarUrlState = selector({
     return src;
   },
 });
+
+export const autoAssignMMOpeningPrayerState = selector({
+  key: 'autoAssignMMOpeningPrayer',
+  get: ({ get }) => {
+    const settings = get(settingsState);
+
+    return settings.opening_prayer_MM_autoAssign || false;
+  },
+});
+
+export const autoAssignWMOpeningPrayerState = selector({
+  key: 'autoAssignWMOpeningPrayer',
+  get: ({ get }) => {
+    const settings = get(settingsState);
+
+    return settings.opening_prayer_WM_autoAssign || false;
+  },
+});
+
+export const midweekMeetingExactDateState = selector({
+  key: 'midweekMeetingExactDate',
+  get: ({ get }) => {
+    const settings = get(settingsState);
+
+    return settings.midweek_meeting_useExactDate || false;
+  },
+});
+
+export const weekendMeetingSubstituteSpeakerState = selector({
+  key: 'weekendMeetingSubstituteSpeaker',
+  get: ({ get }) => {
+    const settings = get(settingsState);
+
+    return settings.weekend_meeting_useSubstituteSpeaker || false;
+  },
+});

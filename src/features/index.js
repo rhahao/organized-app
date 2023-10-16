@@ -1,5 +1,6 @@
 export { default as About } from './about';
 export { default as BackupDbDialog } from './backupRestore/backup';
+export { default as BasicSettings } from './congregation_settings/basic';
 export { default as CongregationAdd } from './visiting_speakers/congregation_add';
 export { default as CongregationCreateUser } from './administration/create_user';
 export { default as CongregationUserBasic } from './administration/user_basic';
@@ -31,6 +32,7 @@ export { default as PersonSearchBar } from './persons/search';
 export { default as PersonSpiritualStatus } from './persons/spiritual_status';
 export { default as PersonTimeAway } from './persons/time_away';
 export { default as RestoreDbDialog } from './backupRestore/restore';
+export { default as SourcesFormsSettings } from './congregation_settings/sources_forms';
 export { default as ThemeSwitcher } from './theme_switcher';
 export { default as VisitingSpeakersHeader } from './visiting_speakers/header';
 export { default as WhatsNewContent } from './whats_new';
