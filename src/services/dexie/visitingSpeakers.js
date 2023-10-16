@@ -222,12 +222,13 @@ export const updateSpeakerTalks = async ({ talks, person_uid, cong_number }) => 
     return talk.talk_number;
   });
 
-  const currentCong = await getCongregation(cong_number);
   const selfCongNumber = await promiseGetRecoil(congNumberState);
+  const oldCong = await getCongregation(cong_number);
+  const currentCong = structuredClone(oldCong);
 
   const speaker = currentCong.cong_speakers.find((record) => record.person_uid === person_uid);
   speaker.changes = speaker.changes.filter((record) => record.field !== 'talks');
-  speaker.push({ date: new Date().toISOString(), field: 'talks', value: talks });
+  speaker.changes.push({ date: new Date().toISOString(), field: 'talks', value: talks });
   speaker.talks = talks;
 
   const isSelf = currentCong.cong_number === +selfCongNumber;

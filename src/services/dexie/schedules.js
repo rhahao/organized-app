@@ -7,9 +7,10 @@ import {
   publicTalkCoordinatorRoleState,
 } from '@states/settings';
 import { schedulesState } from '@states/schedules';
-import { publicTalkFindLocal, publicTalksLocale } from '../cpe/publicTalks';
+import { publicTalkFindLocal } from '../cpe/publicTalks';
 import { formatDate } from '@services/dateformat';
 import { scheduleSchema } from '@services/dexie/schema';
+import { publicTalksLocaleState } from '@states/publicTalks';
 import appDb from './db';
 
 export const saveSchedule = async (appData) => {
@@ -17,7 +18,7 @@ export const saveSchedule = async (appData) => {
   const coordinatorRole = await promiseGetRecoil(coordinatorRoleState);
   const publicTalkCoordinatorRole = await promiseGetRecoil(publicTalkCoordinatorRoleState);
   const hasPersonAccess = await promiseGetRecoil(elderLocalRoleState);
-  const talksList = await promiseGetRecoil(publicTalksLocale);
+  const talksList = await promiseGetRecoil(publicTalksLocaleState);
   const accountType = await promiseGetRecoil(accountTypeState);
 
   const schedules = await promiseGetRecoil(schedulesState);

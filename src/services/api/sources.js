@@ -14,3 +14,16 @@ export const apiFetchSources = async () => {
     return { status: res.status, data };
   }
 };
+
+export const apiFetchPublicTalks = async () => {
+  const { apiHost, appVersion: appversion, visitorID: visitorid, userUID: uid, congID } = await apiDefault();
+
+  const res = await fetch(`${apiHost}api/congregations/meeting/${congID}/public-talks`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', appclient: 'cpe', appversion, visitorid, uid },
+  });
+
+  const data = await res.json();
+
+  return { status: res.status, data };
+};

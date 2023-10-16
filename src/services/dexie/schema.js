@@ -199,3 +199,8 @@ export const visitingSpeakerSchema = {
   phone: '',
   changes: [],
 };
+
+export const S34Schema = {
+  talk_number: '',
+  talk_title: [],
+};

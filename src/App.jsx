@@ -40,7 +40,7 @@ const BranchOfficeReports = lazy(() => import('@pages/BranchOfficeReports'));
 const UserFieldServiceReport = lazy(() => import('@pages/UserFieldServiceReport'));
 const UserBibleStudies = lazy(() => import('@pages/UserBibleStudies'));
 const PendingFieldServiceReports = lazy(() => import('@pages/PendingFieldServiceReports'));
-const PublicTalksList = lazy(() => import('@pages/PublicTalksList'));
+const PublicTalksList = lazy(() => import('@pages/public_talks_list'));
 const WeekendMeetingSchedule = lazy(() => import('@pages/WeekendMeetingSchedule'));
 const VisitingSpeakers = lazy(() => import('@pages/visiting_speakers'));
 

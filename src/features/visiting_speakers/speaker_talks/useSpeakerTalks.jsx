@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { publicTalkCoordinatorRoleState } from '@states/settings';
 import { updateSpeakerTalks } from '@services/dexie/visitingSpeakers';
-import { publicTalksLocale } from '@services/cpe/publicTalks';
+import { publicTalksLocaleState } from '@states/publicTalks';
 
 const useSpeakerTalks = ({ speaker }) => {
-  const [talksList, setTalksList] = useState([]);
-  const [selectedTalks, setSelectedTalks] = useState([]);
-
   const isEditor = useRecoilValue(publicTalkCoordinatorRoleState);
+  const talksList = useRecoilValue(publicTalksLocaleState);
+
+  const [selectedTalks, setSelectedTalks] = useState([]);
 
   const handleTalksUpdate = async (value) => {
     value = value.sort((a, b) => {
@@ -24,20 +24,13 @@ const useSpeakerTalks = ({ speaker }) => {
   };
 
   useEffect(() => {
-    const getS34Local = async () => {
-      const options = await publicTalksLocale();
-      setTalksList(options);
+    const selected = speaker.talks.map((talk) => {
+      const found = talksList.find((record) => record.talk_number === talk);
+      return found;
+    });
 
-      const selected = speaker.talks.map((talk) => {
-        const found = options.find((record) => record.talk_number === talk);
-        return found;
-      });
-
-      setSelectedTalks(selected);
-    };
-
-    getS34Local();
-  }, [speaker]);
+    setSelectedTalks(selected);
+  }, [speaker, talksList]);
 
   return { talksList, selectedTalks, isEditor, handleTalksUpdate };
 };
