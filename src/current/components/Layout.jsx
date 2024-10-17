@@ -1,4 +1,4 @@
-import { useEffect, Suspense, lazy } from 'react';
+import { useEffect, lazy } from 'react';
 import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -35,7 +35,6 @@ import { ImportEPUB, ImportJWOrg } from '../features/sourceMaterial';
 import { AppUpdater } from '../features/updater';
 import { MyAssignments } from '../features/myAssignments';
 import { CongregationPersonAdd } from '../features/congregationPersons';
-import WaitingPage from './WaitingPage';
 import Startup from '../features/startup';
 import {
   fetchNotifications,
@@ -209,10 +208,10 @@ const Layout = ({ updatePwa }) => {
         {isAppLoad && isEmailAuth && <EmailLinkAuthentication />}
         {isAppLoad && !isEmailAuth && <Startup />}
         {!isAppLoad && (
-          <Suspense fallback={<WaitingPage />}>
+          <>
             <MyAssignments />
             <Outlet />
-          </Suspense>
+          </>
         )}
       </Box>
     </RootModal>
