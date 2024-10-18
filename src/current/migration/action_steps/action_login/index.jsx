@@ -1,13 +1,13 @@
-import { Box, Button, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
+import OAuthLogin from './oauth_login';
+import useActionLogin from './useActionLogin';
 
-const ActionLogin = ({ next }) => {
+const ActionLogin = () => {
+  useActionLogin();
+
   return (
     <Stack>
-      <Box>
-        <Button variant="contained" onClick={next}>
-          Continue
-        </Button>
-      </Box>
+      <OAuthLogin />
     </Stack>
   );
 };

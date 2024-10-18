@@ -1,16 +1,9 @@
-import { Box, Button, Stack } from '@mui/material';
+import useActionKeys from './useActionKeys';
 
-const ActionKeys = ({ previous, next }) => {
-  return (
-    <Stack>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <Button variant="contained" onClick={next}>
-          Continue
-        </Button>
-        <Button onClick={previous}>Back</Button>
-      </Box>
-    </Stack>
-  );
+const ActionKeys = () => {
+  const { currentStep, steps } = useActionKeys();
+
+  return <>{steps[currentStep]}</>;
 };
 
 export default ActionKeys;

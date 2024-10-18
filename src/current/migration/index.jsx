@@ -1,4 +1,4 @@
-import { Box, Divider, Paper, Toolbar, Typography } from '@mui/material';
+import { Box, Divider, Paper, ThemeProvider, Toolbar, Typography, createTheme } from '@mui/material';
 import { NotificationsActive } from '@mui/icons-material';
 import usePwa2 from 'use-pwa2/dist/index.js';
 import useMigration from './useMigration';
@@ -8,13 +8,19 @@ import AppUpdater from './app_updater';
 import Header from './header';
 import StandardUser from './standard_user';
 
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
+  },
+});
+
 const Migration = ({ updatePwa }) => {
   const { enabledInstall } = usePwa2();
 
   const { appSnackOpen, isAdmin } = useMigration();
 
   return (
-    <>
+    <ThemeProvider theme={lightTheme}>
       <Header />
       <AppUpdater updatePwa={updatePwa} enabledInstall={enabledInstall} />
 
@@ -44,7 +50,7 @@ const Migration = ({ updatePwa }) => {
 
         {isAdmin && <AdminUser />}
       </Paper>
-    </>
+    </ThemeProvider>
   );
 };
 
