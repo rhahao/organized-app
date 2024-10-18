@@ -6,8 +6,8 @@ const AdminUser = () => {
     <Stack spacing="12px">
       <Typography>
         The Congregation Program for Everyone (CPE) has been rebranded to a new application called Organized, featuring
-        new look and enhanced features. As an administrator to your congregation account in CPE, you have to complete
-        the steps below to migrate your current data into Organized.
+        new look and enhanced features. As an administrator to the congregation account in CPE, you have to complete the
+        steps below to migrate your current data into Organized.
       </Typography>
 
       <Typography color="red" sx={{ fontWeight: 'bold' }}>

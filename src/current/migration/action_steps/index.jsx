@@ -18,7 +18,9 @@ const ActionSteps = () => {
 
       {currentStep === steps.length && (
         <Stack spacing="12px">
-          <Typography>You have completed the migration and you can now open the new Organized app.</Typography>
+          <Typography>
+            Congratulations! You have completed the migration and you can now open the new Organized app.
+          </Typography>
           <Button variant="contained" endIcon={<OpenInNew />}>
             Open Organized
           </Button>
