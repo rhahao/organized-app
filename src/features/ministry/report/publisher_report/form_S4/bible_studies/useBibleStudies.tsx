@@ -269,9 +269,9 @@ const useBibleStudies = ({ month, person_uid, publisher }: FormS4Props) => {
   const bibleStudiesValidator = async (value: number) => {
     if (!userReport) return true;
 
-    const result = userReport.report_data.bible_studies_records?.length || 0;
+    const records = userReport.report_data.bible_studies.records?.length || 0;
 
-    if (value < result) {
+    if (value < records) {
       await displaySnackNotification({
         header: t('tr_cantDeductStudiesTitle'),
         message: t('tr_cantDeductStudiesDesc'),
@@ -280,6 +280,8 @@ const useBibleStudies = ({ month, person_uid, publisher }: FormS4Props) => {
 
       return false;
     }
+
+    const daily = userReport.report_data.bible_studies?.daily || 0;
 
     return true;
   };
