@@ -215,6 +215,7 @@ export const dbGetMetadata = async () => {
     delete result.field_service_groups;
     delete result.user_bible_studies;
     delete result.user_field_service_reports;
+    delete result.delegated_field_service_reports;
     delete result.cong_field_service_reports;
   }
 
