@@ -217,7 +217,9 @@ const useBibleStudies = ({ month, person_uid, publisher }: FormS4Props) => {
           report = structuredClone(monthReport);
         }
 
-        report.report_data.bible_studies.monthly = value;
+        const daily = report.report_data.bible_studies.daily;
+
+        report.report_data.bible_studies.monthly = value - daily || 0;
 
         if (value > 0) {
           report.report_data.shared_ministry = true;
@@ -282,6 +284,16 @@ const useBibleStudies = ({ month, person_uid, publisher }: FormS4Props) => {
     }
 
     const daily = userReport.report_data.bible_studies?.daily || 0;
+
+    if (value < daily) {
+      await displaySnackNotification({
+        header: t('tr_cantDeductStudiesTitle'),
+        message: t('tr_bibleStudiesMonthlyLess'),
+        severity: 'error',
+      });
+
+      return false;
+    }
 
     return true;
   };
